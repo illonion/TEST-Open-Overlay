@@ -4,14 +4,16 @@
     --teamRedColour: #FF9190;
     --teamSectionColour: #FFFEFA;
 
-    --boxShadowRed: rgba(255, 145, 144, 0.45);
+    --boxShadowRed: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
     --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
 
     --nowPlayingBoxHeight: 80px;
     --sideSectionContainerWidth: 315px;
     --sideSectionContainerLeft: 15px;
+    --sideSectionOutsideContainerHeight: 105px;
 }
 
+/* Inter Font */
 @font-face {
     font-family: "Inter";
     src: url("../fonts/Inter-ExtraBold.ttf");
@@ -32,6 +34,17 @@
     src: url("../fonts/Inter-Italic.ttf");
     font-weight: 400;
     text-decoration: italic;
+}
+/* Montserrat Font */
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Medium.ttf");
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-ExtraBold.ttf");
+    font-weight: 800;
 }
 
 /* Whole page */
@@ -58,6 +71,7 @@
     width: 940px; height: var(--nowPlayingBoxHeight);
     box-shadow: var(--boxShadowPurple);
     color: var(--mainColour);
+    background-color: white;
 }
 /* Mod*/
 #nowPlayingMod {
@@ -132,8 +146,9 @@
 /* Commentators */
 #commentatorsContainer {
     position: absolute; left: var(--sideSectionContainerLeft); top: 134px;
-    width: var(--sideSectionContainerWidth); height: 105px;
+    width: var(--sideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
     box-shadow: var(--boxShadowPurple);
+    background-color: white;
 }
 #commentatorsText {
     position: absolute; left: 10px; top: 10px;
@@ -155,7 +170,7 @@
 .teamSection {
     position: absolute; left: var(--sideSectionContainerLeft); 
     width: var(--sideSectionContainerWidth); height: 175px;
-    /* background-color: white; */
+    background-color: white;
 }
 #teamRedSection {
     top: 383px;
@@ -322,4 +337,60 @@
     font-family: "Inter"; font-weight: 800;
     text-align: center;
     line-height: 30px;
+}
+
+/* Rotating Info */
+#rotatingInfo {
+    position: absolute; left: var(--sideSectionContainerLeft); top: 937px;
+    width: var(--sideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
+    background-color: white;
+    color: var(--mainColour);
+    box-shadow: var(--boxShadowPurple);
+}
+#rotatingInfoLine1 {
+    position: absolute; right: 0; top: 13px;
+    width: 200px; height: 1px;
+    background-color: var(--mainColour);
+}
+#rotatingInfoLine2 {
+    position: absolute; right: 11px; top: 19px; 
+    width: 15px; height: 2px;
+    background-color: var(--mainColour);
+}
+/* Rotating Information Text */
+.rotatingInfoText {
+    position: absolute; left: 30px; top: 20px;
+    text-align: center;
+    width: 150px; height: 70px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.rotatingInfoTextHeader { font-family: "Inter"; font-weight: 800; font-size: 14px; }
+.rotatingInfoTextBody { font-family: "Inter"; font-weight: 500; font-size: 12px; }
+.rotatingInfoCommand {
+    position: absolute; left: 239px; top: 44px;
+    font-family: "Inter"; font-weight: 800; font-size: 20px;
+    transform: translateX(-50%);
+}
+
+/* Sponsor Text */
+#sponsorInfo { opacity: 0; }
+#sponsorThankYou {
+    position: absolute; left: 50px; top: 24px; 
+    font-family: "Montserrat"; font-weight: 500; font-size: 8px;
+}
+#blueBunnyLogo {
+    position: absolute; left: 71px; top: 40px;
+    width: 35px; height: 51px;
+}
+#blueBunnyText {
+    position: absolute; left: 124px; top: 39px;
+    font-family: "Montserrat"; font-weight: 800; font-size: 20px;
+}
+#blueBunnyCustomTabletCoversText {
+    position: absolute; left: 136px; top: 62px;
+    width: 90px;
+    font-family: "Montserrat"; font-weight: 500; font-size: 12px;
+    text-align: center;
 }
