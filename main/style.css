@@ -412,3 +412,15 @@
     font-family: "Montserrat"; font-weight: 500; font-size: 12px;
     text-align: center;
 }
+
+/* Gameplay greenscreen */
+.gameplayScreen {
+    position: absolute; 
+    width: 507px; height: 479px;
+    background-color: #00b140;
+}
+.gameplayLeftScreen { left: 375px; }
+.gameplayMiddleScreen { left: 890px; }
+.gameplayRightScreen { left: 1405px; }
+.gameplayTopScreen { top: 104px; }
+.gameplayBottomScreen { top: 593px; }
