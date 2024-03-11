@@ -114,3 +114,25 @@
     background-size: cover;
     width: 400px; height: var(--nowPlayingBoxHeight);
 }
+
+/* Commentators */
+#commentatorsContainer {
+    position: absolute; left: 15px; top: 134px;
+    width: 315px; height: 105px;
+    box-shadow: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+}
+#commentatorsText {
+    position: absolute; left: 10px; top: 10px;
+    font-family: "Inter"; font-weight: 500; font-size: 12px;
+    color: var(--mainColour);
+}
+#commentatorsLine1 {
+    position: absolute; left: 0px; top: 27px;
+    background-color: var(--mainColour);
+    width: 217px; height: 1px;
+}
+#commentatorsLine2 {
+    position: absolute; left: 11px; top: 33px;
+    background-color: var(--mainColour);
+    width: 15px; height: 2px;
+}
