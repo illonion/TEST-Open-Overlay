@@ -1,6 +1,10 @@
 :root {
     --mainColour: #5E72EB;
+    --teamRedColour: #FF9190;
+    --teamSectionColour: #FFFEFA;
     --nowPlayingBoxHeight: 80px;
+    --sideSectionContainerWidth: 315px;
+    --sideSectionContainerLeft: 15px;
 }
 
 @font-face {
@@ -12,6 +16,11 @@
     font-family: "Inter";
     src: url("../fonts/Inter-Medium.ttf");
     font-weight: 500;
+}
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-Regular.ttf");
+    font-weight: 400;
 }
 @font-face {
     font-family: "Inter Italic";
@@ -117,8 +126,8 @@
 
 /* Commentators */
 #commentatorsContainer {
-    position: absolute; left: 15px; top: 134px;
-    width: 315px; height: 105px;
+    position: absolute; left: var(--sideSectionContainerLeft); top: 134px;
+    width: var(--sideSectionContainerWidth); height: 105px;
     box-shadow: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
 }
 #commentatorsText {
@@ -135,4 +144,110 @@
     position: absolute; left: 11px; top: 33px;
     background-color: var(--mainColour);
     width: 15px; height: 2px;
+}
+
+/* Team Sections */
+#teamRedSection {
+    position: absolute; left: var(--sideSectionContainerLeft); top: 383px;
+    width: var(--sideSectionContainerWidth); height: 175px;
+    color: var(--teamRedColour);
+    background-color: white;
+    box-shadow: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
+}
+/* Team Details */
+#teamRedDetails {
+    position: absolute; left: 0px; top: 0px;
+    width: inherit; height: 56px;
+    background-color: var(--teamRedColour);
+}
+/* Team Banner */
+#teamRedBanner {
+    position: absolute; left: 10px; top: 8px; 
+    width: 80px; height: 40px;
+    background-size: cover;
+    background-position: center;
+}
+/* Team Name */
+#teamRedNameContainer {
+    position: absolute; left: 106px; top: 8px;
+    width: 150px; height: 40px;
+    display: flex;
+    align-items: center;
+}
+#teamRedName {
+    font-family: "Inter"; font-weight: 800; font-size: 16px;
+    color: var(--teamSectionColour);
+}
+/* Team Seed */
+#teamRedSeed {
+    position: absolute; left: 273px; top: 9px;
+    width: 35px; height: 31px;
+    color: var(--teamSectionColour);
+    font-family: "Inter"; 
+}
+#teamRedSeedText {
+    font-weight: 800; font-size: 12px;
+}
+#teamRedSeedNumber {
+    position: absolute; left: 50%; top: 15px;
+    font-weight: 400; font-size: 18px;
+    transform: translateX(-55%);
+}
+/* Team Wins */
+#teamRedWins {
+    position: absolute; top: 59px;
+    width: 174px; height: 30px;
+}
+/* Team win text */
+#teamRedWinsText {
+    position: absolute; left: 10px;
+    font-family: "Inter"; font-size: 12px; font-weight: 500;
+}
+/* Team win line */
+#teamRedWinLine {
+    position: absolute; top: 17px;
+    width: 91px; height: 1px;
+    background-color: var(--teamRedColour)
+}
+/* Team win stars */
+#teamRedWinStars {
+    display: flex;
+    position: absolute; left: 10px; top: 23px;
+}
+.teamRedWinStar {
+    width: 18px; height: 5px;
+    margin-right: 4px;
+    border: 1px solid var(--teamRedColour);
+}
+.teamRedWinStarFill {
+    background-color: var(--teamRedColour);
+}
+/* Team map picks */
+#teamRedMapPick {
+    position: absolute; left: 217px; top: 62px;
+    width: 96px; height: 23px;
+    border: 2px solid var(--teamRedColour);
+    border-right-width: 0;
+    line-height: 23px;
+    font-family: "Inter"; font-size: 12px; font-weight: 500;
+    text-align: center;
+}
+/* Red Team Score Section */
+#teamRedCurrentScore {
+    position: absolute; right: 10px; top: 94px;
+    font-family: "Inter"; font-weight: 500; font-size: 36px;
+}
+#teamRedScoreLine1 {
+    position: absolute; left: 11px; top: 138px;
+    width: 15px; height: 2px;
+    background-color: var(--teamRedColour);
+}
+#teamRedScoreLine2 {
+    position: absolute; top: 145px;
+    width: 217px; height: 1px;
+    background-color: var(--teamRedColour);
+}
+#teamRedScoreText {
+    position: absolute; left: 10px; top: 149px;
+    font-family: "Inter"; font-size: 12px; font-weight: 500;
 }
