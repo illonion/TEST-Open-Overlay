@@ -1,5 +1,6 @@
 :root {
     --mainColour: #5E72EB;
+    --nowPlayingBoxHeight: 80px;
 }
 
 @font-face {
@@ -40,6 +41,7 @@
 /* Now Playing */
 #nowPlayingContainer {
     position: absolute; left: 890px; top: 10px;
+    width: 940px; height: var(--nowPlayingBoxHeight);
     box-shadow: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
     color: var(--mainColour);
 }
@@ -102,7 +104,7 @@
     background: linear-gradient(to right, white,  white,  white, rgba(255, 255, 255, 0.875), rgba(255, 255, 255, 0.75), 
                             rgba(255, 255, 255, 0.625), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.375), 
                             rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.125), transparent);
-    width: 450px; height: 80px;
+    width: 450px; height: var(--nowPlayingBoxHeight);
     z-index: 1;
 }
 #nowPlayingBackground {
@@ -110,5 +112,5 @@
     background-image: url("https://assets.ppy.sh/beatmaps/292301/covers/cover.jpg");
     background-position: center;
     background-size: cover;
-    width: 400px; height: 80px;
+    width: 400px; height: var(--nowPlayingBoxHeight);
 }
