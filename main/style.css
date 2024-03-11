@@ -1,3 +1,24 @@
+:root {
+    --mainColour: #5E72EB;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-ExtraBold.ttf");
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-Medium.ttf");
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("../fonts/Inter-Italic.ttf");
+    font-weight: 400;
+    text-decoration: italic;
+}
+
 /* Whole page */
 #main {
     position: absolute; top: 0; left: 0;
@@ -14,4 +35,80 @@
 #logoText { 
     position: absolute; left: 100px; top: 28px; 
     width: 460px; height: 50px;
+}
+
+/* Now Playing */
+#nowPlayingContainer {
+    position: absolute; left: 890px; top: 10px;
+    box-shadow: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+    color: var(--mainColour);
+}
+/* Mod*/
+#nowPlayingMod {
+    position: absolute; left: 0; top: 25px;
+    background-color: var(--mainColour);
+    width: 70px; height: 30px;
+    font-family: "Inter"; font-weight: 800;
+    text-align: center;
+    color: white;
+    line-height: 30px;
+}
+/* Now playing metadata */
+.nowPlayingMetadataWrapper {
+    position: absolute; left: 90px;
+    width: 320px;
+    text-wrap: nowrap;
+    overflow: hidden;
+}
+.nowPlayingDifficultyArtistWrapper { font-family: "Inter Italic"; font-weight: 400; font-size: 14px; }
+.nowPlayingMetadata { width: max-content; }
+/* Song Name */
+#nowPlayingSongNameWrapper {
+    top: 10px;
+    font-family: "Inter"; font-weight: 800; font-size: 20px;
+}
+/* Difficulty */
+#nowPlayingDifficultyWrapper {
+    top: 34px;
+    letter-spacing: 0.6px;
+}
+/* Artist */
+#nowPlayingArtistWrapper {
+    top: 52px;
+    letter-spacing: 0.5px;
+}
+/* Text Animation */
+.nowPlayingTextAnimation { animation: displaySlide 20s linear infinite alternate; }
+@keyframes nowPlayingTextKeyframes {
+    0% { transform: translate(0px); }
+    11% {transform: translate(0px); }
+    89% { transform: translate(calc(-100% + 320px)); }
+    100% { transform: translate(calc(-100% + 320px)); }
+}
+/* Now Playing Stats */
+#nowPlayingStats {
+    position: absolute; left: 423px; top: 9px;
+    display: grid;
+    grid-template-columns: 95px 200px;
+    grid-template-rows: repeat(3, 20px);
+    z-index: 2;
+    
+    font-family: "Inter"; font-size: 16px; font-weight: 500;
+}
+.nowPlayingStatsText { font-weight: 800; }
+/* Now Playing Background */
+#nowPlayingBackgroundGradient {
+    position: absolute; left: 580px; top: 0;
+    background: linear-gradient(to right, white,  white,  white, rgba(255, 255, 255, 0.875), rgba(255, 255, 255, 0.75), 
+                            rgba(255, 255, 255, 0.625), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.375), 
+                            rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.125), transparent);
+    width: 450px; height: 80px;
+    z-index: 1;
+}
+#nowPlayingBackground {
+    position: absolute; left: 630px; top: 0;
+    background-image: url("https://assets.ppy.sh/beatmaps/292301/covers/cover.jpg");
+    background-position: center;
+    background-size: cover;
+    width: 400px; height: 80px;
 }
