@@ -339,6 +339,24 @@
     line-height: 30px;
 }
 
+/* Current Score Bar */
+#currentScoreBar {
+    position: absolute; left: 340px; top: 104px;
+    width: 25px; height: 968px;
+}
+.currentScoreBar {
+    position: absolute; 
+    width: inherit; height: 484px;
+}
+#currentScoreBarRed {
+    bottom: 50%;
+    background-color: var(--teamRedColour);
+}
+#currentScoreBarBlue {
+    top: 50%;
+    background-color: var(--teamBlueColour);
+}
+
 /* Rotating Info */
 #rotatingInfo {
     position: absolute; left: var(--sideSectionContainerLeft); top: 937px;
