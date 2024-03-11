@@ -317,8 +317,8 @@
     background-color: var(--teamRedColour);
 }
 #teamBlueScoreLine2 {
-    top: 145px;
-    background-color: var(--teamRedColour);
+    bottom: 145px;
+    background-color: var(--teamBlueColour);
 }
 /* Score Text */
 .teamScoreText {
@@ -326,7 +326,7 @@
     font-family: "Inter"; font-size: 12px; font-weight: 500;
 }
 #teamRedScoreText { top: 149px; }
-#teamBlueScoreText { top: 149px; }
+#teamBlueScoreText { bottom: 149px; }
 
 /* Current score difference */
 #currentScoreDifference {
