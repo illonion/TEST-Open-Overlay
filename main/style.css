@@ -1,7 +1,12 @@
 :root {
     --mainColour: #5E72EB;
+    --teamBlueColour: #5E72EB;
     --teamRedColour: #FF9190;
     --teamSectionColour: #FFFEFA;
+
+    --boxShadowRed: rgba(255, 145, 144, 0.45);
+    --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+
     --nowPlayingBoxHeight: 80px;
     --sideSectionContainerWidth: 315px;
     --sideSectionContainerLeft: 15px;
@@ -51,7 +56,7 @@
 #nowPlayingContainer {
     position: absolute; left: 890px; top: 10px;
     width: 940px; height: var(--nowPlayingBoxHeight);
-    box-shadow: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+    box-shadow: var(--boxShadowPurple);
     color: var(--mainColour);
 }
 /* Mod*/
@@ -128,7 +133,7 @@
 #commentatorsContainer {
     position: absolute; left: var(--sideSectionContainerLeft); top: 134px;
     width: var(--sideSectionContainerWidth); height: 105px;
-    box-shadow: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+    box-shadow: var(--boxShadowPurple);
 }
 #commentatorsText {
     position: absolute; left: 10px; top: 10px;
@@ -147,107 +152,174 @@
 }
 
 /* Team Sections */
-#teamRedSection {
-    position: absolute; left: var(--sideSectionContainerLeft); top: 383px;
+.teamSection {
+    position: absolute; left: var(--sideSectionContainerLeft); 
     width: var(--sideSectionContainerWidth); height: 175px;
+    /* background-color: white; */
+}
+#teamRedSection {
+    top: 383px;
     color: var(--teamRedColour);
-    background-color: white;
-    box-shadow: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
+    box-shadow: var(--boxShadowRed);
+}
+#teamBlueSection {
+    top: 618px;
+    color: var(--teamBlueColour);
+    box-shadow: var(--boxShadowPurple);
 }
 /* Team Details */
-#teamRedDetails {
-    position: absolute; left: 0px; top: 0px;
+.teamDetails {
+    position: absolute; left: 0px; 
     width: inherit; height: 56px;
+}
+#teamRedDetails {
+    top: 0px;
     background-color: var(--teamRedColour);
 }
+#teamBlueDetails {
+    bottom: 0px;
+    background-color: var(--teamBlueColour);
+}
 /* Team Banner */
-#teamRedBanner {
-    position: absolute; left: 10px; top: 8px; 
+.teamBanner {
+    position: absolute; left: 10px; 
     width: 80px; height: 40px;
     background-size: cover;
     background-position: center;
 }
+#teamRedBanner { top: 8px; }
+#teamBlueBanner { bottom: 8px; }
 /* Team Name */
-#teamRedNameContainer {
+.teamNameContainer {
     position: absolute; left: 106px; top: 8px;
     width: 150px; height: 40px;
     display: flex;
     align-items: center;
 }
-#teamRedName {
+.teamName {
     font-family: "Inter"; font-weight: 800; font-size: 16px;
     color: var(--teamSectionColour);
 }
 /* Team Seed */
-#teamRedSeed {
+.teamSeed {
     position: absolute; left: 273px; top: 9px;
     width: 35px; height: 31px;
     color: var(--teamSectionColour);
     font-family: "Inter"; 
 }
-#teamRedSeedText {
-    font-weight: 800; font-size: 12px;
-}
-#teamRedSeedNumber {
+.teamSeedText { font-weight: 800; font-size: 12px; }
+.teamSeedNumber {
     position: absolute; left: 50%; top: 15px;
     font-weight: 400; font-size: 18px;
     transform: translateX(-55%);
 }
 /* Team Wins */
-#teamRedWins {
-    position: absolute; top: 59px;
+.teamWins {
+    position: absolute; 
     width: 174px; height: 30px;
 }
+#teamRedWins { top: 59px; }
+#teamBlueWins { top: 83px; }
 /* Team win text */
-#teamRedWinsText {
+.teamWinsText {
     position: absolute; left: 10px;
     font-family: "Inter"; font-size: 12px; font-weight: 500;
 }
 /* Team win line */
-#teamRedWinLine {
+.teamWinLine {
     position: absolute; top: 17px;
     width: 91px; height: 1px;
-    background-color: var(--teamRedColour)
 }
+#teamRedWinLine { background-color: var(--teamRedColour); }
+#teamBlueWinLine { background-color: var(--teamBlueColour); }
 /* Team win stars */
-#teamRedWinStars {
+.teamWinStars {
     display: flex;
     position: absolute; left: 10px; top: 23px;
 }
-.teamRedWinStar {
+.teamWinStar {
     width: 18px; height: 5px;
     margin-right: 4px;
-    border: 1px solid var(--teamRedColour);
+    border: 1px solid;
 }
-.teamRedWinStarFill {
-    background-color: var(--teamRedColour);
-}
+.teamRedWinStar { border-color: var(--teamRedColour); }
+.teamRedWinStarFill { background-color: var(--teamRedColour); }
+.teamBlueWinStar { border-color: var(--teamBlueColour); }
+.teamBlueWinStarFill { background-color: var(--teamBlueColour); }
 /* Team map picks */
-#teamRedMapPick {
-    position: absolute; left: 217px; top: 62px;
+.teamMapPick {
+    position: absolute; left: 217px;
     width: 96px; height: 23px;
-    border: 2px solid var(--teamRedColour);
+    border: 2px solid;
     border-right-width: 0;
     line-height: 23px;
     font-family: "Inter"; font-size: 12px; font-weight: 500;
     text-align: center;
 }
-/* Red Team Score Section */
-#teamRedCurrentScore {
-    position: absolute; right: 10px; top: 94px;
-    font-family: "Inter"; font-weight: 500; font-size: 36px;
+#teamRedMapPick {
+    top: 62px;
+    border-color: var(--teamRedColour);
 }
-#teamRedScoreLine1 {
-    position: absolute; left: 11px; top: 138px;
+#teamBlueMapPick {
+    top: 86px;
+    border-color: var(--teamBlueColour);
+}
+/* Team Score Section */
+/* Team Score */
+.teamCurrentScore {
+    position: absolute; right: 9px; 
+    font-family: "Inter"; font-size: 36px;
+}
+#teamRedCurrentScore {
+    top: 94px;
+    font-weight: 500;
+}
+#teamBlueCurrentScore {
+    top: 36px;
+    font-weight: 800; 
+}
+/* Score Line 1 */
+.teamScoreLine1 {
+    position: absolute; left: 11px; 
     width: 15px; height: 2px;
     background-color: var(--teamRedColour);
 }
-#teamRedScoreLine2 {
-    position: absolute; top: 145px;
-    width: 217px; height: 1px;
+#teamRedScoreLine1 { 
+    top: 138px;
     background-color: var(--teamRedColour);
 }
-#teamRedScoreText {
-    position: absolute; left: 10px; top: 149px;
+#teamBlueScoreLine1 {
+    bottom: 138px;
+    background-color: var(--teamBlueColour);
+}
+/* Score Line 2 */
+.teamScoreLine2 {
+    position: absolute; 
+    width: 217px; height: 1px;
+}
+#teamRedScoreLine2 {
+    top: 145px;
+    background-color: var(--teamRedColour);
+}
+#teamBlueScoreLine2 {
+    top: 145px;
+    background-color: var(--teamRedColour);
+}
+/* Score Text */
+.teamScoreText {
+    position: absolute; left: 10px; 
     font-family: "Inter"; font-size: 12px; font-weight: 500;
+}
+#teamRedScoreText { top: 149px; }
+#teamBlueScoreText { top: 149px; }
+
+/* Current score difference */
+#currentScoreDifference {
+    position: absolute; left: 73px; top: 573px;
+    width: 200px; height: 30px;
+    background-color: var(--teamBlueColour);
+    color: white;
+    font-family: "Inter"; font-weight: 800;
+    text-align: center;
+    line-height: 30px;
 }
