@@ -8,9 +8,10 @@
     --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
 
     --nowPlayingBoxHeight: 80px;
-    --sideSectionContainerWidth: 315px;
+    --outsideSectionContainerWidth: 330px;
+    --middleSectionContainerWidth: 315px;
     --sideSectionContainerLeft: 15px;
-    --sideSectionOutsideContainerHeight: 105px;
+    --sideSectionOutsideContainerHeight: 140px;
 }
 
 /* Inter Font */
@@ -98,7 +99,7 @@
     font-family: "Inter"; font-weight: 800; font-size: 20px;
 }
 /* Difficulty */
-#nowPlayingDifficultyWrapper {
+#nowPlayingDifficultyMapperWrapper {
     top: 34px;
     letter-spacing: 0.6px;
 }
@@ -145,20 +146,20 @@
 
 /* Commentators */
 #commentatorsContainer {
-    position: absolute; left: var(--sideSectionContainerLeft); top: 134px;
-    width: var(--sideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
+    position: absolute; top: 134px;
+    width: var(--outsideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
     box-shadow: var(--boxShadowPurple);
     background-color: white;
 }
 #commentatorsText {
-    position: absolute; left: 10px; top: 10px;
+    position: absolute; left: 25px; top: 10px;
     font-family: "Inter"; font-weight: 500; font-size: 12px;
     color: var(--mainColour);
 }
 #commentatorsLine1 {
     position: absolute; left: 0px; top: 27px;
     background-color: var(--mainColour);
-    width: 217px; height: 1px;
+    width: 232px; height: 1px;
 }
 #commentatorsLine2 {
     position: absolute; left: 11px; top: 33px;
@@ -169,7 +170,7 @@
 /* Team Sections */
 .teamSection {
     position: absolute; left: var(--sideSectionContainerLeft); 
-    width: var(--sideSectionContainerWidth); height: 175px;
+    width: var(--middleSectionContainerWidth); height: 175px;
     background-color: white;
 }
 #teamRedSection {
@@ -361,8 +362,8 @@
 
 /* Rotating Info */
 #rotatingInfo {
-    position: absolute; left: var(--sideSectionContainerLeft); top: 937px;
-    width: var(--sideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
+    position: absolute; top: 902px;
+    width: var(--outsideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
     background-color: white;
     color: var(--mainColour);
     box-shadow: var(--boxShadowPurple);
@@ -379,9 +380,9 @@
 }
 /* Rotating Information Text */
 .rotatingInfoText {
-    position: absolute; left: 30px; top: 20px;
+    position: absolute; left: 45px; top: 20px;
     text-align: center;
-    width: 150px; height: 70px;
+    width: 150px; height: 105px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -389,7 +390,7 @@
 .rotatingInfoTextHeader { font-family: "Inter"; font-weight: 800; font-size: 14px; }
 .rotatingInfoTextBody { font-family: "Inter"; font-weight: 500; font-size: 12px; }
 .rotatingInfoCommand {
-    position: absolute; left: 239px; top: 44px;
+    position: absolute; left: 254px; top: 61.5px;
     font-family: "Inter"; font-weight: 800; font-size: 20px;
     transform: translateX(-50%);
 }
@@ -397,19 +398,19 @@
 /* Sponsor Text */
 #sponsorInfo { opacity: 0; }
 #sponsorThankYou {
-    position: absolute; left: 50px; top: 24px; 
+    position: absolute; left: 50px; top: 41.5px; 
     font-family: "Montserrat"; font-weight: 500; font-size: 8px;
 }
 #blueBunnyLogo {
-    position: absolute; left: 71px; top: 40px;
+    position: absolute; left: 71px; top: 57.5px;
     width: 35px; height: 51px;
 }
 #blueBunnyText {
-    position: absolute; left: 124px; top: 39px;
+    position: absolute; left: 124px; top: 56.5px;
     font-family: "Montserrat"; font-weight: 800; font-size: 20px;
 }
 #blueBunnyCustomTabletCoversText {
-    position: absolute; left: 136px; top: 62px;
+    position: absolute; left: 136px; top: 79.5px;
     width: 90px;
     font-family: "Montserrat"; font-weight: 500; font-size: 12px;
     text-align: center;

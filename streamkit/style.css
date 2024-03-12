@@ -4,7 +4,7 @@
 
 
 body {
-    --width: 120;
+    --width: 100;
 
     --widthPX: calc(var(--width) * 1px);
     --height: 100px;
