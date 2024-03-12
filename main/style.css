@@ -337,6 +337,7 @@
     font-family: "Inter"; font-weight: 800;
     text-align: center;
     line-height: 30px;
+    transition: 400ms ease-in-out;
 }
 
 /* Current Score Bar */
@@ -347,6 +348,7 @@
 .currentScoreBar {
     position: absolute; 
     width: inherit; height: 484px;
+    transition: 200ms ease-in-out;
 }
 #currentScoreBarRed {
     bottom: 50%;
