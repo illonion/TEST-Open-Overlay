@@ -87,7 +87,7 @@
 /* Now playing metadata */
 .nowPlayingMetadataWrapper {
     position: absolute; left: 90px;
-    width: 320px;
+    width: 400px;
     text-wrap: nowrap;
     overflow: hidden;
 }
@@ -113,12 +113,12 @@
 @keyframes nowPlayingTextKeyframes {
     0% { transform: translate(0px); }
     11% {transform: translate(0px); }
-    89% { transform: translate(calc(-100% + 320px)); }
-    100% { transform: translate(calc(-100% + 320px)); }
+    89% { transform: translate(calc(-100% + 400px)); }
+    100% { transform: translate(calc(-100% + 400px)); }
 }
 /* Now Playing Stats */
 #nowPlayingStats {
-    position: absolute; left: 423px; top: 9px;
+    position: absolute; left: 515px; top: 9px;
     display: grid;
     grid-template-columns: 95px 200px;
     grid-template-rows: repeat(3, 20px);
@@ -130,7 +130,7 @@
 /* Now Playing Background */
 #nowPlayingBackgroundGradient {
     position: absolute; left: 580px; top: 0;
-    background: linear-gradient(to right, white,  white,  white, rgba(255, 255, 255, 0.875), rgba(255, 255, 255, 0.75), 
+    background: linear-gradient(to right, white,  white,  white, white, white, rgba(255, 255, 255, 0.875), rgba(255, 255, 255, 0.75), 
                             rgba(255, 255, 255, 0.625), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.375), 
                             rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.125), transparent);
     width: 450px; height: var(--nowPlayingBoxHeight);
