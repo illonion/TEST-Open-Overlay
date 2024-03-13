@@ -144,27 +144,50 @@
     width: 400px; height: var(--nowPlayingBoxHeight);
 }
 
-/* Commentators */
-#commentatorsContainer {
-    position: absolute; top: 134px;
-    width: var(--outsideSectionContainerWidth); height: 140px;
+/* Side Containers */
+.sideContainer {
+    position: absolute; 
+    width: var(--outsideSectionContainerWidth);
     box-shadow: var(--boxShadowPurple);
     background-color: white;
-}
-#commentatorsText {
-    position: absolute; left: 25px; top: 10px;
-    font-family: "Inter"; font-weight: 500; font-size: 12px;
     color: var(--mainColour);
 }
-#commentatorsLine1 {
+.sideSectionLine1 {
     position: absolute; left: 0px; top: 27px;
     background-color: var(--mainColour);
     width: 232px; height: 1px;
 }
-#commentatorsLine2 {
+.sideSectionLine2 {
     position: absolute; left: 11px; top: 33px;
     background-color: var(--mainColour);
     width: 15px; height: 2px;
+}
+
+/* Commentator */
+#commentatorsContainer {
+    top: 134px;
+    height: 140px;
+}
+#commentatorsText {
+    position: absolute; left: 25px; top: 10px;
+    font-family: "Inter"; font-weight: 500; font-size: 12px;
+}
+
+/* Mod Info */
+#modInfoContainer {
+    top: 810px;
+    height: 105px;
+}
+#modInfoHeader {
+    position: absolute; left: 25px; top: 10px;
+    font-family: "Inter"; font-weight: 800; font-size: 12px;
+}
+#modInfoText {
+    position: absolute; left: 50%; top: 64.5px;
+    transform: translate(-50%, -50%);
+    width: 255px;
+    font-family: "Inter"; font-weight: 500; font-size: 12px;
+    text-align: center;
 }
 
 /* Team Sections */
@@ -235,7 +258,7 @@
     width: 174px; height: 30px;
 }
 #teamRedWins { top: 59px; }
-#teamBlueWins { top: 83px; }
+#teamBlueWins { bottom: 59px; }
 /* Team win text */
 .teamWinsText {
     position: absolute; left: 10px;
@@ -277,7 +300,7 @@
     border-color: var(--teamRedColour);
 }
 #teamBlueMapPick {
-    top: 86px;
+    bottom: 62px;
     border-color: var(--teamBlueColour);
 }
 /* Team Score Section */
@@ -291,7 +314,7 @@
     font-weight: 500;
 }
 #teamBlueCurrentScore {
-    top: 36px;
+    bottom: 94px;
     font-weight: 800; 
 }
 /* Score Line 1 */
@@ -362,11 +385,8 @@
 
 /* Rotating Info */
 #rotatingInfo {
-    position: absolute; top: 937px;
-    width: var(--outsideSectionContainerWidth); height: var(--sideSectionLowerContainerHeight);
-    background-color: white;
-    color: var(--mainColour);
-    box-shadow: var(--boxShadowPurple);
+    top: 937px;
+    height: var(--sideSectionLowerContainerHeight);
 }
 #rotatingInfoLine1 {
     position: absolute; right: 0; top: 13px;
