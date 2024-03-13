@@ -193,8 +193,9 @@
 /* Team Sections */
 .teamSection {
     position: absolute; left: var(--sideSectionContainerLeft); 
-    width: var(--middleSectionContainerWidth); height: 175px;
+    width: var(--middleSectionContainerWidth); height: 100px;
     background-color: white;
+    overflow: hidden;
 }
 #teamRedSection {
     top: 383px;
@@ -202,7 +203,7 @@
     box-shadow: var(--boxShadowRed);
 }
 #teamBlueSection {
-    top: 618px;
+    bottom: 308px;
     color: var(--teamBlueColour);
     box-shadow: var(--boxShadowPurple);
 }
@@ -383,6 +384,38 @@
     background-color: var(--teamBlueColour);
 }
 
+/* Chat */
+#chatDisplay {
+    position: absolute; left: 15px; top: 508px;
+    width: 295px; height: 130px;
+    background-color: white;
+    box-shadow: var(--boxShadowPurple);
+    font-family: "Inter"; font-size: 12px;
+    overflow: hidden;
+    padding: 10px;
+    overflow-y: scroll;
+}
+.chatMessageContainer { display: flex; }
+.messageTime {
+    font-weight: 500;
+    width: 45px;
+    color: #B5B5B5;
+}
+.messageUser {
+    font-weight: 800;
+    color: #5E72EB;
+    width: 100px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.messageContent {
+    width: 154px;
+    margin-left: 5px;
+    color: #5E72EB;
+}
+
 /* Rotating Info */
 #rotatingInfo {
     top: 937px;
@@ -447,3 +480,7 @@
 .gameplayRightScreen { left: 1405px; }
 .gameplayTopScreen { top: 104px; }
 .gameplayBottomScreen { top: 593px; }
+
+::-webkit-scrollbar {
+    display: none;
+}
