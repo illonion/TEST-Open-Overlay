@@ -11,7 +11,7 @@
     --outsideSectionContainerWidth: 330px;
     --middleSectionContainerWidth: 315px;
     --sideSectionContainerLeft: 15px;
-    --sideSectionOutsideContainerHeight: 140px;
+    --sideSectionLowerContainerHeight: 105px
 }
 
 /* Inter Font */
@@ -147,7 +147,7 @@
 /* Commentators */
 #commentatorsContainer {
     position: absolute; top: 134px;
-    width: var(--outsideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
+    width: var(--outsideSectionContainerWidth); height: 140px;
     box-shadow: var(--boxShadowPurple);
     background-color: white;
 }
@@ -362,8 +362,8 @@
 
 /* Rotating Info */
 #rotatingInfo {
-    position: absolute; top: 902px;
-    width: var(--outsideSectionContainerWidth); height: var(--sideSectionOutsideContainerHeight);
+    position: absolute; top: 937px;
+    width: var(--outsideSectionContainerWidth); height: var(--sideSectionLowerContainerHeight);
     background-color: white;
     color: var(--mainColour);
     box-shadow: var(--boxShadowPurple);
@@ -380,7 +380,7 @@
 }
 /* Rotating Information Text */
 .rotatingInfoText {
-    position: absolute; left: 45px; top: 20px;
+    position: absolute; left: 45px; top: 5px;
     text-align: center;
     width: 150px; height: 105px;
     display: flex;
@@ -390,7 +390,7 @@
 .rotatingInfoTextHeader { font-family: "Inter"; font-weight: 800; font-size: 14px; }
 .rotatingInfoTextBody { font-family: "Inter"; font-weight: 500; font-size: 12px; }
 .rotatingInfoCommand {
-    position: absolute; left: 254px; top: 61.5px;
+    position: absolute; left: 254px; top: 44px;
     font-family: "Inter"; font-weight: 800; font-size: 20px;
     transform: translateX(-50%);
 }
@@ -398,19 +398,19 @@
 /* Sponsor Text */
 #sponsorInfo { opacity: 0; }
 #sponsorThankYou {
-    position: absolute; left: 50px; top: 41.5px; 
+    position: absolute; left: 50px; top: 7px; 
     font-family: "Montserrat"; font-weight: 500; font-size: 8px;
 }
 #blueBunnyLogo {
-    position: absolute; left: 71px; top: 57.5px;
+    position: absolute; left: 71px; top: 40px;
     width: 35px; height: 51px;
 }
 #blueBunnyText {
-    position: absolute; left: 124px; top: 56.5px;
+    position: absolute; left: 124px; top: 39px;
     font-family: "Montserrat"; font-weight: 800; font-size: 20px;
 }
 #blueBunnyCustomTabletCoversText {
-    position: absolute; left: 136px; top: 79.5px;
+    position: absolute; left: 136px; top: 62px;
     width: 90px;
     font-family: "Montserrat"; font-weight: 500; font-size: 12px;
     text-align: center;
