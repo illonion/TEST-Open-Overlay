@@ -109,12 +109,19 @@
     letter-spacing: 0.5px;
 }
 /* Text Animation */
-.nowPlayingTextAnimation { animation: displaySlide 20s linear infinite alternate; }
+.nowPlayingTextAnimationShort { animation: displaySlide 20s linear infinite alternate; }
 @keyframes nowPlayingTextKeyframes {
     0% { transform: translate(0px); }
     11% {transform: translate(0px); }
     89% { transform: translate(calc(-100% + 400px)); }
     100% { transform: translate(calc(-100% + 400px)); }
+}
+.nowPlayingTextAnimationLong { animation: displaySlide 20s linear infinite alternate; }
+@keyframes nowPlayingTextKeyframes {
+    0% { transform: translate(0px); }
+    11% {transform: translate(0px); }
+    89% { transform: translate(calc(-100% + 470px)); }
+    100% { transform: translate(calc(-100% + 470px)); }
 }
 /* Now Playing Stats */
 #nowPlayingStats {
