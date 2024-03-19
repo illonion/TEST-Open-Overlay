@@ -8,6 +8,49 @@ socket.onopen = () => {
     console.log('Successfully Connected')
 }
 
+// Star system
+const teamRedWinStars = document.getElementById("teamRedWinStars")
+const teamBlueWinStars = document.getElementById("teamBlueWinStars")
+let currentBestOf = 9, currentFirstTo = 5
+let currentStarRed = 2, currentStarBlue = 3
+// Generate stars
+function generateStarsDisplay() {
+    if (currentStarRed > currentFirstTo) currentStarRed = currentFirstTo
+    if (currentStarBlue > currentFirstTo) currentStarBlue = currentFirstTo
+    if (currentStarRed < 0) currentStarRed = 0
+    if (currentStarBlue < 0) currentStarBlue = 0
+
+    // Generate or remove new (blank) stars
+    teamRedWinStars.innerHTML = ""
+    teamBlueWinStars.innerHTML = ""
+
+    // Red stars
+    createStars(teamRedWinStars, "teamRedWinStar", "teamRedWinStarFill", currentStarRed)
+    createStars(teamRedWinStars, "teamRedWinStar", null, currentFirstTo - currentStarRed)
+
+    // Blue stars
+    createStars(teamBlueWinStars, "teamBlueWinStar", "teamBlueWinStarFill", currentStarBlue)
+    createStars(teamBlueWinStars, "teamBlueWinStar", null, currentFirstTo - currentStarBlue)
+}
+function createStars(container, starClass, fillClass, count) {
+    for (let i = 0; i < count; i++) {
+        const teamWinStars = document.createElement("div");
+        teamWinStars.classList.add("teamWinStar", starClass);
+        if (fillClass && i < count) {
+            teamWinStars.classList.add(fillClass);
+        }
+        container.append(teamWinStars);
+    }
+}
+function changeStarCount(team, action) {
+    if (team === "red" && action === "plus") currentStarRed++
+    if (team === "red" && action === "minus") currentStarRed--
+    if (team === "blue" && action === "plus") currentStarBlue++
+    if (team === "blue" && action === "minus") currentStarBlue--
+    generateStarsDisplay()
+}
+generateStarsDisplay()
+
 // Now Playing Details
 const nowPlayingMod = document.getElementById("nowPlayingMod")
 const nowPlayingSongName = document.getElementById("nowPlayingSongName")
@@ -30,10 +73,29 @@ const nowPlayingStatsSRNumber = document.getElementById("nowPlayingStatsSRNumber
 // Now Playing Background
 const nowPlayingBackground = document.getElementById("nowPlayingBackground")
 
+// Mod information
+const modInfoContainer = document.getElementById("modInfoContainer")
+const currentMod = document.getElementById("currentMod")
+const modInfoText = document.getElementById("modInfoText")
+let resultsDisplayed = false
+
+// Team Sections
+const teamRedSection = document.getElementById("teamRedSection")
+const teamBlueSection = document.getElementById("teamBlueSection")
+const teamRedScoreSection = document.getElementById("teamRedScoreSection")
+const teamBlueScoreSection = document.getElementById("teamBlueScoreSection")
+
+// Score Section
+const currentScoreBar = document.getElementById("currentScoreBar")
+
+// Chat Section
+const chatDisplay = document.getElementById("chatDisplay")
+
 // Whenever socket sends a message
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
+
 
     // todo: complete this typedef
     /**
@@ -87,6 +149,46 @@ socket.onmessage = event => {
             nowPlayingStatsBPMNumber.innerText = `${Math.round(message.bpm)}`;
             nowPlayingStatsODNumber.innerText = `${message.difficulty.overall_difficulty}`;
             nowPlayingStatsSRNumber.innerText = `${Math.round(message.star_rating * 100) / 100}★`;
+            modInfoContainer.style.left = "-330px"
+        }
+    }
+
+    // For what information to show on left
+    // UPDATE THIS WHEN I KNOW WHAT THE DATA LOOKS LIKE AND ADD THE TYPEDEF IN HERE TOO
+    if (data.type === "MultiplayerRoomState") {
+        const currentStatus = message.___.toLowerCase()
+
+        if (currentStatus === "open") {
+
+            resultsDisplayed = false
+            teamRedSection.style.width = "175px"
+            teamBlueSection.style.width = "175px"
+            teamRedScoreSection.style.opacity = 0
+            teamBlueScoreSection.style.opacity = 0
+            chatDisplay.style.left = "15px"
+            currentScoreBar.style.opacity = 0            
+
+        } else if (currentStatus === "loading" || currentStatus === "playing") {
+
+            resultsDisplayed = false
+            teamRedSection.style.width = "100px"
+            teamBlueSection.style.width = "100px"
+            teamRedScoreSection.style.opacity = 1
+            teamBlueScoreSection.style.opacity = 1
+            chatDisplay.style.left = "-295px"
+            currentScoreBar.style.opacity = 0
+
+        } else if (currentStatus === "results" && !resultsDisplayed) {
+
+            resultsDisplayed = true
+            setTimeout(() => {
+                teamRedSection.style.width = "175px"
+                teamBlueSection.style.width = "175px"
+                teamRedScoreSection.style.opacity = 0
+                teamBlueScoreSection.style.opacity = 0
+                chatDisplay.style.left = "15px"
+                currentScoreBar.style.opacity = 0
+            }, 15000)
         }
     }
 

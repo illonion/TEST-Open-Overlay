@@ -64,7 +64,7 @@
             <!-- Red Team Map Pick-->
             <div class="teamMapPick" id="teamRedMapPick">MAP PICK</div>
             <!-- Red team Score -->
-            <section id="teamRedScoreSection">
+            <section class="teamScoreSection" id="teamRedScoreSection">
                 <div class="teamCurrentScore" id="teamRedCurrentScore">1,999,999</div>
                 <div class="teamScoreLine1" id="teamRedScoreLine1"></div>
                 <div class="teamScoreLine2" id="teamRedScoreLine2"></div>
@@ -89,7 +89,7 @@
             <!-- Blue Team Map Pick-->
             <div class="teamMapPick" id="teamBlueMapPick">MAP PICK</div>
             <!-- Blue team Score -->
-            <section id="teamBlueScoreSection">
+            <section class="teamScoreSection" id="teamBlueScoreSection">
                 <div class="teamCurrentScore" id="teamBlueCurrentScore">2,999,999</div>
                 <div class="teamScoreLine1" id="teamBlueScoreLine1"></div>
                 <div class="teamScoreLine2" id="teamBlueScoreLine2"></div>
@@ -152,6 +152,18 @@
         <div class="gameplayScreen gameplayLeftScreen gameplayBottomScreen"></div>
         <div class="gameplayScreen gameplayMiddleScreen gameplayBottomScreen"></div>
         <div class="gameplayScreen gameplayRightScreen gameplayBottomScreen"></div>
+    </div>
+    <!-- Sidebar -->
+    <div id="sideBar">
+        <section id="sideBarStarSection">
+            <div class="sideBarSectionHeader">Stars</div>
+            <div id="sideBarStarButtons">
+                <button class="sideBarStarButton" onclick="changeStarCount('red','plus')">Red ++</button>
+                <button class="sideBarStarButton" onclick="changeStarCount('red','minus')">Red --</button>
+                <button class="sideBarStarButton" onclick="changeStarCount('blue','plus')">Blue ++</button>
+                <button class="sideBarStarButton" onclick="changeStarCount('blue','minus')">Blue --</button>
+            </div>
+        </section>
     </div>
 
     <script src="../_shared//deps/reconnecting-websocket.min.js"></script>
