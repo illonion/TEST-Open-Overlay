@@ -43,11 +43,13 @@ function createStars(container, starClass, fillClass, count) {
     }
 }
 function changeStarCount(team, action) {
-    if (team === "red" && action === "plus") currentStarRed++
-    if (team === "red" && action === "minus") currentStarRed--
-    if (team === "blue" && action === "plus") currentStarBlue++
-    if (team === "blue" && action === "minus") currentStarBlue--
-    generateStarsDisplay()
+    if (!warmupMode) {
+        if (team === "red" && action === "plus") currentStarRed++
+        if (team === "red" && action === "minus") currentStarRed--
+        if (team === "blue" && action === "plus") currentStarBlue++
+        if (team === "blue" && action === "minus") currentStarBlue--
+        generateStarsDisplay()
+    }
 }
 generateStarsDisplay()
 
