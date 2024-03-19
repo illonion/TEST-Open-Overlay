@@ -182,8 +182,9 @@
 
 /* Mod Info */
 #modInfoContainer {
-    top: 810px;
+    top: 810px; left: 0;
     height: 105px;
+    transition: 500ms ease-in-out;
 }
 #modInfoHeader {
     position: absolute; left: 25px; top: 10px;
@@ -203,6 +204,7 @@
     width: var(--middleSectionContainerWidth); height: 100px;
     background-color: white;
     overflow: hidden;
+    transition: 500ms ease-in-out;
 }
 #teamRedSection {
     top: 383px;
@@ -313,6 +315,10 @@
 }
 /* Team Score Section */
 /* Team Score */
+.teamScoreSection  {
+    opacity: 1;
+    transition: 500ms ease-in-out;
+}
 .teamCurrentScore {
     position: absolute; right: 9px; 
     font-family: "Inter"; font-size: 36px;
@@ -376,6 +382,7 @@
 #currentScoreBar {
     position: absolute; left: 340px; top: 104px;
     width: 25px; height: 968px;
+    transition: 500ms ease-in-out;
 }
 .currentScoreBar {
     position: absolute; 
@@ -401,6 +408,7 @@
     overflow: hidden;
     padding: 10px;
     overflow-y: scroll;
+    transition: 500ms ease-in-out;
 }
 .chatMessageContainer { display: flex; }
 .messageTime {

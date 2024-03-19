@@ -30,6 +30,24 @@ const nowPlayingStatsSRNumber = document.getElementById("nowPlayingStatsSRNumber
 // Now Playing Background
 const nowPlayingBackground = document.getElementById("nowPlayingBackground")
 
+// Mod information
+const modInfoContainer = document.getElementById("modInfoContainer")
+const currentMod = document.getElementById("currentMod")
+const modInfoText = document.getElementById("modInfoText")
+let resultsDisplayed = false
+
+// Team Sections
+const teamRedSection = document.getElementById("teamRedSection")
+const teamBlueSection = document.getElementById("teamBlueSection")
+const teamRedScoreSection = document.getElementById("teamRedScoreSection")
+const teamBlueScoreSection = document.getElementById("teamBlueScoreSection")
+
+// Score Section
+const currentScoreBar = document.getElementById("currentScoreBar")
+
+// Chat Section
+const chatDisplay = document.getElementById("chatDisplay")
+
 // Whenever socket sends a message
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
@@ -37,6 +55,7 @@ socket.onmessage = event => {
     console.log(data)
     console.log(message)
 
+    // Beatmap information
     if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!") {
         foundMappoolMap = false
         currentId = message.online_id
@@ -61,12 +80,53 @@ socket.onmessage = event => {
 
         if (!foundMappoolMap) {
             nowPlayingStatsCSNumber.innerText = message.difficulty.circle_size
-            let seconds = message.length / 1000
+            const seconds = message.length / 1000
             nowPlayingStatsLENNumber.innerText = `${Math.floor(seconds / 60)}:${Math.round((num => (num < 10 ? '0' : '') + num)(seconds % 60))}`
             nowPlayingStatsARNumber.innerText = message.difficulty.approach_rate
             nowPlayingStatsBPMNumber.innerText = Math.round(message.bpm)
             nowPlayingStatsODNumber.innerText = message.difficulty.overall_difficulty
             nowPlayingStatsSRNumber.innerText = `${Math.round(message.star_rating * 100) / 100}★`
+            modInfoContainer.style.left = "-330px"
+        }
+    }
+
+    // For what information to show on left
+    // UPDATE THIS WHEN I KNOW WHAT THE DATA LOOKS LIKE AND ADD THE TYPEDEF IN HERE TOO
+    if (data.type === "MultiplayerRoomState") {
+        const currentStatus = message.___.toLowerCase()
+
+        if (currentStatus === "open") {
+
+            resultsDisplayed = false
+            teamRedSection.style.width = "175px"
+            teamBlueSection.style.width = "175px"
+            teamRedScoreSection.style.opacity = 0
+            teamBlueScoreSection.style.opacity = 0
+            chatDisplay.style.left = "15px"
+            currentScoreBar.style.opacity = 0            
+
+        } else if (currentStatus === "loading" || currentStatus === "playing") {
+
+            resultsDisplayed = false
+            teamRedSection.style.width = "100px"
+            teamBlueSection.style.width = "100px"
+            teamRedScoreSection.style.opacity = 1
+            teamBlueScoreSection.style.opacity = 1
+            chatDisplay.style.left = "-295px"
+            currentScoreBar.style.opacity = 0
+
+        } else if (currentStatus === "results" && !resultsDisplayed) {
+
+            resultsDisplayed = true
+            setTimeout(() => {
+                teamRedSection.style.width = "175px"
+                teamBlueSection.style.width = "175px"
+                teamRedScoreSection.style.opacity = 0
+                teamBlueScoreSection.style.opacity = 0
+                chatDisplay.style.left = "15px"
+                currentScoreBar.style.opacity = 0
+            }, 15000)
+
         }
     }
 }
