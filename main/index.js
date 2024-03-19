@@ -51,6 +51,22 @@ function changeStarCount(team, action) {
 }
 generateStarsDisplay()
 
+// Warmup mode
+const warmupText = document.getElementById("warmupText")
+let warmupMode = true
+function warmupToggle() {
+    warmupMode = !warmupMode
+    if (warmupMode) {
+        warmupText.innerText = "ON"
+        teamRedWinStars.style.display = "none"
+        teamBlueWinStars.style.display = "none"
+    } else {
+        warmupText.innerText = "OFF"
+        teamRedWinStars.style.display = "block"
+        teamBlueWinStars.style.display = "block"
+    }
+}
+
 // Now Playing Details
 const nowPlayingMod = document.getElementById("nowPlayingMod")
 const nowPlayingSongName = document.getElementById("nowPlayingSongName")
@@ -77,7 +93,6 @@ const nowPlayingBackground = document.getElementById("nowPlayingBackground")
 const modInfoContainer = document.getElementById("modInfoContainer")
 const currentMod = document.getElementById("currentMod")
 const modInfoText = document.getElementById("modInfoText")
-let resultsDisplayed = false
 
 // Team Sections
 const teamRedSection = document.getElementById("teamRedSection")
@@ -86,16 +101,26 @@ const teamRedScoreSection = document.getElementById("teamRedScoreSection")
 const teamBlueScoreSection = document.getElementById("teamBlueScoreSection")
 
 // Score Section
+const teamRedCurrentScore = document.getElementById("teamRedCurrentScore")
+const teamBlueCurrentScore = document.getElementById("teamBlueCurrentScore")
+const currentScoreDifferenceNumber = document.getElementById("currentScoreDifferenceNumber")
 const currentScoreBar = document.getElementById("currentScoreBar")
+const currentScoreBarRed = document.getElementById("currentScoreBarRed")
+const currentScoreBarBlue = document.getElementById("currentScoreBarBlue")
+let currentScoreRed, currentScoreBlue, currentScoreDelta
 
 // Chat Section
 const chatDisplay = document.getElementById("chatDisplay")
+
+// Map currentply playing
+let gameplayDisplayed = false
+let resultsDisplayed = false
+let resultsShown = false
 
 // Whenever socket sends a message
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
-
 
     // todo: complete this typedef
     /**
@@ -155,42 +180,42 @@ socket.onmessage = event => {
 
     // For what information to show on left
     // UPDATE THIS WHEN I KNOW WHAT THE DATA LOOKS LIKE AND ADD THE TYPEDEF IN HERE TOO
-    if (data.type === "MultiplayerRoomState") {
-        const currentStatus = message.___.toLowerCase()
+    // if (data.type === "MultiplayerRoomState") {
+    //     const currentStatus = message.room_state
+    //     console.log(currentStatus)
+    //     if (currentStatus === "Open") {
 
-        if (currentStatus === "open") {
+    //         resultsDisplayed = false
+    //         teamRedSection.style.height = "100px"
+    //         teamBlueSection.style.height = "100px"
+    //         teamRedScoreSection.style.opacity = 0
+    //         teamBlueScoreSection.style.opacity = 0
+    //         chatDisplay.style.left = "15px"
+    //         currentScoreBar.style.opacity = 0            
 
-            resultsDisplayed = false
-            teamRedSection.style.width = "175px"
-            teamBlueSection.style.width = "175px"
-            teamRedScoreSection.style.opacity = 0
-            teamBlueScoreSection.style.opacity = 0
-            chatDisplay.style.left = "15px"
-            currentScoreBar.style.opacity = 0            
+    //     } else if (currentStatus === "WaitingForLoad" || currentStatus === "Playing") {
 
-        } else if (currentStatus === "loading" || currentStatus === "playing") {
+    //         resultsDisplayed = false
+    //         teamRedSection.style.height = "175px"
+    //         teamBlueSection.style.height = "175px"
+    //         teamRedScoreSection.style.opacity = 1
+    //         teamBlueScoreSection.style.opacity = 1
+    //         chatDisplay.style.left = "-335px"
+    //         currentScoreBar.style.opacity = 0
 
-            resultsDisplayed = false
-            teamRedSection.style.width = "100px"
-            teamBlueSection.style.width = "100px"
-            teamRedScoreSection.style.opacity = 1
-            teamBlueScoreSection.style.opacity = 1
-            chatDisplay.style.left = "-295px"
-            currentScoreBar.style.opacity = 0
+    //     } else if (currentStatus === "Results" && !resultsDisplayed) {
 
-        } else if (currentStatus === "results" && !resultsDisplayed) {
-
-            resultsDisplayed = true
-            setTimeout(() => {
-                teamRedSection.style.width = "175px"
-                teamBlueSection.style.width = "175px"
-                teamRedScoreSection.style.opacity = 0
-                teamBlueScoreSection.style.opacity = 0
-                chatDisplay.style.left = "15px"
-                currentScoreBar.style.opacity = 0
-            }, 15000)
-        }
-    }
+    //         resultsDisplayed = true
+    //         setTimeout(() => {
+    //             teamRedSection.style.height = "100px"
+    //             teamBlueSection.style.height = "100px"
+    //             teamRedScoreSection.style.opacity = 0
+    //             teamBlueScoreSection.style.opacity = 0
+    //             chatDisplay.style.left = "15px"
+    //             currentScoreBar.style.opacity = 0
+    //         }, 15000)
+    //     }
+    // }
 
     if (data.type === "MultiplayerGameplay") {
         /**
@@ -211,10 +236,60 @@ socket.onmessage = event => {
          *     }
          * }} message
          */
-        let scoreRed = Object.values(message.player_states).filter(s => s.team_id === 0).map(s => s.total_score).reduce((a, b) => a + b);
-        let scoreBlue = Object.values(message.player_states).filter(s => s.team_id === 1).map(s => s.total_score).reduce((a, b) => a + b);
-        let scoreDelta = Math.abs(scoreRed - scoreBlue);
-        console.log(`score: ${scoreRed} vs ${scoreBlue} (delta: ${scoreDelta})`);
+
+        // let scoreRed = Object.values(message.player_states).filter(s => s.team_id === 0).map(s => s.total_score).reduce((a, b) => a + b);
+        // let scoreBlue = Object.values(message.player_states).filter(s => s.team_id === 1).map(s => s.total_score).reduce((a, b) => a + b);
+        // let scoreDelta = Math.abs(scoreRed - scoreBlue);
+        // console.log(`score: ${scoreRed} vs ${scoreBlue} (delta: ${scoreDelta})`);
+
+        // Check if map is found playing
+        gameplayDisplayed = false
+        resultsDisplayed = false
+
+        // Check for gameplay and whether results are displayed
+        for (let key in message.player_states) {
+            const user_state = message.player_states[key].user_state
+            if (user_state === "Playing" || user_state === "ReadyForGameplay") {
+                gameplayDisplayed = true
+                resultsShown = false
+            }
+            if (user_state === "Results") {
+                resultsDisplayed = true
+            }
+        }
+
+        if (gameplayDisplayed) {
+            // Gameplay showing
+            resultsDisplayed = false
+            teamRedSection.style.height = "175px"
+            teamBlueSection.style.height = "175px"
+            teamRedScoreSection.style.opacity = 1
+            teamBlueScoreSection.style.opacity = 1
+            chatDisplay.style.left = "-335px"
+            currentScoreBar.style.opacity = 1
+        } else if (resultsDisplayed && !resultsShown) {
+            // Results showing
+            resultsShown = true
+
+            // Generate star resutls
+            if (!warmupMode) {
+                if (currentScoreRed > currentScoreBlue) {
+                    changeStarCount('red','plus')
+                } else if (currentScoreBlue > currentScoreRed) {
+                    changeStarCount('blue','plus')
+                }
+            }
+
+            // Show chat after 15 seconds
+            setTimeout(() => {
+                teamRedSection.style.height = "100px"
+                teamBlueSection.style.height = "100px"
+                teamRedScoreSection.style.opacity = 0
+                teamBlueScoreSection.style.opacity = 0
+                chatDisplay.style.left = "15px"
+                currentScoreBar.style.opacity = 0
+            }, 15000)
+        }
     }
 }
 
