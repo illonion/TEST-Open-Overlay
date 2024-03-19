@@ -8,6 +8,42 @@ socket.onopen = () => {
     console.log('Successfully Connected')
 }
 
+// Star system
+const teamRedWinStars = document.getElementById("teamRedWinStars")
+const teamBlueWinStars = document.getElementById("teamBlueWinStars")
+let currentBestOf = 9, currentFirstTo = 5
+let currentStarRed = 2, currentStarBlue = 3
+// Generate stars
+function generateStarsDisplay() {
+    if (currentStarRed > currentFirstTo) currentStarRed = currentFirstTo
+    if (currentStarBlue > currentFirstTo) currentStarBlue = currentFirstTo
+    if (currentStarRed < 0) currentStarRed = 0
+    if (currentStarBlue < 0) currentStarBlue = 0
+
+    // Generate or remove new (blank) stars
+    teamRedWinStars.innerHTML = ""
+    teamBlueWinStars.innerHTML = ""
+
+    // Red stars
+    createStars(teamRedWinStars, "teamRedWinStar", "teamRedWinStarFill", currentStarRed)
+    createStars(teamRedWinStars, "teamRedWinStar", null, currentFirstTo - currentStarRed)
+
+    // Blue stars
+    createStars(teamBlueWinStars, "teamBlueWinStar", "teamBlueWinStarFill", currentStarBlue)
+    createStars(teamBlueWinStars, "teamBlueWinStar", null, currentFirstTo - currentStarBlue)
+}
+function createStars(container, starClass, fillClass, count) {
+    for (let i = 0; i < count; i++) {
+        const teamWinStars = document.createElement("div");
+        teamWinStars.classList.add("teamWinStar", starClass);
+        if (fillClass && i < count) {
+            teamWinStars.classList.add(fillClass);
+        }
+        container.append(teamWinStars);
+    }
+}
+generateStarsDisplay()
+
 // Now Playing Details
 const nowPlayingMod = document.getElementById("nowPlayingMod")
 const nowPlayingSongName = document.getElementById("nowPlayingSongName")
