@@ -95,10 +95,30 @@ const chatDisplay = document.getElementById("chatDisplay")
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
-    console.log(data)
-    console.log(message)
 
-    // Beatmap information
+
+    // todo: complete this typedef
+    /**
+     * @typedef {{
+     *     online_id: number
+     *     difficulty_name: string
+     *     bpm: number
+     *     star_rating: number
+     *     metadata: {
+     *         author: {
+     *             username: string
+     *         }
+     *     }
+     *     difficulty: {
+     *         circle_size: number
+     *         approach_rate: number
+     *         overall_difficulty: number
+     *     }
+     *     beatmap_set: {
+     *         online_id: number
+     *     }
+     * }} message
+     */
     if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!") {
         foundMappoolMap = false
         currentId = message.online_id
@@ -118,17 +138,17 @@ socket.onmessage = event => {
         adjustNowPlaying(nowPlayingSongName, nowPlayingSongNameWrapper)
         adjustNowPlaying(nowPlayingDifficultyMapper, nowPlayingDifficultyMapperWrapper)
         adjustNowPlaying(nowPlayingArtist, nowPlayingArtistWrapper)
-        
+
         // put find beatmap function here
 
         if (!foundMappoolMap) {
-            nowPlayingStatsCSNumber.innerText = message.difficulty.circle_size
-            const seconds = message.length / 1000
+            nowPlayingStatsCSNumber.innerText = `${message.difficulty.circle_size}`;
+            let seconds = message.length / 1000
             nowPlayingStatsLENNumber.innerText = `${Math.floor(seconds / 60)}:${Math.round((num => (num < 10 ? '0' : '') + num)(seconds % 60))}`
-            nowPlayingStatsARNumber.innerText = message.difficulty.approach_rate
-            nowPlayingStatsBPMNumber.innerText = Math.round(message.bpm)
-            nowPlayingStatsODNumber.innerText = message.difficulty.overall_difficulty
-            nowPlayingStatsSRNumber.innerText = `${Math.round(message.star_rating * 100) / 100}★`
+            nowPlayingStatsARNumber.innerText = `${message.difficulty.approach_rate}`;
+            nowPlayingStatsBPMNumber.innerText = `${Math.round(message.bpm)}`;
+            nowPlayingStatsODNumber.innerText = `${message.difficulty.overall_difficulty}`;
+            nowPlayingStatsSRNumber.innerText = `${Math.round(message.star_rating * 100) / 100}★`;
             modInfoContainer.style.left = "-330px"
         }
     }
@@ -169,8 +189,32 @@ socket.onmessage = event => {
                 chatDisplay.style.left = "15px"
                 currentScoreBar.style.opacity = 0
             }, 15000)
-
         }
+    }
+
+    if (data.type === "MultiplayerGameplay") {
+        /**
+         * @typedef {{
+         *     player_states: {
+         *         string: {
+         *             team_id: number
+         *             total_score: number
+         *             username: string
+         *             user_id: number
+         *             slot_index: number
+         *             accuracy: number
+         *             mods: [{}]
+         *             combo: number
+         *             highest_combo: number
+         *             user_state: string
+         *         }
+         *     }
+         * }} message
+         */
+        let scoreRed = Object.values(message.player_states).filter(s => s.team_id === 0).map(s => s.total_score).reduce((a, b) => a + b);
+        let scoreBlue = Object.values(message.player_states).filter(s => s.team_id === 1).map(s => s.total_score).reduce((a, b) => a + b);
+        let scoreDelta = Math.abs(scoreRed - scoreBlue);
+        console.log(`score: ${scoreRed} vs ${scoreBlue} (delta: ${scoreDelta})`);
     }
 }
 
@@ -188,6 +232,6 @@ function adjustNowPlaying(element, wrapperElement, foundMappoolMap) {
             element.classList.add("nowPlayingTextAnimationShort")
         } else {
             element.classList.add("nowPlayingTextAnimationLong")
-        }   
+        }
     }
 }
