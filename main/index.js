@@ -42,6 +42,13 @@ function createStars(container, starClass, fillClass, count) {
         container.append(teamWinStars);
     }
 }
+function changeStarCount(team, action) {
+    if (team === "red" && action === "plus") currentStarRed++
+    if (team === "red" && action === "minus") currentStarRed--
+    if (team === "blue" && action === "plus") currentStarBlue++
+    if (team === "blue" && action === "minus") currentStarBlue--
+    generateStarsDisplay()
+}
 generateStarsDisplay()
 
 // Now Playing Details

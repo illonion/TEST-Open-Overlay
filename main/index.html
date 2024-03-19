@@ -153,6 +153,18 @@
         <div class="gameplayScreen gameplayMiddleScreen gameplayBottomScreen"></div>
         <div class="gameplayScreen gameplayRightScreen gameplayBottomScreen"></div>
     </div>
+    <!-- Sidebar -->
+    <div id="sideBar">
+        <section id="sideBarStarSection">
+            <div class="sideBarSectionHeader">Stars</div>
+            <div id="sideBarStarButtons">
+                <button class="sideBarStarButton" onclick="changeStarCount('red','plus')">Red ++</button>
+                <button class="sideBarStarButton" onclick="changeStarCount('red','minus')">Red --</button>
+                <button class="sideBarStarButton" onclick="changeStarCount('blue','plus')">Blue ++</button>
+                <button class="sideBarStarButton" onclick="changeStarCount('blue','minus')">Blue --</button>
+            </div>
+        </section>
+    </div>
 
     <script src="../_shared//deps/reconnecting-websocket.min.js"></script>
     <script src="index.js"></script>
