@@ -54,8 +54,8 @@ function changeStarCount(team, action) {
 generateStarsDisplay()
 
 // Warmup mode
-const warmupText = document.getElementById("warmupText")
 let warmupMode = true
+const warmupText = document.getElementById("warmupText")
 function warmupToggle() {
     warmupMode = !warmupMode
     if (warmupMode) {
@@ -64,10 +64,11 @@ function warmupToggle() {
         teamBlueWinStars.style.display = "none"
     } else {
         warmupText.innerText = "OFF"
-        teamRedWinStars.style.display = "block"
-        teamBlueWinStars.style.display = "block"
+        teamRedWinStars.style.display = "flex"
+        teamBlueWinStars.style.display = "flex"
     }
 }
+warmupToggle()
 
 const rotatingInfoTexts = document.getElementById("rotatingInfoTexts")
 const rotatingInfos = rotatingInfoTexts.querySelectorAll(".rotating-info")
@@ -80,6 +81,23 @@ function startInterval() {
     rotatingInfos[currentRotatingInfoIndex].style.opacity = 1
 }
 setInterval(startInterval, 4500)
+
+// Player information
+let allPlayers
+let allPlayersRequest = new XMLHttpRequest()
+
+allPlayersRequest.onreadystatechange = () => {
+    if (allPlayersRequest.readyState == XMLHttpRequest.DONE) {
+        allPlayers = JSON.parse(allPlayersRequest.responseText).record
+    }
+}
+
+const jsonBinId = "65fa6cc71f5677401f40141d"
+const jsonBinApiKey = "$2a$10$DMpFsMNY2Tb.oXpzNqfeSO.VtzHd.8EsiN8ln.1.8cUFRtTVVk0na"
+
+allPlayersRequest.open("GET", `https://api.jsonbin.io/v3/b/${jsonBinId}`, false)
+allPlayersRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
+allPlayersRequest.send()
 
 // Now Playing Details
 const nowPlayingMod = document.getElementById("nowPlayingMod")
@@ -117,6 +135,7 @@ const teamBlueScoreSection = document.getElementById("teamBlueScoreSection")
 // Score Section
 const teamRedCurrentScore = document.getElementById("teamRedCurrentScore")
 const teamBlueCurrentScore = document.getElementById("teamBlueCurrentScore")
+const currentScoreDifference = document.getElementById("currentScoreDifference")
 const currentScoreDifferenceNumber = document.getElementById("currentScoreDifferenceNumber")
 const currentScoreBar = document.getElementById("currentScoreBar")
 const currentScoreBarRed = document.getElementById("currentScoreBarRed")
@@ -127,6 +146,15 @@ let scoreAnimation = {
     teamBlueCurrentScore: new CountUp(teamBlueCurrentScore, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
     currentScoreDifferenceNumber: new CountUp(currentScoreDifferenceNumber, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." })
 }
+
+// Team Details
+const teamRedBanner = document.getElementById("teamRedBanner")
+const teamBlueBanner = document.getElementById("teamBlueBanner")
+const teamRedName = document.getElementById("teamRedName")
+const teamBlueName = document.getElementById("teamBlueName")
+const teamRedSeedNumber = document.getElementById("teamRedSeedNumber")
+const teamBlueSeedNumber = document.getElementById("teamBlueSeedNumber")
+let currentTeamRedName, currentTeamBlueName
 
 // Chat Section
 const chatDisplay = document.getElementById("chatDisplay")
@@ -203,6 +231,29 @@ socket.onmessage = event => {
 
     // For what information to show on left
     // UPDATE THIS WHEN I KNOW WHAT THE DATA LOOKS LIKE AND ADD THE TYPEDEF IN HERE TOO
+    if (data.type === "MultiplayerRoomState") {
+    /**
+     * @typedef {{
+     *     room_name: string
+     *     room_state: string
+     * }} message
+     */
+        const roomName = message.room_name
+        currentTeamRedName = roomName.split("(")[1].split(")")[0]
+        currentTeamBlueName = roomName.split("(")[2].split(")")[0]
+        teamRedName.innerText = currentTeamRedName
+        teamBlueName.innerText = currentTeamBlueName
+
+        for (let i = 0; i < allPlayers.length; i++) {
+            if (currentTeamRedName === allPlayers[i].team_name) {
+                teamRedBanner.style.backgroundImage = `url("${allPlayers[i].banner_url}")`
+                teamRedSeedNumber.innerText = `#${allPlayers[i].seed}`
+            } else if (currentTeamBlueName === allPlayers[i].team_name) {
+                teamBlueBanner.style.backgroundImage = `url("${allPlayers[i].banner_url}")`
+                teamBlueSeedNumber.innerText = `#${allPlayers[i].seed}`
+            }
+        }
+    }
     // if (data.type === "MultiplayerRoomState") {
     //     const currentStatus = message.room_state
     //     console.log(currentStatus)
@@ -264,10 +315,14 @@ socket.onmessage = event => {
         gameplayDisplayed = false
         resultsDisplayed = false
 
+        currentScoreRed = 0
+        currentScoreBlue = 0
+
         // Check for gameplay and whether results are displayed
         for (let key in message.player_states) {
-            const user_state = message.player_states[key].user_state
-            const score = message.player_states[key].total_score
+            const player = message.player_states[key]
+            const user_state = player.user_state
+            const score = player.total_score
             if (user_state === "Playing" || user_state === "ReadyForGameplay") {
                 gameplayDisplayed = true
                 resultsShown = false
@@ -276,8 +331,9 @@ socket.onmessage = event => {
                 resultsDisplayed = true
             }
 
-            if (team_id === 0) currentScoreRed += score
-            else if (team_id === 1) currentScoreBlue += score
+            console.log(player.total_score)
+            if (player.team_id === 0) currentScoreRed += parseInt(score)
+            else if (player.team_id === 1) currentScoreBlue += parseInt(score)
         }
 
         // Set score information
@@ -289,22 +345,22 @@ socket.onmessage = event => {
         currentScoreDelta = Math.abs(currentScoreRed - currentScoreBlue)
         scoreAnimation.currentScoreDifferenceNumber.update(currentScoreDelta)
         let movingScoreBarDifferencePercent = Math.min(currentScoreDelta / 1000000, 1)
-        let movingScoreBarRectangleWidth = xMath.max(Math.pow(movingScoreBarDifferencePercent, 0.5) * 0.8 * 484, 484)
+        let movingScoreBarRectangleHeight = Math.min(Math.pow(movingScoreBarDifferencePercent, 0.5) * 0.8 * 484, 484)
         if (currentScoreRed > currentScoreBlue) {
-            currentScoreBarRed.style.width = `${movingScoreBarRectangleWidth}px`
-            currentScoreBarBlue.style.width = "0px"
-            currentScoreDifferenceNumber.style.backgroundColor = "var(--teamRedColour)"
+            currentScoreBarRed.style.height = `${movingScoreBarRectangleHeight}px`
+            currentScoreBarBlue.style.height = "0px"
+            currentScoreDifference.style.backgroundColor = "var(--teamRedColour)"
             currentScoreDifferenceNumber.style.color = "white"
         } else if (currentScoreRed === currentScoreBlue) {
-            currentScoreBarRed.style.width = "0px"
-            currentScoreBarBlue.style.width = "0px"
-            currentScoreDifferenceNumber.style.backgroundColor = "white"
-            currentScoreDifferenceNumber.style.COLOR = "black"
+            currentScoreBarRed.style.height = "0px"
+            currentScoreBarBlue.style.height = "0px"
+            currentScoreDifference.style.backgroundColor = "white"
+            currentScoreDifferenceNumber.style.color = "black"
         } else if (currentScoreBlue > currentScoreRed) {
-            currentScoreBarRed.style.width = "9px"
-            currentScoreBarBlue.style.width = `${movingScoreBarRectangleWidth}px`
-            currentScoreDifferenceNumber.style.backgroundColor = "var(--teamBlueColour)"
-            currentScoreDifferenceNumber.style.COLOR = "white"
+            currentScoreBarRed.style.height = "0px"
+            currentScoreBarBlue.style.height = `${movingScoreBarRectangleHeight}px`
+            currentScoreDifference.style.backgroundColor = "var(--teamBlueColour)"
+            currentScoreDifferenceNumber.style.color = "white"
         }
 
         if (gameplayDisplayed) {
@@ -337,7 +393,14 @@ socket.onmessage = event => {
                 teamBlueScoreSection.style.opacity = 0
                 chatDisplay.style.left = "15px"
                 currentScoreBar.style.opacity = 0
-            }, 15000)
+            }, 20000)
+        } else if (!gameplayDisplayed && !resultsDisplayed) {
+            teamRedSection.style.height = "100px"
+            teamBlueSection.style.height = "100px"
+            teamRedScoreSection.style.opacity = 0
+            teamBlueScoreSection.style.opacity = 0
+            chatDisplay.style.left = "15px"
+            currentScoreBar.style.opacity = 0
         }
     }
 
@@ -367,7 +430,7 @@ socket.onmessage = event => {
                 let dateTime = new Date(Date.parse(message.chat_messages[i].message_time))
                 const messageTime = document.createElement("div")
                 messageTime.classList.add("messageTime")
-                messageTime.innerText = `${dateTime.getUTCHours()}:${dateTime.getUTCMinutes()}`
+                messageTime.innerText = `${dateTime.getUTCHours().toString().padStart(2, '0')}:${dateTime.getUTCMinutes().toString().padStart(2, '0')}`
 
                 // Name
                 const messageUser = document.createElement("div")
