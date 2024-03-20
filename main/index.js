@@ -318,11 +318,20 @@ socket.onmessage = event => {
         currentScoreRed = 0
         currentScoreBlue = 0
 
+        let currentRedCount = 0
+        let currentBlueCount = 0
+        let currentRedTotalAccuracy = 0
+        let currentBlueTotalAccuracy = 0
+        let currentRedAvgAccuracy = 0
+        let currentBlueAvgAccuracy = 0
+
         // Check for gameplay and whether results are displayed
         for (let key in message.player_states) {
             const player = message.player_states[key]
             const user_state = player.user_state
             const score = player.total_score
+            const accuracy = player.accuracy
+
             if (user_state === "Playing" || user_state === "ReadyForGameplay") {
                 gameplayDisplayed = true
                 resultsShown = false
@@ -331,13 +340,23 @@ socket.onmessage = event => {
                 resultsDisplayed = true
             }
 
-            console.log(player.total_score)
-            if (player.team_id === 0) currentScoreRed += parseInt(score)
-            else if (player.team_id === 1) currentScoreBlue += parseInt(score)
+            if (player.team_id === 0) {
+                currentScoreRed += parseInt(score)
+                currentRedTotalAccuracy += accuracy
+                currentRedCount++
+            }
+            else if (player.team_id === 1) {
+                currentScoreBlue += parseInt(score)
+                currentBlueTotalAccuracy += accuracy
+                currentBlueCount++
+            }
         }
 
+        // Set average accuracies
+        currentRedAvgAccuracy = currentRedTotalAccuracy / currentRedCount
+        currentBlueAvgAccuracy = currentBlueTotalAccuracy / currentBlueCount
+
         // Set score information
-        
         scoreAnimation.teamRedCurrentScore.update(currentScoreRed)
         scoreAnimation.teamBlueCurrentScore.update(currentScoreBlue)
 
@@ -382,6 +401,10 @@ socket.onmessage = event => {
                     changeStarCount('red','plus')
                 } else if (currentScoreBlue > currentScoreRed) {
                     changeStarCount('blue','plus')
+                } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
+                    changeStarCount('red','plus')
+                } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
+                    changeStarCount('blue','plus')
                 }
             }
 
@@ -395,6 +418,7 @@ socket.onmessage = event => {
                 currentScoreBar.style.opacity = 0
             }, 20000)
         } else if (!gameplayDisplayed && !resultsDisplayed) {
+            // Show chat
             teamRedSection.style.height = "100px"
             teamBlueSection.style.height = "100px"
             teamRedScoreSection.style.opacity = 0
