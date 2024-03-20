@@ -12,7 +12,7 @@ socket.onopen = () => {
 const teamRedWinStars = document.getElementById("teamRedWinStars")
 const teamBlueWinStars = document.getElementById("teamBlueWinStars")
 let currentBestOf = 9, currentFirstTo = 5
-let currentStarRed = 2, currentStarBlue = 3
+let currentStarRed = 0, currentStarBlue = 0
 // Generate stars
 function generateStarsDisplay() {
     if (currentStarRed > currentFirstTo) currentStarRed = currentFirstTo
@@ -110,9 +110,15 @@ const currentScoreBar = document.getElementById("currentScoreBar")
 const currentScoreBarRed = document.getElementById("currentScoreBarRed")
 const currentScoreBarBlue = document.getElementById("currentScoreBarBlue")
 let currentScoreRed, currentScoreBlue, currentScoreDelta
+let scoreAnimation = {
+    teamRedCurrentScore: new CountUp(teamRedCurrentScore, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    teamBlueCurrentScore: new CountUp(teamBlueCurrentScore, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    currentScoreDifferenceNumber: new CountUp(currentScoreDifferenceNumber, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." })
+}
 
 // Chat Section
 const chatDisplay = document.getElementById("chatDisplay")
+let chatLength = 0
 
 // Map currentply playing
 let gameplayDisplayed = false
@@ -123,6 +129,9 @@ let resultsShown = false
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
+
+    console.log(data.type)
+    console.log(message)
 
     // todo: complete this typedef
     /**
@@ -182,6 +191,9 @@ socket.onmessage = event => {
 
     // For what information to show on left
     // UPDATE THIS WHEN I KNOW WHAT THE DATA LOOKS LIKE AND ADD THE TYPEDEF IN HERE TOO
+    if (data.type === "MultiplayerRoomState") {
+        const 
+    }
     // if (data.type === "MultiplayerRoomState") {
     //     const currentStatus = message.room_state
     //     console.log(currentStatus)
@@ -239,11 +251,6 @@ socket.onmessage = event => {
          * }} message
          */
 
-        // let scoreRed = Object.values(message.player_states).filter(s => s.team_id === 0).map(s => s.total_score).reduce((a, b) => a + b);
-        // let scoreBlue = Object.values(message.player_states).filter(s => s.team_id === 1).map(s => s.total_score).reduce((a, b) => a + b);
-        // let scoreDelta = Math.abs(scoreRed - scoreBlue);
-        // console.log(`score: ${scoreRed} vs ${scoreBlue} (delta: ${scoreDelta})`);
-
         // Check if map is found playing
         gameplayDisplayed = false
         resultsDisplayed = false
@@ -251,6 +258,7 @@ socket.onmessage = event => {
         // Check for gameplay and whether results are displayed
         for (let key in message.player_states) {
             const user_state = message.player_states[key].user_state
+            const score = message.player_states[key].total_score
             if (user_state === "Playing" || user_state === "ReadyForGameplay") {
                 gameplayDisplayed = true
                 resultsShown = false
@@ -258,6 +266,36 @@ socket.onmessage = event => {
             if (user_state === "Results") {
                 resultsDisplayed = true
             }
+
+            if (team_id === 0) currentScoreRed += score
+            else if (team_id === 1) currentScoreBlue += score
+        }
+
+        // Set score information
+        
+        scoreAnimation.teamRedCurrentScore.update(currentScoreRed)
+        scoreAnimation.teamBlueCurrentScore.update(currentScoreBlue)
+
+        // Set score difference information
+        currentScoreDelta = Math.abs(currentScoreRed - currentScoreBlue)
+        scoreAnimation.currentScoreDifferenceNumber.update(currentScoreDelta)
+        let movingScoreBarDifferencePercent = Math.min(currentScoreDelta / 1000000, 1)
+        let movingScoreBarRectangleWidth = xMath.max(Math.pow(movingScoreBarDifferencePercent, 0.5) * 0.8 * 484, 484)
+        if (currentScoreRed > currentScoreBlue) {
+            currentScoreBarRed.style.width = `${movingScoreBarRectangleWidth}px`
+            currentScoreBarBlue.style.width = "0px"
+            currentScoreDifferenceNumber.style.backgroundColor = "var(--teamRedColour)"
+            currentScoreDifferenceNumber.style.color = "white"
+        } else if (currentScoreRed === currentScoreBlue) {
+            currentScoreBarRed.style.width = "0px"
+            currentScoreBarBlue.style.width = "0px"
+            currentScoreDifferenceNumber.style.backgroundColor = "white"
+            currentScoreDifferenceNumber.style.COLOR = "black"
+        } else if (currentScoreBlue > currentScoreRed) {
+            currentScoreBarRed.style.width = "9px"
+            currentScoreBarBlue.style.width = `${movingScoreBarRectangleWidth}px`
+            currentScoreDifferenceNumber.style.backgroundColor = "var(--teamBlueColour)"
+            currentScoreDifferenceNumber.style.COLOR = "white"
         }
 
         if (gameplayDisplayed) {
@@ -291,6 +329,52 @@ socket.onmessage = event => {
                 chatDisplay.style.left = "15px"
                 currentScoreBar.style.opacity = 0
             }, 15000)
+        }
+    }
+
+    if (data.type === "MultiplayerChatState") {
+        /**
+         * @typedef {{
+        *     chat_messages: {
+        *         number: {
+        *             message_content: string
+        *             message_time: datetime
+        *             sender_name: string
+        *         }
+        *     }
+        * }} message
+        */
+
+        if (chatLength !== message.chat_messages.length) {
+            (chatLength === 0 || chatLength > message.chat_messages.length) ? (chatDisplay.innerHTML = "", chatLEngth = 0) : null
+
+            for (let i = chatLength; i < message.chat_messages.length; i++) {
+                // TODO: Add teams to chat messages
+                // Container
+                const chatMessageContainer = document.createElement("div")
+                chatMessageContainer.classList.add("chatMessageContainer")
+
+                // Time
+                let dateTime = new Date(Date.parse(message.chat_messages[i].message_time))
+                const messageTime = document.createElement("div")
+                messageTime.classList.add("messageTime")
+                messageTime.innerText = `${dateTime.getUTCHours()}:${dateTime.getUTCMinutes()}`
+
+                // Name
+                const messageUser = document.createElement("div")
+                messageUser.classList.add("messageUser")
+                messageUser.innerText = message.chat_messages[i].sender_name
+
+                // Content
+                const messageContent = document.createElement("div")
+                messageContent.classList.add("messageContent")
+                messageContent.innerText = message.chat_messages[i].message_content
+
+                chatMessageContainer.append(messageTime, messageUser, messageContent)
+                chatDisplay.append(chatMessageContainer)
+            }
+
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
         }
     }
 }
