@@ -82,22 +82,44 @@ function startInterval() {
 }
 setInterval(startInterval, 4500)
 
+// Json Bin Details
+const playerJsonBinId = ""
+const mappoolJsonBinId = ""
+const jsonBinApiKey = "" // Changed the API Key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
-
 allPlayersRequest.onreadystatechange = () => {
     if (allPlayersRequest.readyState == XMLHttpRequest.DONE) {
         allPlayers = JSON.parse(allPlayersRequest.responseText).record
     }
 }
-
-const jsonBinId = "65fa6cc71f5677401f40141d"
-const jsonBinApiKey = "$2a$10$DMpFsMNY2Tb.oXpzNqfeSO.VtzHd.8EsiN8ln.1.8cUFRtTVVk0na"
-
-allPlayersRequest.open("GET", `https://api.jsonbin.io/v3/b/${jsonBinId}`, false)
+allPlayersRequest.open("GET", `https://api.jsonbin.io/v3/b/${playerJsonBinId}`, false)
 allPlayersRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
 allPlayersRequest.send()
+// Mappool information
+let mappool
+let allBeatmaps
+let mappoolRequest = new XMLHttpRequest()
+const roundName = document.getElementById("roundName")
+mappoolRequest.onreadystatechange = () => {
+    if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
+        mappool = JSON.parse(mappoolRequest.responseText).record
+        allBeatmaps = mappool.beatmaps
+        roundName.setAttribute("src",`static/${mappool.roundName.toLowerCase().replace(/ /g, "-")}.png`)
+    }
+}
+mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
+mappoolRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
+mappoolRequest.send()
+
+// Find beatmap
+function findMapInBeatmaps(id) {
+    for (let i = 0; i < allBeatmaps.length; i++) {
+        if (id == allBeatmaps[i].beatmapID) return allBeatmaps[i]
+    }
+    return
+}
 
 // Now Playing Details
 const nowPlayingMod = document.getElementById("nowPlayingMod")
@@ -125,6 +147,14 @@ const nowPlayingBackground = document.getElementById("nowPlayingBackground")
 const modInfoContainer = document.getElementById("modInfoContainer")
 const currentMod = document.getElementById("currentMod")
 const modInfoText = document.getElementById("modInfoText")
+const funMods = [
+    { modAbbreviation: "BR", modMessage: "The whole playing field spins slightly! It's on a barrel!"},
+    { modAbbreviation: "TC", modMessage: "Circles are gone, the players have to rely on the (bigger) approach circles!"},
+    { modAbbreviation: "WG", modMessage: "The circles are wiggling! Can stay focused on the moving targets?"},
+    { modAbbreviation: "GR", modMessage: "The circles are moving closer... Make sure to hit it at the right timing! Don't forget about the note underneath!"},
+    { modAbbreviation: "RP", modMessage: "The circles are moving away! Can the players catch them before time runs out?"},
+    { modAbbreviation: "DP", modMessage: "The circles are growing and expanding. Almost 3D!"},
+]
 
 // Team Sections
 const teamRedSection = document.getElementById("teamRedSection")
@@ -211,22 +241,46 @@ socket.onmessage = event => {
         nowPlayingMapper.innerText =  message.metadata.author.username
         nowPlayingArtist.innerText = message.metadata.artist
 
-        adjustNowPlaying(nowPlayingSongName, nowPlayingSongNameWrapper)
-        adjustNowPlaying(nowPlayingDifficultyMapper, nowPlayingDifficultyMapperWrapper)
-        adjustNowPlaying(nowPlayingArtist, nowPlayingArtistWrapper)
-
         // put find beatmap function here
+        const currentMap = findMapInBeatmaps(currentId)
+        if (currentMap) {
+            nowPlayingStatsCSNumber.innerText = `${Math.round(parseFloat(currentMap.cs) * 10) / 10}`
+            nowPlayingStatsLENNumber.innerText = `${Math.floor(currentMap.songLength / 60)}:${(num => (num < 10 ? '0' : '') + num)(Math.round(currentMap.songLength) % 60)}`
+            nowPlayingStatsARNumber.innerText = `${Math.round(parseFloat(currentMap.ar) * 10) / 10}`
+            nowPlayingStatsBPMNumber.innerText = `${Math.round(parseFloat(currentMap.bpm) * 10) / 10}`
+            nowPlayingStatsODNumber.innerText = `${Math.round(parseFloat(currentMap.od) * 10) / 10}`
+            nowPlayingStatsSRNumber.innerText = `${Math.round(parseFloat(currentMap.difficultyrating) * 100) / 100}★`
 
-        if (!foundMappoolMap) {
+            nowPlayingMod.style.display = "block"
+            nowPlayingMod.innerText = `${currentMap.mod}${currentMap.order}`
+
+            if (currentMap.hasOwnProperty("additional_mod")) {
+                let newMod = currentMap.additional_mod
+                currentMod.innerText = newMod
+                for  (let i = 0; i < funMods.length; i++) {
+                    if (funMods[i].modAbbreviation === newMod) {
+                        modInfoText.innerText = funMods[i].modMessage
+                        break
+                    }
+                }
+                modInfoContainer.style.left = "0px"
+            } else {
+                modInfoContainer.style.left = "-330px"
+            }
+        } else {
             nowPlayingStatsCSNumber.innerText = `${message.difficulty.circle_size}`;
             let seconds = message.length / 1000
             nowPlayingStatsLENNumber.innerText = `${Math.floor(seconds / 60)}:${Math.round((num => (num < 10 ? '0' : '') + num)(seconds % 60))}`
-            nowPlayingStatsARNumber.innerText = `${message.difficulty.approach_rate}`;
-            nowPlayingStatsBPMNumber.innerText = `${Math.round(message.bpm)}`;
-            nowPlayingStatsODNumber.innerText = `${message.difficulty.overall_difficulty}`;
-            nowPlayingStatsSRNumber.innerText = `${Math.round(message.star_rating * 100) / 100}★`;
+            nowPlayingStatsARNumber.innerText = `${message.difficulty.approach_rate}`
+            nowPlayingStatsBPMNumber.innerText = `${Math.round(message.bpm)}`
+            nowPlayingStatsODNumber.innerText = `${message.difficulty.overall_difficulty}`
+            nowPlayingStatsSRNumber.innerText = `${Math.round(message.star_rating * 100) / 100}★`
             modInfoContainer.style.left = "-330px"
         }
+
+        adjustNowPlaying(nowPlayingSongName, nowPlayingSongNameWrapper, currentMap)
+        adjustNowPlaying(nowPlayingDifficultyMapper, nowPlayingDifficultyMapperWrapper, currentMap)
+        adjustNowPlaying(nowPlayingArtist, nowPlayingArtistWrapper, currentMap)
     }
 
     // For what information to show on left
