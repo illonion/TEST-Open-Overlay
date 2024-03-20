@@ -446,6 +446,10 @@
     width: 15px; height: 2px;
     background-color: var(--mainColour);
 }
+#rotatingInfoTexts > * {
+    opacity: 0;
+    transition: 750ms ease-in-out;
+}
 /* Rotating Information Text */
 .rotatingInfoText {
     position: absolute; left: 45px; top: 5px;
@@ -466,7 +470,10 @@
 /* Sponsor Text */
 #sponsorInfo { opacity: 0; }
 #sponsorThankYou {
-    position: absolute; left: 50px; top: 7px; 
+    position: absolute; left: 50%; top: 25px; 
+    transform: translateX(-50%);
+    width: inherit;
+    text-align: center;
     font-family: "Montserrat"; font-weight: 500; font-size: 8px;
 }
 #blueBunnyLogo {

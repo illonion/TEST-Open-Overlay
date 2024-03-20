@@ -69,6 +69,22 @@ function warmupToggle() {
     }
 }
 
+const rotatingInfoTexts = document.getElementById("rotatingInfoTexts")
+const rotatingInfos = rotatingInfoTexts.querySelectorAll(".rotating-info")
+let currentRotatingInfoIndex = 0
+
+function startInterval() {
+    const nextIndex = (currentRotatingInfoIndex + 1) % rotatingInfos.length
+    rotatingInfos[currentRotatingInfoIndex].style.opacity = 0
+    rotatingInfos[nextIndex].style.opacity = 1
+    currentRotatingInfoIndex = nextIndex
+}
+
+setInterval(startInterval, 4500)
+
+// Initial start
+startInterval()
+
 // Now Playing Details
 const nowPlayingMod = document.getElementById("nowPlayingMod")
 const nowPlayingSongName = document.getElementById("nowPlayingSongName")
@@ -191,9 +207,6 @@ socket.onmessage = event => {
 
     // For what information to show on left
     // UPDATE THIS WHEN I KNOW WHAT THE DATA LOOKS LIKE AND ADD THE TYPEDEF IN HERE TOO
-    if (data.type === "MultiplayerRoomState") {
-        const 
-    }
     // if (data.type === "MultiplayerRoomState") {
     //     const currentStatus = message.room_state
     //     console.log(currentStatus)
