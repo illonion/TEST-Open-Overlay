@@ -509,7 +509,7 @@
 #sponsorThankYou {
     position: absolute; left: 50%; top: 25px; 
     transform: translateX(-50%);
-    width: inherit;
+    width: 300px;
     text-align: center;
     font-family: "Montserrat"; font-weight: 500; font-size: 8px;
 }
