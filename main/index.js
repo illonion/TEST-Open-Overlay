@@ -106,7 +106,7 @@ mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
         mappool = JSON.parse(mappoolRequest.responseText).record
         allBeatmaps = mappool.beatmaps
-        roundName.setAttribute("src",`static/${mappool.roundName.toLowerCase().replace(/ /g, "-")}.png`)
+        roundName.setAttribute("src",`../_shared/logo/static/${mappool.roundName.toLowerCase().replace(/ /g, "-")}.png`)
     }
 }
 mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
