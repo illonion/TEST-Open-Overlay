@@ -1,0 +1,276 @@
+:root {
+    --mainColour: #5E72EB;
+    --teamBlueColour: #5E72EB;
+    --teamRedColour: #FF9190;
+    --teamSectionColour: #FFFEFA;
+
+    --boxShadowRed: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
+    --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+
+    --NMColour: #5E72EB;
+    --HDColour: #FCC164;
+    --HRColour: #F27F85;
+    --DTColour: #8874ED;
+    --FMColour: #EFA071;
+    --LMColour: #F9A0BE;
+    --TBColour: #5D5048;
+}
+
+/* Fonts */
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-ExtraBold.ttf");
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-Medium.ttf");
+    font-weight: 500;
+}
+
+/* Whole page */
+#main {
+    position: absolute; left: 0; top: 0;
+    width: 1920px; height: 1080px;
+    background-image: url("static/background.png");
+    background-size: cover;
+}
+
+/* Team Sections */
+#redTeamSection {
+    position: absolute; left: 0px; top: 106px;
+    width: 450px; height: 600px;
+}
+/* Team Top Background */
+#redTeamBackgroundImage {
+    position: absolute; right: 0; top: 0;
+    width: 325px; height: 140px;
+}
+/* Team Top Gradient */
+#redTeamGradient {
+    position: absolute; left: 0; top: 0;
+    width: inherit; height: 140px;
+    background: linear-gradient(to right, var(--teamRedColour), var(--teamRedColour), #FF919080, transparent, transparent);
+}
+/* Team Name Section */
+#redTeamNameSection {
+    position: absolute; left: 0; top: 18px;
+    width: 369px; height: 103px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+/* Team Name Text */
+#redTeamNameText {
+    margin: 2px 0 0 30px;
+    width: 300px;
+    font-family: "Inter"; font-size: 32px; font-weight: 800;
+    color: white;
+}
+/* Team Average Rank Section */
+#redTeamAverageRankSection { display: flex; }
+/* Team Average Rank Line */
+#redTeamAverageRankLine {
+    margin-top: 16px;
+    width: 60px; height: 2px;
+    background-color: white; 
+}
+/* Team Average Rank Number */
+#redTeamAverageRank {
+    margin-left: 9px;
+    margin-top: 6px;
+    font-family: "Inter";
+    font-weight: 500;
+    color: white;
+}
+/* Team Side Cosmetics */
+#redTeamCosmetics {
+    position: absolute; top: 0; left: 0;
+    width: 15px; height: inherit;
+    background-color: var(--teamRedColour);
+    box-shadow: var(--boxShadowRed);
+}
+/* Team Wins Section */
+#redTeamWinsSection {
+    position: absolute; left: 15px; top: 140px;
+    width: 435px; height: 460px;
+}
+/* Team Wins Text */
+#redTeamWinsText {
+    position: absolute; left: 15px; top: 16px;
+    font-family: "Inter"; font-weight: 800; font-size: 20px;
+    color: var(--teamRedColour)
+}
+/* Team Wins Rectangle 1 */
+#redTeamWinRectangle1 {
+    position: absolute; top: 45px;
+    width: 169px; height: 2px;
+    background-color: var(--teamRedColour);
+}
+/* Team Wins Rectangle 2 */
+#redTeamWinRectangle2 {
+    position: absolute; left: 15px; top: 57px;
+    width: 15px; height: 3px;
+    background-color: var(--teamRedColour);
+}
+/* Team win stars */
+#redTeamWinStars {
+    position: absolute; left: 15px; top: 70px;
+    display: flex;
+}
+.teamWinStar {
+    width: 50px; height: 13px;
+    margin-right: 6px;
+    border: 1px solid;
+}
+.teamRedWinStar { border-color: var(--teamRedColour); }
+.teamRedWinStarFill { background-color: var(--teamRedColour); }
+.teamBlueWinStar { border-color: var(--teamBlueColour); }
+.teamBlueWinStarFill { background-color: var(--teamBlueColour); }
+/* Team Players Sections */
+#redTeamPlayers {
+    position: absolute; left: 30px; top: 246px;
+    width: 400px; height: 155px;
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap;
+}
+/* Team Players */
+.redTeamPlayer {
+    position: relative;
+    width: 192px; height: 45px;
+    margin-bottom: 10px;
+}
+/* Team Player Side Rectangle */
+.redTeamPlayerSideRectangle {
+    position: absolute; top: 6px; 
+    width: 4px; height: 32px;
+    background-color: var(--teamRedColour);
+}
+/* Team Player Profile Picture */
+.redTeamPlayerProfilePicture {
+    position: absolute; left: 4px;
+    width: 45px; height: 45px;
+}
+/* Team Player Name */
+.redTeamPlayerNameRectangle {
+    position: absolute; left: 49px; top: 6px;
+    width: 145px; height: 21px; 
+    background-color: var(--teamRedColour);
+}
+.redTeamPlayerName {
+    position: absolute; left: 57px; top: 8px;
+    font-family: "Inter"; font-size: 14px; font-weight: 800;
+    white-space: nowrap;
+    width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+}
+/* Team Player Rank */
+.redTeamPlayerRankRectangle {
+    position: absolute; left: 49px; top: 36px;
+    width: 18px; height: 2px;
+    background-color: var(--teamRedColour);
+}
+.redTeamPlayerRank {
+    position: absolute; left: 71px; top: 30px;
+    font-family: "Inter"; font-size: 11px; font-weight: 500;
+    color: var(--teamRedColour);
+}
+/* Team Protect */
+#redTeamProtect { 
+    position: absolute; left: 15px; top: 430px; 
+    width: 400px; height: 90px;
+}
+/* Team Protect Text */
+#redTeamProtectText {
+    position: absolute; left: 15px;
+    width: 140px;
+    font-family: "Inter"; font-size: 20px; font-weight: 500;
+    color: var(--teamRedColour);
+}
+.protectTextColour { font-weight: 800; }
+/* Team Protect Rectangle 1 */
+#redTeamProtectRectangle1 {
+    position: absolute; top: 25px;
+    width: 251px; height: 2px;
+    background-color: var(--teamRedColour);
+}
+/* Team Protect Rectangle 2 */
+#redTeamProtectRectangle2 {
+    position: absolute; left: 15px; top: 37px;
+    width: 15px; height: 3px;
+    background-color: var(--teamRedColour);
+}
+/* Team Protect Map */
+#redTeamProtectMap {
+    position: absolute; left: 15px; top: 59px;
+    width: 400px; height: 90px;
+    font-family: "Inter";  font-weight: 800;
+    color: var(--LMColour);
+}
+/* Team Protect Background Image */
+#redTeamProtectBackgroundImage {
+    position: absolute; right: 0; width: 180px; height: inherit;
+    background-image: url("https://assets.ppy.sh/beatmaps/292301/covers/cover.jpg");
+    background-size: cover;
+    background-position: center;
+}
+#redTeamProtectGradient {
+    position: absolute; width: inherit; height: inherit;
+    background: linear-gradient(to right, white 0%, white 65%, rgba(255, 255, 255, 0) 100%);
+}
+/* Team Protect Map Mod */
+#redTeamProtectMapMod {
+    position: absolute;
+    width: 54px; height: inherit;
+    background-color: var(--LMColour);
+    color: white;
+}
+#redTeamProtectMapMod > * {
+    position: absolute; left: 50%; 
+    transform: translateX(-50%);
+}
+#redTeamProtectMapModIdText {
+    top: 13px;
+    font-size: 20px;
+}
+#redTeamProtectMapModIdNumber {
+    top: 30px;
+    font-size: 46px;
+}
+/* Team Protect Map Name */ 
+#redTeamProtectMapName {
+    position: absolute; left: 63px; top: 13px;
+    width: 250px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+/* Team Protect Mapper */
+#redTeamProtectMapperText {
+    position: absolute; left: 63px; top: 56px;
+    font-family: "Inter"; font-size: 7px; font-weight: 500;
+}
+#redTeamProtectMapperName {
+    position: absolute; left: 63px; top: 64px;
+    font-family: "Inter"; font-weight: 800; font-size: 11px;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* Team Protect Difficulty */
+#redTeamProtectDifficultyText {
+    position: absolute; left: 170px; top: 56px;
+    font-family: "Inter"; font-size: 7px; font-weight: 500;
+}
+#redTeamProtectDifficultyName {
+    position: absolute; left: 170px; top: 64px;
+    font-family: "Inter"; font-weight: 800; font-size: 11px;
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
