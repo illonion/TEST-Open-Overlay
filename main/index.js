@@ -150,7 +150,7 @@ const modInfoText = document.getElementById("modInfoText")
 const funMods = [
     { modAbbreviation: "BR", modMessage: "The whole playing field spins slightly! It's on a barrel!"},
     { modAbbreviation: "TC", modMessage: "Circles are gone, the players have to rely on the (bigger) approach circles!"},
-    { modAbbreviation: "WG", modMessage: "The circles are wiggling! Can stay focused on the moving targets?"},
+    { modAbbreviation: "WG", modMessage: "The circles are wiggling! Can the players stay focused on the moving targets?"},
     { modAbbreviation: "GR", modMessage: "The circles are moving closer... Make sure to hit it at the right timing! Don't forget about the note underneath!"},
     { modAbbreviation: "RP", modMessage: "The circles are moving away! Can the players catch them before time runs out?"},
     { modAbbreviation: "DP", modMessage: "The circles are growing and expanding. Almost 3D!"},
