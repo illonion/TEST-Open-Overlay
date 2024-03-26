@@ -7,6 +7,12 @@
     --boxShadowRed: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
     --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
 
+    --nowPlayingBoxHeight: 80px;
+    --outsideSectionContainerWidth: 330px;
+    --middleSectionContainerWidth: 315px;
+    --sideSectionContainerLeft: 15px;
+    --sideSectionLowerContainerHeight: 105px;
+
     --NMColour: #5E72EB;
     --HDColour: #FCC164;
     --HRColour: #F27F85;
@@ -370,3 +376,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* Rotating Info */
+#rotatingInfo { top: 923px; }

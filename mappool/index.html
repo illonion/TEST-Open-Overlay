@@ -8,6 +8,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="../_shared/logo/index.css">
+    <link rel="stylesheet" href="../_shared/rotating-info/index.css">
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
@@ -206,8 +207,70 @@
                 </div>
             </section>
         </section>
+
+        <!-- Rotating info -->
+        <section class="sideContainer" id="rotatingInfo">
+            <div id="rotatingInfoLine1"></div>
+            <div id="rotatingInfoLine2"></div>
+            <!-- Rotating info texts -->
+            <section id="rotatingInfoTexts">
+                <!-- !youtube command -->
+                <div class="rotating-info" id="youtubeCommand">
+                    <div class="rotatingInfoText">
+                        <div class="rotatingInfoTextHeader">Missed a match?</div>
+                        <div class="rotatingInfoTextBody">Check out our YouTube channel for all the VODs</div>
+                    </div>
+                    <div class="rotatingInfoCommand">!youtube</div>
+                </div>
+
+                <!-- !sheet command -->
+                <div class="rotating-info" id="sheetCommand">
+                    <div class="rotatingInfoText">
+                        <div class="rotatingInfoTextHeader">Want to see the pool?</div>
+                        <div class="rotatingInfoTextBody">Check the main sheet for all map details</div>
+                    </div>
+                    <div class="rotatingInfoCommand">!sheet</div>
+                </div>
+
+                <!-- !discord command -->
+                <div class="rotating-info" id="discordCommand">
+                    <div class="rotatingInfoText">
+                        <div class="rotatingInfoTextHeader">Don’t miss out!</div>
+                        <div class="rotatingInfoTextBody">Join the Discord to get notified when we’re live</div>
+                    </div>
+                    <div class="rotatingInfoCommand">!discord</div>
+                </div>
+                
+                <!-- !website command -->
+                <div class="rotating-info" id="websiteCommand">
+                    <div class="rotatingInfoText">
+                        <div class="rotatingInfoTextHeader">Want more info?</div>
+                        <div class="rotatingInfoTextBody">Visit the website for all tournament details</div>
+                    </div>
+                    <div class="rotatingInfoCommand">!website</div>
+                </div>
+
+                <!-- !twitter command -->
+                <div class="rotating-info" id="websiteCommand">
+                    <div class="rotatingInfoText">
+                        <div class="rotatingInfoTextHeader">Don’t miss out!</div>
+                        <div class="rotatingInfoTextBody">Follow our Twitter to get notified when we’re live</div>
+                    </div>
+                    <div class="rotatingInfoCommand">!twitter</div>
+                </div>
+                
+                <!-- Sponsor-->
+                <div class="rotating-info" id="sponsorInfo">
+                    <div id="sponsorThankYou">THANK YOU FOR SPONSORING THE TOURNAMENT!</div>
+                    <img id="blueBunnyLogo" src="../_shared/rotating-info/static/bluebunny-logo.png">
+                    <div id="blueBunnyText">Bluebunny</div>
+                    <div id="blueBunnyCustomTabletCoversText">Custom Tablet Covers</div>
+                </div>
+            </section>
+        </section>
     </div>
 
+    <script src="../_shared/rotating-info/index.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

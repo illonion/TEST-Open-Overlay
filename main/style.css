@@ -1,18 +1,18 @@
-    :root {
-        --mainColour: #5E72EB;
-        --teamBlueColour: #5E72EB;
-        --teamRedColour: #FF9190;
-        --teamSectionColour: #FFFEFA;
+:root {
+    --mainColour: #5E72EB;
+    --teamBlueColour: #5E72EB;
+    --teamRedColour: #FF9190;
+    --teamSectionColour: #FFFEFA;
 
-        --boxShadowRed: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
-        --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+    --boxShadowRed: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
+    --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
 
-        --nowPlayingBoxHeight: 80px;
-        --outsideSectionContainerWidth: 330px;
-        --middleSectionContainerWidth: 315px;
-        --sideSectionContainerLeft: 15px;
-        --sideSectionLowerContainerHeight: 105px
-    }
+    --nowPlayingBoxHeight: 80px;
+    --outsideSectionContainerWidth: 330px;
+    --middleSectionContainerWidth: 315px;
+    --sideSectionContainerLeft: 15px;
+    --sideSectionLowerContainerHeight: 105px
+}
 
 /* Inter Font */
 @font-face {
@@ -419,66 +419,6 @@
     width: 154px;
     margin-left: 5px;
     color: #5E72EB;
-}
-
-/* Rotating Info */
-#rotatingInfo {
-    top: 937px;
-    height: var(--sideSectionLowerContainerHeight);
-}
-#rotatingInfoLine1 {
-    position: absolute; right: 0; top: 13px;
-    width: 200px; height: 1px;
-    background-color: var(--mainColour);
-}
-#rotatingInfoLine2 {
-    position: absolute; right: 11px; top: 19px; 
-    width: 15px; height: 2px;
-    background-color: var(--mainColour);
-}
-#rotatingInfoTexts > * {
-    opacity: 0;
-    transition: 750ms ease-in-out;
-}
-/* Rotating Information Text */
-.rotatingInfoText {
-    position: absolute; left: 45px; top: 5px;
-    text-align: center;
-    width: 150px; height: 105px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
-.rotatingInfoTextHeader { font-family: "Inter"; font-weight: 800; font-size: 14px; }
-.rotatingInfoTextBody { font-family: "Inter"; font-weight: 500; font-size: 12px; }
-.rotatingInfoCommand {
-    position: absolute; left: 254px; top: 44px;
-    font-family: "Inter"; font-weight: 800; font-size: 20px;
-    transform: translateX(-50%);
-}
-
-/* Sponsor Text */
-#sponsorInfo { opacity: 0; }
-#sponsorThankYou {
-    position: absolute; left: 50%; top: 25px; 
-    transform: translateX(-50%);
-    width: 300px;
-    text-align: center;
-    font-family: "Montserrat"; font-weight: 500; font-size: 8px;
-}
-#blueBunnyLogo {
-    position: absolute; left: 71px; top: 40px;
-    width: 35px; height: 51px;
-}
-#blueBunnyText {
-    position: absolute; left: 124px; top: 39px;
-    font-family: "Montserrat"; font-weight: 800; font-size: 20px;
-}
-#blueBunnyCustomTabletCoversText {
-    position: absolute; left: 136px; top: 62px;
-    width: 90px;
-    font-family: "Montserrat"; font-weight: 500; font-size: 12px;
-    text-align: center;
 }
 
 /* Gameplay greenscreen */
