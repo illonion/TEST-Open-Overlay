@@ -377,5 +377,11 @@
     text-overflow: ellipsis;
 }
 
+/* Commentators  */
+#commentatorsContainer {
+    top: unset;
+    bottom: 167px;
+}
+
 /* Rotating Info */
 #rotatingInfo { top: 923px; }

@@ -160,16 +160,6 @@
     width: 15px; height: 2px;
 }
 
-/* Commentator */
-#commentatorsContainer {
-    top: 134px;
-    height: 140px;
-}
-#commentatorsText {
-    position: absolute; left: 25px; top: 10px;
-    font-family: "Inter"; font-weight: 500; font-size: 12px;
-}
-
 /* Mod Info */
 #modInfoContainer {
     top: 810px; left: 0;

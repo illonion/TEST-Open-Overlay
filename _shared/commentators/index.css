@@ -1,0 +1,19 @@
+/* Commentator */
+#commentatorsContainer {
+    top: 134px;
+    height: 140px;
+}
+#commentatorsText {
+    position: absolute; left: 25px; top: 10px;
+    font-family: "Inter"; font-weight: 500; font-size: 12px;
+}
+.sideSectionLine1 {
+    position: absolute; left: 0px; top: 27px;
+    background-color: var(--mainColour);
+    width: 232px; height: 1px;
+}
+.sideSectionLine2 {
+    position: absolute; left: 11px; top: 33px;
+    background-color: var(--mainColour);
+    width: 15px; height: 2px;
+}
