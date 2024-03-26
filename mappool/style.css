@@ -384,3 +384,30 @@
 
 /* Rotating Info */
 #rotatingInfo { top: 923px; }
+
+/* Ban Texts */
+.banText {
+    position: absolute;
+    transform: rotate(90deg);
+    font-family: "Inter"; font-weight: 500; font-size: 16px;
+}
+#redBanText {
+    left: 482px; top: 136px;
+    color: var(--teamRedColour);
+}
+#blueBanText {
+    right: 479px; top: 140px;
+    color: var(--teamBlueColour);
+}
+.banLine {
+    position: absolute; top: 106px;
+    width: 2px; height: 145px;
+}
+#redBanLine {
+    left: 538px;
+    background-color: var(--teamRedColour);
+}
+#blueBanLine {
+    right: 538px; 
+    background-color: var(--teamBlueColour);
+}
