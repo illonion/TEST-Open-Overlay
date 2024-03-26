@@ -40,6 +40,8 @@
 #redTeamSection {
     position: absolute; left: 0px; top: 106px;
     width: 450px; height: 600px;
+    box-shadow: var(--boxShadowRed);
+    background-color: white;
 }
 /* Team Top Background */
 #redTeamBackgroundImage {
