@@ -277,7 +277,7 @@
     right: 15px;
     color: var(--teamBlueColour);
 }
-.protectTextColour { font-weight: 800; }
+.extraBoldInter { font-weight: 800; }
 /* Team Protect Rectangle 1 */
 .teamProtectRectangle1 {
     position: absolute; top: 25px;
@@ -386,8 +386,8 @@
 #rotatingInfo { top: 923px; }
 
 /* Ban Texts */
-.banText {
-    position: absolute;
+.pickBanText {
+    position: absolute; 
     transform: rotate(90deg);
     font-family: "Inter"; font-weight: 500; font-size: 16px;
 }
@@ -409,5 +409,28 @@
 }
 #blueBanLine {
     right: 538px; 
+    background-color: var(--teamBlueColour);
+}
+
+/* Pick Text */
+
+#redPickText {
+    left: 482px; top: 368px;
+    color: var(--teamRedColour);
+}
+#bluePickText {
+    right: 479px; top: 372px;
+    color: var(--teamBlueColour);
+}
+.pickLine {
+    position: absolute; top: 338px;
+    width: 2px; height: 244px;
+}
+#redPickLine {
+    left: 538px;
+    background-color: var(--teamRedColour);
+}
+#bluePickLine {
+    right: 538px;
     background-color: var(--teamBlueColour);
 }
