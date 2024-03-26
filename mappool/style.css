@@ -46,11 +46,10 @@
 .teamSection {
     position: absolute; top: 106px;
     width: 450px; height: 600px;
-    /* background-color: white; */
+    background-color: white;
 }
 #redTeamSection { 
     left: 0px; 
-    background-color: white;
     box-shadow: var(--boxShadowRed); 
 }
 #blueTeamSection { 
