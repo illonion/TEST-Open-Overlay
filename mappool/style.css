@@ -20,6 +20,14 @@
     --FMColour: #EFA071;
     --LMColour: #F9A0BE;
     --TBColour: #5D5048;
+
+    --boxShadowNM: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+    --boxShadowHD: 0 4px 15px 0 rgba(252, 193, 100, 0.45);
+    --boxShadowHR: 0 4px 15px 0 rgba(242, 127, 133, 0.45);
+    --boxShadowDT: 0 4px 15px 0 rgba(136, 116, 237, 0.45);
+    --boxShadowFM: 0 4px 15px 0 rgba(239, 160, 113, 0.45);
+    --boxShadowLM: 0 4px 15px 0 rgba(249, 160, 190, 0.45);
+    --boxShadowTB: 0 4px 15px 0 rgba(93, 80, 72, 0.45);
 }
 
 /* Fonts */
@@ -434,11 +442,133 @@
     background-color: var(--teamBlueColour);
 }
 
+/* Tiles Container Container */
+/* Ban Tiles */
+#redBanTiles {
+    position: absolute; left: 550px; top: 106px;
+}
+#blueBanTiles {
+    position: absolute; right: 550px; top: 106px;
+}
+/* Pick Tiles */
+#pickTiles {
+    position: absolute; left: 550px; top: 337px;
+    width: 820px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+/* Map Information */
+.mapInformationContainer {
+    position: relative;
+    width: 400px; height: 90px;
+    color: var(--LMColour);
+    /* box-shadow: var(--boxShadowLM); */
+    margin-bottom: 10px;
+}
+#tiebreakerContainer {
+    position: relative; left: 50%; transform: translateX(-50%);
+}
+/* Map Information Background Image */
+.mapInformationGradient {
+    position: absolute; top: 0; left: 0;
+    width: inherit; height: inherit;
+    background: linear-gradient(to right, white 0%, white 65%, rgba(255, 255, 255, 0) 100%);
+}
+.mapInformationBackgroundImage {
+    position: absolute; right: 0;
+    width: 160px; height: inherit;
+    background-image: url("https://assets.ppy.sh/beatmaps/292301/covers/cover.jpg");
+    background-size: cover;
+    background-position: center;
+}
+/* Map Information Mod */
+.mapInformationModContainer {
+    position: absolute; left: 0; top: 0;
+    width: 54px; height: inherit;
+    background-color: var(--LMColour);
+}
+.mapInformationModContainer > * {
+    position: absolute; left: 50%;
+    transform: translateX(-50%);
+    font-family: "Inter"; font-weight: 800;
+    color: white;
+}
+.mapInformationModIdText {
+    top: 14px;
+    font-size: 20px; 
+}
+.mapInformationModIdNumber {
+    top: 30px;
+    font-size: 46px;
+}
+/* Map Information Song Name */
+.mapInformationSongName {
+    position: absolute; left: 63px; top: 14px;
+    width: 260px; height: 45px;
+    font-family: "Inter"; font-weight: 800; font-size: 16px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+/* Map Information Mapper */
+.mapInformationMapperText {
+    position: absolute; left: 63px; top: 56px;
+    font-family: "Inter"; font-weight: 500; font-size: 7px;
+}
+.mapInformationMapperName {
+    position: absolute; left: 63px; top: 64px;
+    white-space: nowrap;
+    font-family: "Inter"; font-weight: 800; font-size: 11px;
+}
+/* Map Information Difficulty */
+.mapInformationDifficultyText {
+    position: absolute; left: 170px; top: 56px;
+    font-family: "Inter"; font-weight: 500; font-size: 7px;
+}
+.mapInformationDifficultyName {
+    position: absolute; left: 170px; top: 64px;
+    white-space: nowrap;
+    font-family: "Inter"; font-weight: 800; font-size: 11px;
+}
+/* Map Information Picker */
+.mapInformationPickerOverlay {
+    position: absolute; left: 0; top: 0;
+    width: inherit; height: inherit;
+    background-color: #E5E7F1;
+}
+.mapInformationPickerCurrent {
+    animation: mapInformationAction 3s infinite forwards linear;
+}
+@keyframes mapInformationAction {
+    0% { background-color: #E5E7F1; }
+    25% { background-color: #E5E7F1; }
+    50% { background-color: #D3D7E4; }
+    75% { background-color: #D3D7E4; }
+    100% { background-color: #E5E7F1; }
+}
+/* Map Information Winner */
+.mapInformationWinner {
+    position: absolute; top: 0; left: 0;
+    width: calc(100% - 9px); height: calc(100% - 9px);
+    backdrop-filter: blur(2px);
+    display: none;
+}
+.mapInformationWinnerRed {
+    border: 5px solid var(--teamRedColour);
+    background-color: rgb(218, 41, 41, 0.25);
+}
+.mapInformationWinnerBlue {
+    border: 5px solid var(--teamBlueColour);
+    background-color: rgb(41, 48, 218, 0.25);
+}
+
 /* Chat */
 #chatDisplay {
     position: absolute; right: 0px; bottom: 53px;
     width: 314px; height: 200px;
-    /* background-color: white; */
+    background-color: white;
     box-shadow: var(--boxShadowPurple);
     font-family: "Inter"; font-size: 12px;
     overflow: hidden;
