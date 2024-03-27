@@ -519,8 +519,11 @@
 }
 .mapInformationMapperName {
     position: absolute; left: 63px; top: 64px;
-    white-space: nowrap;
+    width: 90px;
     font-family: "Inter"; font-weight: 800; font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 /* Map Information Difficulty */
 .mapInformationDifficultyText {
@@ -529,8 +532,11 @@
 }
 .mapInformationDifficultyName {
     position: absolute; left: 170px; top: 64px;
-    white-space: nowrap;
+    width: 170px;
     font-family: "Inter"; font-weight: 800; font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 /* Map Information Picker */
 .mapInformationPickerOverlay {
