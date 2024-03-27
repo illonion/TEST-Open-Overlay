@@ -600,8 +600,10 @@
     background-color: var(--mainColour);
 }
 #chatContainerDisplay {
-    position: absolute; bottom: 0;
-    width: inherit; height: 180px;
+    position: absolute; bottom: 5px;
+    width: inherit; height: 175px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 .chatMessageContainer { display: flex; }
 .messageTime {

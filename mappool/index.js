@@ -165,12 +165,16 @@ const redTeamAverageRankNumber = document.getElementById("redTeamAverageRankNumb
 const blueTeamAverageRankNumber = document.getElementById("blueTeamAverageRankNumber")
 let currentTeamRedName, currentTeamBlueName
 
+// Chat Section
+const chatContainerDisplay = document.getElementById("chatContainerDisplay")
+let chatLength = 0
+
 // Whenever socket sends a message
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
 
-    // Team Name changing
+    // Team details changing
     if (data.type === "MultiplayerRoomState") {
         /**
          * @typedef {{
@@ -192,6 +196,61 @@ socket.onmessage = event => {
             } else if (currentTeamBlueName === allPlayers[i].team_name) {
                 updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
             }
+        }
+    }
+
+    // Chat messages
+    if (data.type === "MultiplayerChatState") {
+        /**
+         * @typedef {{
+        *     chat_messages: {
+        *         number: {
+        *             message_content: string
+        *             message_time: datetime
+        *             sender_name: string
+        *             team_id: number
+        *         }
+        *     }
+        * }} message
+        */
+
+        if (chatLength !== message.chat_messages.length) {
+            (chatLength === 0 || chatLength > message.chat_messages.length) ? (chatContainerDisplay.innerHTML = "", chatLEngth = 0) : null
+
+            for (let i = chatLength; i < message.chat_messages.length; i++) {
+                // TODO: Add teams to chat messages
+                let currentClass = "unknownTeamChat"
+                if (message.chat_messages[i].team_id === 0) {
+                    currentClass = "redTeamChat"
+                } else if (message.chat_messages[i].team_id === 1) {
+                    currentClass = "blueTeamChat"
+                }
+
+                // Container
+                const chatMessageContainer = document.createElement("div")
+                chatMessageContainer.classList.add("chatMessageContainer")
+
+                // Time
+                let dateTime = new Date(Date.parse(message.chat_messages[i].message_time))
+                const messageTime = document.createElement("div")
+                messageTime.classList.add("messageTime")
+                messageTime.innerText = `${dateTime.getUTCHours().toString().padStart(2, '0')}:${dateTime.getUTCMinutes().toString().padStart(2, '0')}`
+
+                // Name
+                const messageUser = document.createElement("div")
+                messageUser.classList.add("messageUser", currentClass)
+                messageUser.innerText = message.chat_messages[i].sender_name
+
+                // Content
+                const messageContent = document.createElement("div")
+                messageContent.classList.add("messageContent", currentClass)
+                messageContent.innerText = message.chat_messages[i].message_content
+
+                chatMessageContainer.append(messageTime, messageUser, messageContent)
+                chatContainerDisplay.append(chatMessageContainer)
+            }
+
+            chatContainerDisplay.scrollTop = chatContainerDisplay.scrollHeight;
         }
     }
 }
