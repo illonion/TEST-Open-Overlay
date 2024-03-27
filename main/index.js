@@ -179,9 +179,7 @@ const chatDisplay = document.getElementById("chatDisplay")
 let chatLength = 0
 
 // Map currentply playing
-let gameplayDisplayed = false
 let resultsDisplayed = false
-let resultsShown = false
 
 // Whenever socket sends a message
 socket.onmessage = event => {
@@ -280,6 +278,40 @@ socket.onmessage = event => {
      *     room_state: string
      * }} message
      */
+    
+        // Room state
+        if (message.room_state == "Open" || message.room_state == "Closed") {
+            // Chat showing
+            resultsDisplayed = false
+            teamRedSection.style.height = "100px"
+            teamBlueSection.style.height = "100px"
+            teamRedScoreSection.style.opacity = 0
+            teamBlueScoreSection.style.opacity = 0
+            chatDisplay.style.left = "15px"
+            currentScoreBar.style.opacity = 0
+        } else if (message.room_state == "WaitingForLoad" || message.room_state == "Playing") {
+            // Gameplay showing
+            resultsDisplayed = false
+            teamRedSection.style.height = "175px"
+            teamBlueSection.style.height = "175px"
+            teamRedScoreSection.style.opacity = 1
+            teamBlueScoreSection.style.opacity = 1
+            chatDisplay.style.left = "-335px"
+            currentScoreBar.style.opacity = 1
+        } else if (message.room_state == "Results" && !resultsDisplayed) {
+            // Show chat after 20 seconds
+            resultsDisplayed = true
+            setTimeout(() => {
+                teamRedSection.style.height = "100px"
+                teamBlueSection.style.height = "100px"
+                teamRedScoreSection.style.opacity = 0
+                teamBlueScoreSection.style.opacity = 0
+                chatDisplay.style.left = "15px"
+                currentScoreBar.style.opacity = 0
+            }, 20000)
+        }
+
+        // Room Name
         const roomName = message.room_name
         currentTeamRedName = roomName.split("(")[1].split(")")[0]
         currentTeamBlueName = roomName.split("(")[2].split(")")[0]
@@ -296,42 +328,6 @@ socket.onmessage = event => {
             }
         }
     }
-    // if (data.type === "MultiplayerRoomState") {
-    //     const currentStatus = message.room_state
-    //     console.log(currentStatus)
-    //     if (currentStatus === "Open") {
-
-    //         resultsDisplayed = false
-    //         teamRedSection.style.height = "100px"
-    //         teamBlueSection.style.height = "100px"
-    //         teamRedScoreSection.style.opacity = 0
-    //         teamBlueScoreSection.style.opacity = 0
-    //         chatDisplay.style.left = "15px"
-    //         currentScoreBar.style.opacity = 0            
-
-    //     } else if (currentStatus === "WaitingForLoad" || currentStatus === "Playing") {
-
-    //         resultsDisplayed = false
-    //         teamRedSection.style.height = "175px"
-    //         teamBlueSection.style.height = "175px"
-    //         teamRedScoreSection.style.opacity = 1
-    //         teamBlueScoreSection.style.opacity = 1
-    //         chatDisplay.style.left = "-335px"
-    //         currentScoreBar.style.opacity = 0
-
-    //     } else if (currentStatus === "Results" && !resultsDisplayed) {
-
-    //         resultsDisplayed = true
-    //         setTimeout(() => {
-    //             teamRedSection.style.height = "100px"
-    //             teamBlueSection.style.height = "100px"
-    //             teamRedScoreSection.style.opacity = 0
-    //             teamBlueScoreSection.style.opacity = 0
-    //             chatDisplay.style.left = "15px"
-    //             currentScoreBar.style.opacity = 0
-    //         }, 15000)
-    //     }
-    // }
 
     if (data.type === "MultiplayerGameplay") {
         /**
@@ -353,10 +349,6 @@ socket.onmessage = event => {
          * }} message
          */
 
-        // Check if map is found playing
-        gameplayDisplayed = false
-        resultsDisplayed = false
-
         currentScoreRed = 0
         currentScoreBlue = 0
 
@@ -370,17 +362,8 @@ socket.onmessage = event => {
         // Check for gameplay and whether results are displayed
         for (let key in message.player_states) {
             const player = message.player_states[key]
-            const user_state = player.user_state
             const score = player.total_score
             const accuracy = player.accuracy
-
-            if (user_state === "Playing" || user_state === "ReadyForGameplay") {
-                gameplayDisplayed = true
-                resultsShown = false
-            }
-            if (user_state === "Results") {
-                resultsDisplayed = true
-            }
 
             if (player.team_id === 0) {
                 currentScoreRed += parseInt(score)
@@ -411,62 +394,20 @@ socket.onmessage = event => {
             currentScoreBarRed.style.height = `${movingScoreBarRectangleHeight}px`
             currentScoreBarBlue.style.height = "0px"
             currentScoreDifference.style.backgroundColor = "var(--teamRedColour)"
+            currentScoreDifference.style.color = "white"
             currentScoreDifferenceNumber.style.color = "white"
         } else if (currentScoreRed === currentScoreBlue) {
             currentScoreBarRed.style.height = "0px"
             currentScoreBarBlue.style.height = "0px"
             currentScoreDifference.style.backgroundColor = "white"
+            currentScoreDifference.style.color = "black"
             currentScoreDifferenceNumber.style.color = "black"
         } else if (currentScoreBlue > currentScoreRed) {
             currentScoreBarRed.style.height = "0px"
             currentScoreBarBlue.style.height = `${movingScoreBarRectangleHeight}px`
             currentScoreDifference.style.backgroundColor = "var(--teamBlueColour)"
+            currentScoreDifference.style.color = "white"
             currentScoreDifferenceNumber.style.color = "white"
-        }
-
-        if (gameplayDisplayed) {
-            // Gameplay showing
-            resultsDisplayed = false
-            teamRedSection.style.height = "175px"
-            teamBlueSection.style.height = "175px"
-            teamRedScoreSection.style.opacity = 1
-            teamBlueScoreSection.style.opacity = 1
-            chatDisplay.style.left = "-335px"
-            currentScoreBar.style.opacity = 1
-        } else if (resultsDisplayed && !resultsShown) {
-            // Results showing
-            resultsShown = true
-
-            // Generate star resutls
-            if (!warmupMode) {
-                if (currentScoreRed > currentScoreBlue) {
-                    changeStarCount('red','plus')
-                } else if (currentScoreBlue > currentScoreRed) {
-                    changeStarCount('blue','plus')
-                } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
-                    changeStarCount('red','plus')
-                } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
-                    changeStarCount('blue','plus')
-                }
-            }
-
-            // Show chat after 15 seconds
-            setTimeout(() => {
-                teamRedSection.style.height = "100px"
-                teamBlueSection.style.height = "100px"
-                teamRedScoreSection.style.opacity = 0
-                teamBlueScoreSection.style.opacity = 0
-                chatDisplay.style.left = "15px"
-                currentScoreBar.style.opacity = 0
-            }, 20000)
-        } else if (!gameplayDisplayed && !resultsDisplayed) {
-            // Show chat
-            teamRedSection.style.height = "100px"
-            teamBlueSection.style.height = "100px"
-            teamRedScoreSection.style.opacity = 0
-            teamBlueScoreSection.style.opacity = 0
-            chatDisplay.style.left = "15px"
-            currentScoreBar.style.opacity = 0
         }
     }
 
@@ -478,6 +419,7 @@ socket.onmessage = event => {
         *             message_content: string
         *             message_time: datetime
         *             sender_name: string
+        *             team_id: number
         *         }
         *     }
         * }} message
@@ -488,6 +430,13 @@ socket.onmessage = event => {
 
             for (let i = chatLength; i < message.chat_messages.length; i++) {
                 // TODO: Add teams to chat messages
+                let currentClass = "unknownTeamChat"
+                if (message.chat_messages[i].team_id === 0) {
+                    currentClass = "redTeamChat"
+                } else if (message.chat_messages[i].team_id === 1) {
+                    currentClass = "blueTeamChat"
+                }
+
                 // Container
                 const chatMessageContainer = document.createElement("div")
                 chatMessageContainer.classList.add("chatMessageContainer")
@@ -500,12 +449,12 @@ socket.onmessage = event => {
 
                 // Name
                 const messageUser = document.createElement("div")
-                messageUser.classList.add("messageUser")
+                messageUser.classList.add("messageUser", currentClass)
                 messageUser.innerText = message.chat_messages[i].sender_name
 
                 // Content
                 const messageContent = document.createElement("div")
-                messageContent.classList.add("messageContent")
+                messageContent.classList.add("messageContent", currentClass)
                 messageContent.innerText = message.chat_messages[i].message_content
 
                 chatMessageContainer.append(messageTime, messageUser, messageContent)

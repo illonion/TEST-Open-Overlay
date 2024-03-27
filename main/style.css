@@ -398,7 +398,6 @@
 }
 .messageUser {
     font-weight: 800;
-    color: #5E72EB;
     width: 100px;
     text-align: right;
     white-space: nowrap;
@@ -408,8 +407,10 @@
 .messageContent {
     width: 154px;
     margin-left: 5px;
-    color: #5E72EB;
 }
+.unknownTeamChat { color: #00b140; }
+.redTeamChat { color: var(--teamRedColour); }
+.blueTeamChat { color: var(--teamBlueColour); }
 
 /* Gameplay greenscreen */
 .gameplayScreen {
