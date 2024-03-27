@@ -72,6 +72,8 @@ let mappool
 let allBeatmaps
 let mappoolRequest = new XMLHttpRequest()
 const roundName = document.getElementById("roundName")
+const redPickTiles = document.getElementById("redPickTiles")
+const bluePickTiles = document.getElementById("bluePickTiles")
 mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
         mappool = JSON.parse(mappoolRequest.responseText).record
@@ -94,6 +96,60 @@ mappoolRequest.onreadystatechange = () => {
         }
 
         generateStarsDisplay()
+
+        for (let i = 0; i < (currentFirstTo - 1) * 2; i++) {
+            const mapInformationContainer = document.createElement("div")
+            mapInformationContainer.classList.add("mapInformationContainer")
+
+            const mapInformationBackgroundImage = document.createElement("div")
+            mapInformationBackgroundImage.classList.add("mapInformationBackgroundImage")
+
+            const mapInformationGradient = document.createElement("div")
+            mapInformationGradient.classList.add("mapInformationGradient")
+
+            const mapInformationModContainer = document.createElement("div")
+            mapInformationModContainer.classList.add("mapInformationModContainer")
+
+            const mapInformationModIdText = document.createElement("div")
+            mapInformationModIdText.classList.add("mapInformationModIdText")
+
+            const mapInformationModIdNumber = document.createElement("div")
+            mapInformationModIdNumber.classList.add("mapInformationModIdNumber")
+
+            const mapInformationSongName = document.createElement("div")
+            mapInformationSongName.classList.add("mapInformationSongName")
+
+            const mapInformationMapperText = document.createElement("div")
+            mapInformationMapperText.innerText = "MAPPER"
+            mapInformationMapperText.classList.add("mapInformationMapperText")
+
+            const mapInformationMapperName = document.createElement("div")
+            mapInformationMapperName.classList.add("mapInformationMapperName")
+
+            const mapInformationDifficultyText = document.createElement("div")
+            mapInformationDifficultyText.innerText = "DIFFICULTY"
+            mapInformationDifficultyText.classList.add("mapInformationDifficultyText")
+
+            const mapInformationDifficultyName = document.createElement("div")
+            mapInformationDifficultyName.classList.add("mapInformationDifficultyName")
+
+            const mapInformationPickerOverlay = document.createElement("div")
+            mapInformationPickerOverlay.classList.add("mapInformationPickerOverlay")
+
+            const mapInformationWinner = document.createElement("div")
+            mapInformationWinner.classList.add("mapInformationWinner")
+
+            mapInformationModContainer.append(mapInformationModIdText, mapInformationModIdNumber)
+            mapInformationContainer.append(mapInformationBackgroundImage, mapInformationGradient, mapInformationModContainer, 
+                mapInformationSongName, mapInformationMapperText, mapInformationMapperName, mapInformationDifficultyText,
+                mapInformationDifficultyName, mapInformationPickerOverlay, mapInformationWinner)
+
+            if (i % 2 === 0) {
+                redPickTiles.append(mapInformationContainer)
+            } else {
+                bluePickTiles.append(mapInformationContainer)
+            }   
+        }
     }
 }
 mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
