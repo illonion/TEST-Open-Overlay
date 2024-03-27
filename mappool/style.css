@@ -68,6 +68,8 @@
 .teamBackgroundImage {
     position: absolute; top: 0;
     width: 325px; height: 140px;
+    background-position: center;
+    background-size: cover;
 }
 #redTeamBackgroundImage { right: 0; }
 #blueTeamBackgroundImage { left: 0; }
@@ -193,7 +195,7 @@
 }
 #redTeamWinStars { left: 15px; }
 #blueTeamWinStars { 
-    left: 15px; 
+    right: 15px; 
     flex-direction: row-reverse;
 }
 .teamWinStar {

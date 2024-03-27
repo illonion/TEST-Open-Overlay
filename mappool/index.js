@@ -21,7 +21,7 @@ function generateStarsDisplay() {
     if (currentStarBlue < 0) currentStarBlue = 0
 
     // Generate or remove new (blank) stars
-    teamRedWinStars.innerHTML = ""
+    redTeamWinStars.innerHTML = ""
     blueTeamWinStars.innerHTML = ""
 
     // Red stars
@@ -92,8 +92,67 @@ mappoolRequest.onreadystatechange = () => {
                 currentFirstTo = 7
                 break
         }
+
+        generateStarsDisplay()
     }
 }
 mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
 mappoolRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
 mappoolRequest.send()
+
+// Team Details
+const redTeamNameText = document.getElementById("redTeamNameText")
+const blueTeamNameText = document.getElementById("blueTeamNameText")
+const redTeamBackgroundImage = document.getElementById("redTeamBackgroundImage")
+const blueTeamBackgroundImage = document.getElementById("blueTeamBackgroundImage")
+const redTeamAverageRankNumber = document.getElementById("redTeamAverageRankNumber")
+const blueTeamAverageRankNumber = document.getElementById("blueTeamAverageRankNumber")
+let currentTeamRedName, currentTeamBlueName
+
+// Whenever socket sends a message
+socket.onmessage = event => {
+    const data = JSON.parse(event.data)
+    const message = data.message
+
+    // Team Name changing
+    if (data.type === "MultiplayerRoomState") {
+        /**
+         * @typedef {{
+         *     room_name: string
+         *     room_state: string
+         * }} message
+         */
+
+        // Room Name
+        const roomName = message.room_name
+        currentTeamRedName = roomName.split("(")[1].split(")")[0]
+        currentTeamBlueName = roomName.split("(")[2].split(")")[0]
+        redTeamNameText.innerText = currentTeamRedName
+        blueTeamNameText.innerText = currentTeamBlueName
+
+        for (let i = 0; i < allPlayers.length; i++) {
+            if (currentTeamRedName === allPlayers[i].team_name) {
+                updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
+            } else if (currentTeamBlueName === allPlayers[i].team_name) {
+                updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
+            }
+        }
+    }
+}
+
+function updateTeamDisplay(team, backgroundElement, averageRankElement, playerPrefix) {
+    backgroundElement.style.backgroundImage = `url("${team.banner_url}")`;
+    averageRankElement.innerText = Math.round(team.player_ranks.reduce((acc, val) => acc + val, 0) / team.player_ranks.length);
+
+    for (let j = 0; j < 5; j++) {
+        const playerElement = document.getElementById(`${playerPrefix}${j + 1}`);
+        if (j < team.player_ids.length) {
+            playerElement.style.display = "block";
+            playerElement.children[1].setAttribute("src", `https://a.ppy.sh/${team.player_ids[j]}`);
+            playerElement.children[3].innerText = team.player_names[j];
+            playerElement.children[5].innerText = `#${team.player_ranks[j]}`;
+        } else {
+            playerElement.style.display = "none";
+        }
+    }
+}
