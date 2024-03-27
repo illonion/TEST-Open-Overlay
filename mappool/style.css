@@ -433,3 +433,60 @@
     right: 538px;
     background-color: var(--teamBlueColour);
 }
+
+/* Chat */
+#chatDisplay {
+    position: absolute; right: 0px; bottom: 53px;
+    width: 314px; height: 200px;
+    /* background-color: white; */
+    box-shadow: var(--boxShadowPurple);
+    font-family: "Inter"; font-size: 12px;
+    overflow: hidden;
+    padding: 10px;
+    overflow-y: scroll;
+    transition: 500ms ease-in-out;
+}
+#chatText {
+    position: absolute; right: 30px; top: 10px;
+    font-weight: 500;
+    color: var(--mainColour);
+}
+#chatLine1 {
+    position: absolute; right: 0; top: 27px;
+    width: 170px; height: 1px;
+    background-color: var(--mainColour);
+}
+#chatLine2 {
+    position: absolute; right: 30px; top: 33px;
+    width: 15px; height: 2px;
+    background-color: var(--mainColour);
+}
+#chatContainerDisplay {
+    position: absolute; bottom: 0;
+    width: inherit; height: 180px;
+}
+.chatMessageContainer { display: flex; }
+.messageTime {
+    font-weight: 500;
+    width: 45px;
+    color: #B5B5B5;
+}
+.messageUser {
+    font-weight: 800;
+    width: 100px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.messageContent {
+    width: 154px;
+    margin-left: 5px;
+}
+.unknownTeamChat { color: #00b140; }
+.redTeamChat { color: var(--teamRedColour); }
+.blueTeamChat { color: var(--teamBlueColour); }
+/* Scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
