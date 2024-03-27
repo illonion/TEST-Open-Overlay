@@ -11,7 +11,7 @@ socket.onopen = () => {
 // Star system
 const teamRedWinStars = document.getElementById("teamRedWinStars")
 const teamBlueWinStars = document.getElementById("teamBlueWinStars")
-let currentBestOf = 9, currentFirstTo = 5
+let currentBestOf = 0, currentFirstTo = 0
 let currentStarRed = 0, currentStarBlue = 0
 // Generate stars
 function generateStarsDisplay() {
@@ -51,7 +51,6 @@ function changeStarCount(team, action) {
         generateStarsDisplay()
     }
 }
-generateStarsDisplay()
 
 // Warmup mode
 let warmupMode = true
@@ -94,7 +93,23 @@ mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
         mappool = JSON.parse(mappoolRequest.responseText).record
         allBeatmaps = mappool.beatmaps
-        roundName.setAttribute("src",`../_shared/logo/static/${mappool.roundName.toLowerCase().replace(/ /g, "-")}.png`)
+        const currentRoundName = mappool.roundName
+        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.toLowerCase().replace(/ /g, "-")}.png`)
+        switch(currentRoundName) {
+            case "Round of 32": case "Round of 16":
+                currentBestOf = 9
+                currentFirstTo = 5
+                break
+            case "Quarterfinals": case "Semifinals":
+                currentBestOf = 11
+                currentFirstTo = 6
+                break
+            case "Finals": case "Grand Finals":
+                currentBestOf = 13
+                currentFirstTo = 7
+                break
+        }
+        generateStarsDisplay()
     }
 }
 mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
