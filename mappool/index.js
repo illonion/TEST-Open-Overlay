@@ -72,6 +72,8 @@ let mappool
 let allBeatmaps
 let mappoolRequest = new XMLHttpRequest()
 const roundName = document.getElementById("roundName")
+const redBanTiles = document.getElementById("redBanTiles")
+const blueBanTiles = document.getElementById("blueBanTiles")
 const redPickTiles = document.getElementById("redPickTiles")
 const bluePickTiles = document.getElementById("bluePickTiles")
 const sideBarMapSection = document.getElementById("sideBarMapSection")
@@ -84,8 +86,10 @@ mappoolRequest.onreadystatechange = () => {
         for (let i = 0; i < allBeatmaps.length; i++) {
             // Make new button
             const mappoolButton = document.createElement("button")
+            mappoolButton.setAttribute("id", allBeatmaps[i].beatmapID)
             mappoolButton.innerText = allBeatmaps[i].mod + allBeatmaps[i].order
             mappoolButton.classList.add("mappoolButton", "sideBarButton")
+            mappoolButton.addEventListener("click", mapClickEvent)
             sideBarMapSection.append(mappoolButton)     
         }
         
@@ -169,6 +173,14 @@ mappoolRequest.onreadystatechange = () => {
 mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
 mappoolRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
 mappoolRequest.send()
+
+// Find map
+const findMapInMappool = beatmapID => {
+    for (let i = 0; i < allBeatmaps.length; i++) {
+        if (allBeatmaps[i].beatmapID == beatmapID) return allBeatmaps[i]
+    }
+    return
+}
 
 // Team Details
 const redTeamNameText = document.getElementById("redTeamNameText")
@@ -289,5 +301,151 @@ function updateTeamDisplay(team, backgroundElement, averageRankElement, playerPr
 // Change next action
 const sideBarNextActionText = document.getElementById("sideBarNextActionText")
 function changeNextAction(colour, action) {
+    // Change text
     sideBarNextActionText.innerText = `${colour} ${action}`
+
+    // Remove all animations
+    function removeAllTileAnimations(tiles) {
+        for (let i = 0; i < tiles.childElementCount; i++) {
+            tiles.children[i].lastElementChild.classList.remove("mapInformationPickerCurrent")
+            tiles.children[i].lastElementChild.previousElementSibling.classList.remove("mapInformationPickerCurrent")
+        }
+    }
+    removeAllTileAnimations(redBanTiles)
+    removeAllTileAnimations(blueBanTiles)
+    removeAllTileAnimations(redPickTiles)
+    removeAllTileAnimations(bluePickTiles)
+
+    // Function to add class to the appropriate tile
+    function handleAction(action, tiles) {
+        for (let i = 0; i < tiles.childElementCount; i++) {
+            const tile = tiles.children[i]
+            if (tile.hasAttribute("id")) continue
+            const targetElement = action === "Pick" ? tile.lastElementChild.previousElementSibling : tile.lastElementChild
+            targetElement.classList.add("mapInformationPickerCurrent")
+            break
+        }
+    }
+
+    // Red ban
+    if (action === "Ban" && colour === "Red") {
+        handleAction(action, redBanTiles)
+    } else if (action === "Ban" && colour === "Blue") {
+        handleAction(action, blueBanTiles)
+    } else if (action === "Pick" && colour === "Red") {
+        handleAction(action, redPickTiles)
+    } else if (action === "Pick" && colour === "Blue") {
+        handleAction(action, bluePickTiles)
+    }
+}
+changeNextAction("Red", "Ban")
+
+
+const toggleAutopickText = document.getElementById("toggleAutopickText")
+function autopickToggle() {
+    if (toggleAutopickText.innerText === "ON") toggleAutopickText.innerText = "OFF"
+    else toggleAutopickText.innerText = "ON"
+}
+
+const redTeamProtectMap = document.getElementById("redTeamProtectMap")
+const blueTeamProtectMap = document.getElementById("blueTeamProtectMap")
+function mapClickEvent() {
+    const currentId = this.id
+    const currentBeatmap = findMapInMappool(currentId)
+    const currentMod = currentBeatmap.mod
+    console.log(currentId, currentBeatmap)
+
+    // Protects
+    function setProtect(mapInformationElement) {
+        mapInformationElement.style.display = "block"
+        mapInformationElement.style.color = `var(--${currentMod}Colour)`
+        mapInformationElement.children[0].style.backgroundImage = `url("${currentBeatmap.imgURL}")`
+        mapInformationElement.children[2].style.backgroundColor = `var(--${currentMod}Colour)`
+        mapInformationElement.children[2].children[0].innerText = currentMod
+        mapInformationElement.children[2].children[1].innerText = currentBeatmap.order
+        mapInformationElement.children[3].innerText = currentBeatmap.songName
+        mapInformationElement.children[5].innerText = currentBeatmap.mapper
+        mapInformationElement.children[7].innerText = currentBeatmap.difficultyname
+    }
+    if (sideBarNextActionText.innerText === "Red Protect") {
+        setProtect(redTeamProtectMap)
+    } else if (sideBarNextActionText.innerText === "Blue Protect") {
+        setProtect(blueTeamProtectMap)
+    }
+
+    // Set Tile
+    function setTile(currentTile) {
+        currentTile.setAttribute("id", `${currentId}-Ban`)
+        currentTile.style.backgroundImage = `url(${currentBeatmap.beatmapID})`
+        currentTile.style.color = `var(--${currentMod}Colour)`
+        currentTile.style.boxShadow = `var(--boxShadow${currentMod})`
+        currentTile.children[0].style.backgroundImage = `url("${currentBeatmap.imgURL}")`
+        currentTile.children[2].style.backgroundColor = `var(--${currentMod}Colour)`
+        currentTile.children[2].children[0].innerText = currentMod
+        currentTile.children[2].children[1].innerText = currentBeatmap.order
+        currentTile.children[3].innerText = currentBeatmap.songName
+        currentTile.children[5].innerText = currentBeatmap.mapper
+        currentTile.children[7].innerText = currentBeatmap.difficultyname
+        currentTile.children[8].style.display = "none"
+    }
+
+    // Bans
+    function setBan(banTiles) {
+        let currentTile
+        if (banTiles.children[0].hasAttribute("id")) currentTile = banTiles.children[1]
+        else currentTile = banTiles.children[0]
+
+        setTile(currentTile)
+    }
+    if (sideBarNextActionText.innerText === "Red Ban") {
+        setBan(redBanTiles)
+    } else if (sideBarNextActionText.innerText === "Blue Ban") {
+        setBan(blueBanTiles)
+    }
+
+    // Picks
+    function setPicks(banTiles) {
+        let currentTile
+        for (let i = 0; i < banTiles.childElementCount; i++) {
+            if (banTiles.children[i].hasAttribute("id")) continue
+            currentTile = banTiles.children[i]
+            break
+        }
+
+        if (currentTile === undefined) return
+
+        setTile(currentTile)
+    }
+    if (sideBarNextActionText.innerText === "Red Pick") {
+        setPicks(redPickTiles)
+    } else if (sideBarNextActionText.innerText === "Blue Pick") {
+        setPicks(bluePickTiles)
+    }
+
+    // Set new picks
+    if (sideBarNextActionText.innerText === "Red Pick") sideBarNextActionText.innerText = "Blue Pick"
+    else if (sideBarNextActionText.innerText === "Blue Pick") sideBarNextActionText.innerText = "Red Pick"
+
+    // Set new bans
+    const banNumber = banCounter()
+    if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 1) changeNextAction("Red", "Ban")
+    else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 1) changeNextAction("Blue", "Ban")
+    else if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 2) changeNextAction("Blue", "Ban")
+    else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 2) changeNextAction("Red", "Ban")
+    else if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 3) changeNextAction("Red", "Ban")
+    else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 3) changeNextAction("Blue", "Ban")
+
+    // Set new protects
+    if (sideBarNextActionText.innerText === "Red Protect") changeNextAction("Blue", "Protect")
+    else if (sideBarNextActionText.innerText === "Blue Protect") changeNextAction("Red", "Protect")
+}
+function banCounter() {
+    let banCounter = 0
+    for (let i = 0; i < redBanTiles.childElementCount; i++) {
+        if (redBanTiles.children[i].hasAttribute("id")) banCounter++
+    }
+    for (let i = 0; i < blueBanTiles.childElementCount; i++) {
+        if (blueBanTiles.children[i].hasAttribute("id")) banCounter++
+    }
+    return banCounter
 }

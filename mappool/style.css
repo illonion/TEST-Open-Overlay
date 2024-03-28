@@ -317,6 +317,7 @@
     width: 400px; height: 90px;
     font-family: "Inter";  font-weight: 800;
     color: var(--LMColour);
+    display: none;
 }
 #redTeamProtectMap { left: 15px; }
 #blueTeamProtectMap { right: 15px; } 
@@ -627,9 +628,9 @@
 .redTeamChat { color: var(--teamRedColour); }
 .blueTeamChat { color: var(--teamBlueColour); }
 /* Scrollbar */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     display: none;
-}
+} */
 
 /* Sidebar */
 #sideBar {
@@ -650,13 +651,13 @@
     font-size: 32px;
     width: inherit;
 }
-#sideBarStarButtons {
+#sideBarNextActionButtons {
     width: inherit;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
-.sideBarStarButton {
+.sideBarNextActionButton {
     width: 100px; height: 70px;
     margin: 7px;
     border-radius: 10px;
@@ -669,7 +670,7 @@
     background-color: black;
     color: white;
 }
-#warmupButton {
+#toggleAutopick {
     width: 214px;
 }
 #sideBarMapSection {
