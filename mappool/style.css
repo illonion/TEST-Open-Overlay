@@ -664,11 +664,28 @@
     border-color: black;
     font-size: 18px;
 }
-.sideBarStarButton:active {
+.sideBarButton:active {
     border-color: black;
     background-color: black;
     color: white;
 }
 #warmupButton {
     width: 214px;
+}
+#sideBarMapSection {
+    padding-top: 20px;
+    border-top: 1px solid black;
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.mappoolButton {
+    border-radius: 20px;
+    border: 2px solid black;
+    text-align: center;
+    line-height: 40px;
+    width: 65px; height: 40px;
+    background-color: white;
+    margin: 5px;
 }

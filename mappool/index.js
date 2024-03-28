@@ -53,9 +53,9 @@ function changeStarCount(team, action) {
 }
 
 // Json Bin Details
-const playerJsonBinId = ""
-const mappoolJsonBinId = ""
-const jsonBinApiKey = ""
+const playerJsonBinId = "65fa6cc71f5677401f40141d"
+const mappoolJsonBinId = "65fada0a266cfc3fde9b22a2"
+const jsonBinApiKey = "$2a$10$uOzHDtw4jtHSt3F7djDsGOX3N.xJFUOvb0LmynNLKpjZyuhmP3hqm"
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -74,12 +74,26 @@ let mappoolRequest = new XMLHttpRequest()
 const roundName = document.getElementById("roundName")
 const redPickTiles = document.getElementById("redPickTiles")
 const bluePickTiles = document.getElementById("bluePickTiles")
+const sideBarMapSection = document.getElementById("sideBarMapSection")
 mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
+        // beatmap info
         mappool = JSON.parse(mappoolRequest.responseText).record
         allBeatmaps = mappool.beatmaps
+
+        for (let i = 0; i < allBeatmaps.length; i++) {
+            // Make new button
+            const mappoolButton = document.createElement("button")
+            mappoolButton.innerText = allBeatmaps[i].mod + allBeatmaps[i].order
+            mappoolButton.classList.add("mappoolButton", "sideBarButton")
+            sideBarMapSection.append(mappoolButton)     
+        }
+        
+        // Round name info
         const currentRoundName = mappool.roundName
         roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.toLowerCase().replace(/ /g, "-")}.png`)
+
+        // Get round information
         switch(currentRoundName) {
             case "Round of 32": case "Round of 16":
                 currentBestOf = 9
@@ -94,9 +108,9 @@ mappoolRequest.onreadystatechange = () => {
                 currentFirstTo = 7
                 break
         }
-
         generateStarsDisplay()
 
+        // Generate pick tiles
         for (let i = 0; i < (currentFirstTo - 1) * 2; i++) {
             const mapInformationContainer = document.createElement("div")
             mapInformationContainer.classList.add("mapInformationContainer")
