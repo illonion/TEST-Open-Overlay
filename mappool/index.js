@@ -271,3 +271,9 @@ function updateTeamDisplay(team, backgroundElement, averageRankElement, playerPr
         }
     }
 }
+
+// Change next action
+const sideBarNextActionText = document.getElementById("sideBarNextActionText")
+function changeNextAction(colour, action) {
+    sideBarNextActionText.innerText = `${colour} ${action}`
+}
