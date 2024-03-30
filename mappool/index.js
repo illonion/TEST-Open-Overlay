@@ -55,7 +55,7 @@ function changeStarCount(team, action) {
 // Json Bin Details
 const playerJsonBinId = "65fa6cc71f5677401f40141d"
 const mappoolJsonBinId = "65fada0a266cfc3fde9b22a2"
-const jsonBinApiKey = "$2a$10$uOzHDtw4jtHSt3F7djDsGOX3N.xJFUOvb0LmynNLKpjZyuhmP3hqm"
+const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -199,6 +199,16 @@ let chatLength = 0
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
+
+    console.log(data)
+
+    // Autopick with beatmap
+    if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!" &&
+        toggleAutopickText.innerText === "ON" && !document.contains(document.getElementById(`${message.online_id}-Pick`)) &&
+        document.contains(document.getElementById(`${message.online_id}`))) {
+            
+        document.getElementById(message.online_id).click()
+    }
 
     // Team details changing
     if (data.type === "MultiplayerRoomState") {
@@ -374,8 +384,8 @@ function mapClickEvent() {
     }
 
     // Set Tile
-    function setTile(currentTile) {
-        currentTile.setAttribute("id", `${currentId}-Ban`)
+    function setTile(currentTile, type) {
+        currentTile.setAttribute("id", `${currentId}-${type}`)
         currentTile.style.backgroundImage = `url(${currentBeatmap.beatmapID})`
         currentTile.style.color = `var(--${currentMod}Colour)`
         currentTile.style.boxShadow = `var(--boxShadow${currentMod})`
@@ -395,7 +405,8 @@ function mapClickEvent() {
         if (banTiles.children[0].hasAttribute("id")) currentTile = banTiles.children[1]
         else currentTile = banTiles.children[0]
 
-        setTile(currentTile)
+        if (document.contains(document.getElementById(`${currentId}-Ban`))) return
+        setTile(currentTile, "Ban")
     }
     if (sideBarNextActionText.innerText === "Red Ban") {
         setBan(redBanTiles)
@@ -412,9 +423,10 @@ function mapClickEvent() {
             break
         }
 
+        if (document.contains(document.getElementById(`${currentId}-Pick`))) return
         if (currentTile === undefined) return
 
-        setTile(currentTile)
+        setTile(currentTile, "Pick")
     }
     if (sideBarNextActionText.innerText === "Red Pick") {
         setPicks(redPickTiles)
