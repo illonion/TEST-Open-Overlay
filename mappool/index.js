@@ -55,7 +55,7 @@ function changeStarCount(team, action) {
 // Json Bin Details
 const playerJsonBinId = "65fa6cc71f5677401f40141d"
 const mappoolJsonBinId = "65fada0a266cfc3fde9b22a2"
-const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" // Change api key
+const jsonBinApiKey = "" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -77,6 +77,8 @@ const blueBanTiles = document.getElementById("blueBanTiles")
 const redPickTiles = document.getElementById("redPickTiles")
 const bluePickTiles = document.getElementById("bluePickTiles")
 const sideBarMapSection = document.getElementById("sideBarMapSection")
+let currentPickedTile
+let resultsDisplayed = false
 mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
         // beatmap info
@@ -195,6 +197,15 @@ let currentTeamRedName, currentTeamBlueName
 const chatContainerDisplay = document.getElementById("chatContainerDisplay")
 let chatLength = 0
 
+// Score info
+let currentScoreRed, currentScoreBlue
+let currentRedCount
+let currentBlueCount
+let currentRedTotalAccuracy
+let currentBlueTotalAccuracy
+let currentRedAvgAccuracy
+let currentBlueAvgAccuracy
+
 // Whenever socket sends a message
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
@@ -288,6 +299,91 @@ socket.onmessage = event => {
 
             chatContainerDisplay.scrollTop = chatContainerDisplay.scrollHeight;
         }
+    }
+
+    // For what information to show on left
+    if (data.type === "MultiplayerRoomState") {
+        /**
+         * @typedef {{
+         *     room_name: string
+         *     room_state: string
+         * }} message
+         */
+
+        if (message.room_state == "Results" && !resultsDisplayed) {
+            // Show chat after 20 seconds
+            resultsDisplayed = true
+
+            // Add block to winner
+            currentPickedTile.lastElementChild.style.display = "none"
+            currentPickedTile.lastElementChild.classList.remove("mapInformationWinnerRed")
+            currentPickedTile.lastElementChild.classList.remove("mapInformationWinnerBlue")
+            if (currentScoreRed > currentScoreBlue) {
+                currentPickedTile.lastElementChild.style.display = "block"
+                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerRed")
+            } else if (currentScoreBlue > currentScoreRed) {
+                currentPickedTile.lastElementChild.style.display = "block"
+                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerBlue")
+            } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
+                currentPickedTile.lastElementChild.style.display = "block"
+                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerRed")
+            } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
+                currentPickedTile.lastElementChild.style.display = "block"
+                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerBlue")
+            }
+        }
+    }
+
+    if (data.type === "MultiplayerGameplay") {
+        /**
+         * @typedef {{
+         *     player_states: {
+         *         string: {
+         *             team_id: number
+         *             total_score: number
+         *             username: string
+         *             user_id: number
+         *             slot_index: number
+         *             accuracy: number
+         *             mods: [{}]
+         *             combo: number
+         *             highest_combo: number
+         *             user_state: string
+         *         }
+         *     }
+         * }} message
+         */
+
+        currentScoreRed = 0
+        currentScoreBlue = 0
+
+        currentRedCount = 0
+        currentBlueCount = 0
+        currentRedTotalAccuracy = 0
+        currentBlueTotalAccuracy = 0
+        currentRedAvgAccuracy = 0
+        currentBlueAvgAccuracy = 0
+
+        // Check for gameplay and whether results are displayed
+        for (let key in message.player_states) {
+            const player = message.player_states[key]
+            const score = player.total_score
+            const accuracy = player.accuracy
+
+            if (player.team_id === 0) {
+                currentScoreRed += parseInt(score)
+                currentRedTotalAccuracy += accuracy
+                currentRedCount++
+            } else if (player.team_id === 1) {
+                currentScoreBlue += parseInt(score)
+                currentBlueTotalAccuracy += accuracy
+                currentBlueCount++
+            }
+        }
+
+        // Set average accuracies
+        currentRedAvgAccuracy = currentRedTotalAccuracy / currentRedCount
+        currentBlueAvgAccuracy = currentBlueTotalAccuracy / currentBlueCount
     }
 }
 
@@ -427,6 +523,7 @@ function mapClickEvent() {
         if (currentTile === undefined) return
 
         setTile(currentTile, "Pick")
+        currentPickedTile = currentTile
     }
     if (sideBarNextActionText.innerText === "Red Pick") {
         setPicks(redPickTiles)

@@ -174,6 +174,12 @@ const currentScoreBar = document.getElementById("currentScoreBar")
 const currentScoreBarRed = document.getElementById("currentScoreBarRed")
 const currentScoreBarBlue = document.getElementById("currentScoreBarBlue")
 let currentScoreRed, currentScoreBlue, currentScoreDelta
+let currentRedCount
+let currentBlueCount
+let currentRedTotalAccuracy
+let currentBlueTotalAccuracy
+let currentRedAvgAccuracy
+let currentBlueAvgAccuracy
 let scoreAnimation = {
     teamRedCurrentScore: new CountUp(teamRedCurrentScore, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
     teamBlueCurrentScore: new CountUp(teamBlueCurrentScore, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
@@ -285,7 +291,6 @@ socket.onmessage = event => {
     }
 
     // For what information to show on left
-    // UPDATE THIS WHEN I KNOW WHAT THE DATA LOOKS LIKE AND ADD THE TYPEDEF IN HERE TOO
     if (data.type === "MultiplayerRoomState") {
     /**
      * @typedef {{
@@ -316,6 +321,18 @@ socket.onmessage = event => {
         } else if (message.room_state == "Results" && !resultsDisplayed) {
             // Show chat after 20 seconds
             resultsDisplayed = true
+            
+            // Set star count
+            if (currentScoreRed > currentScoreBlue) {
+                changeStarCount("red", "plus")
+            } else if (currentScoreBlue > currentScoreRed) {
+                changeStarCount("blue", "plus")
+            } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
+                changeStarCount("red", "plus")
+            } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
+                changeStarCount("blue", "plus")
+            }
+
             setTimeout(() => {
                 teamRedSection.style.height = "100px"
                 teamBlueSection.style.height = "100px"
@@ -367,12 +384,12 @@ socket.onmessage = event => {
         currentScoreRed = 0
         currentScoreBlue = 0
 
-        let currentRedCount = 0
-        let currentBlueCount = 0
-        let currentRedTotalAccuracy = 0
-        let currentBlueTotalAccuracy = 0
-        let currentRedAvgAccuracy = 0
-        let currentBlueAvgAccuracy = 0
+        currentRedCount = 0
+        currentBlueCount = 0
+        currentRedTotalAccuracy = 0
+        currentBlueTotalAccuracy = 0
+        currentRedAvgAccuracy = 0
+        currentBlueAvgAccuracy = 0
 
         // Check for gameplay and whether results are displayed
         for (let key in message.player_states) {
@@ -384,8 +401,7 @@ socket.onmessage = event => {
                 currentScoreRed += parseInt(score)
                 currentRedTotalAccuracy += accuracy
                 currentRedCount++
-            }
-            else if (player.team_id === 1) {
+            } else if (player.team_id === 1) {
                 currentScoreBlue += parseInt(score)
                 currentBlueTotalAccuracy += accuracy
                 currentBlueCount++
