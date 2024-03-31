@@ -460,6 +460,47 @@
     width: 214px;
 }
 
+/* Player Information */
+.playerInfo {
+    position: absolute; top: 7px;
+    width: inherit; height: 45px;
+    font-family: "Inter";
+    color: white;
+}
+.playerInfoRectangle {
+    position: absolute; top: 8px;
+    width: inherit; height: 29px;
+    background-color: var(--mainColour);
+}
+.playerInfoProfile {
+    position: absolute; left: 8px;
+    width: 45px; height: 45px;
+    background-size: cover;
+    background-image: url("https://a.ppy.sh/2")
+}
+.playerInfoName {
+    font-weight: 800;
+}
+.playerInfoNameReal {
+    position: absolute; left: 69px; top: 13px;
+    width: 185px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 800;
+}
+.playerInfoScoreReal {
+    position: absolute; left: 284.25px; top: 13px;
+    transform: translateX(-50%);
+}
+.playerInfoAccuracyReal {
+    position: absolute; left: 386.35px; top: 13px;
+    transform: translateX(-50%);
+}
+.playerInfoComboReal {
+    position: absolute; right: 10px; top: 13px;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     display: none;
