@@ -305,11 +305,9 @@
 }
 #teamRedCurrentScore {
     top: 94px;
-    font-weight: 500;
 }
 #teamBlueCurrentScore {
     bottom: 94px;
-    font-weight: 800; 
 }
 /* Score Line 1 */
 .teamScoreLine1 {
@@ -481,7 +479,7 @@
 .playerInfoName {
     font-weight: 800;
 }
-.playerInfoNameReal {
+.playerInfoName {
     position: absolute; left: 69px; top: 13px;
     width: 185px;
     white-space: nowrap;
@@ -489,15 +487,15 @@
     text-overflow: ellipsis;
     font-weight: 800;
 }
-.playerInfoScoreReal {
+.playerInfoScore {
     position: absolute; left: 284.25px; top: 13px;
     transform: translateX(-50%);
 }
-.playerInfoAccuracyReal {
+.playerInfoAccuracy {
     position: absolute; left: 386.35px; top: 13px;
     transform: translateX(-50%);
 }
-.playerInfoComboReal {
+.playerInfoCombo {
     position: absolute; right: 10px; top: 13px;
 }
 

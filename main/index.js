@@ -180,10 +180,52 @@ let currentRedTotalAccuracy
 let currentBlueTotalAccuracy
 let currentRedAvgAccuracy
 let currentBlueAvgAccuracy
+
+// Player Scores
+const playerInfoScore0 = document.getElementById("playerInfoScore0")
+const playerInfoScore1 = document.getElementById("playerInfoScore1")
+const playerInfoScore2 = document.getElementById("playerInfoScore2")
+const playerInfoScore3 = document.getElementById("playerInfoScore3")
+const playerInfoScore4 = document.getElementById("playerInfoScore4")
+const playerInfoScore5 = document.getElementById("playerInfoScore5")
+// Player accuracies
+const playerInfoAccuracyNumber0 = document.getElementById("playerInfoAccuracyNumber0")
+const playerInfoAccuracyNumber1 = document.getElementById("playerInfoAccuracyNumber1")
+const playerInfoAccuracyNumber2 = document.getElementById("playerInfoAccuracyNumber2")
+const playerInfoAccuracyNumber3 = document.getElementById("playerInfoAccuracyNumber3")
+const playerInfoAccuracyNumber4 = document.getElementById("playerInfoAccuracyNumber4")
+const playerInfoAccuracyNumber5 = document.getElementById("playerInfoAccuracyNumber5")
+// Player combos
+const playerInfoComboNumber0 = document.getElementById("playerInfoComboNumber0")
+const playerInfoComboNumber1 = document.getElementById("playerInfoComboNumber1")
+const playerInfoComboNumber2 = document.getElementById("playerInfoComboNumber2")
+const playerInfoComboNumber3 = document.getElementById("playerInfoComboNumber3")
+const playerInfoComboNumber4 = document.getElementById("playerInfoComboNumber4")
+const playerInfoComboNumber5 = document.getElementById("playerInfoComboNumber5")
+
+// Score animation
 let scoreAnimation = {
-    teamRedCurrentScore: new CountUp(teamRedCurrentScore, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
-    teamBlueCurrentScore: new CountUp(teamBlueCurrentScore, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
-    currentScoreDifferenceNumber: new CountUp(currentScoreDifferenceNumber, 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." })
+    teamRedCurrentScore: new CountUp("teamRedCurrentScore", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    teamBlueCurrentScore: new CountUp("teamBlueCurrentScore", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    currentScoreDifferenceNumber: new CountUp("currentScoreDifferenceNumber", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoScore0: new CountUp("playerInfoScore0", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoScore1: new CountUp("playerInfoScore1", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoScore2: new CountUp("playerInfoScore2", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoScore3: new CountUp("playerInfoScore3", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoScore4: new CountUp("playerInfoScore4", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoScore5: new CountUp("playerInfoScore5", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoAccuracyNumber0: new CountUp("playerInfoAccuracyNumber0", 0, 0, 2, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoAccuracyNumber1: new CountUp("playerInfoAccuracyNumber1", 0, 0, 2, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoAccuracyNumber2: new CountUp("playerInfoAccuracyNumber2", 0, 0, 2, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoAccuracyNumber3: new CountUp("playerInfoAccuracyNumber3", 0, 0, 2, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoAccuracyNumber4: new CountUp("playerInfoAccuracyNumber4", 0, 0, 2, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoAccuracyNumber5: new CountUp("playerInfoAccuracyNumber5", 0, 0, 2, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }),
+    playerInfoComboNumber0: new CountUp("playerInfoComboNumber0", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }), 
+    playerInfoComboNumber1: new CountUp("playerInfoComboNumber1", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }), 
+    playerInfoComboNumber2: new CountUp("playerInfoComboNumber2", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }), 
+    playerInfoComboNumber3: new CountUp("playerInfoComboNumber3", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }), 
+    playerInfoComboNumber4: new CountUp("playerInfoComboNumber4", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }), 
+    playerInfoComboNumber5: new CountUp("playerInfoComboNumber5", 0, 0, 0, 0.2, { useEasing: true, useGrouping: true, separator: ",", decimal: "." }), 
 }
 
 // Team Details
@@ -201,6 +243,7 @@ let chatLength = 0
 
 // Map currentply playing
 let resultsDisplayed = false
+let roomState
 
 // Whenever socket sends a message
 socket.onmessage = event => {
@@ -298,9 +341,10 @@ socket.onmessage = event => {
      *     room_state: string
      * }} message
      */
-    
+        
+        roomState = message.room_state
         // Room state
-        if (message.room_state == "Open" || message.room_state == "Closed") {
+        if (roomState == "Open" || roomState == "Closed") {
             // Chat showing
             resultsDisplayed = false
             teamRedSection.style.height = "100px"
@@ -309,7 +353,7 @@ socket.onmessage = event => {
             teamBlueScoreSection.style.opacity = 0
             chatDisplay.style.left = "15px"
             currentScoreBar.style.opacity = 0
-        } else if (message.room_state == "WaitingForLoad" || message.room_state == "Playing") {
+        } else if (roomState == "WaitingForLoad" || roomState == "Playing") {
             // Gameplay showing
             resultsDisplayed = false
             teamRedSection.style.height = "175px"
@@ -318,7 +362,7 @@ socket.onmessage = event => {
             teamBlueScoreSection.style.opacity = 1
             chatDisplay.style.left = "-335px"
             currentScoreBar.style.opacity = 1
-        } else if (message.room_state == "Results" && !resultsDisplayed) {
+        } else if (roomState == "Results" && !resultsDisplayed) {
             // Show chat after 20 seconds
             resultsDisplayed = true
             
@@ -380,7 +424,6 @@ socket.onmessage = event => {
          *     }
          * }} message
          */
-
         currentScoreRed = 0
         currentScoreBlue = 0
 
@@ -391,21 +434,50 @@ socket.onmessage = event => {
         currentRedAvgAccuracy = 0
         currentBlueAvgAccuracy = 0
 
+        let player_slots = [0, 1, 2, 3, 4, 5]
+
         // Check for gameplay and whether results are displayed
         for (let key in message.player_states) {
             const player = message.player_states[key]
             const score = player.total_score
             const accuracy = player.accuracy
 
-            if (player.team_id === 0) {
-                currentScoreRed += parseInt(score)
-                currentRedTotalAccuracy += accuracy
-                currentRedCount++
-            } else if (player.team_id === 1) {
-                currentScoreBlue += parseInt(score)
-                currentBlueTotalAccuracy += accuracy
-                currentBlueCount++
+            // Displaying player information
+            player_slots = player_slots.filter(int => int !== player.slot_index)
+            const playerInformationConatiner = document.getElementById(`playerInfo${player.slot_index}`)
+            playerInformationConatiner.style.display = "block"
+            playerInformationConatiner.children[1].style.backgroundImage = `url("https://a.ppy.sh/${key}")`
+            playerInformationConatiner.children[2].innerText = player.username
+
+            if (roomState !== "Open") {
+                scoreAnimation[`playerInfoScore${player.slot_index}`].update(player.total_score)
+                scoreAnimation[`playerInfoAccuracyNumber${player.slot_index}`].update(player.accuracy * 100)
+                scoreAnimation[`playerInfoComboNumber${player.slot_index}`].update(player.combo)
+    
+                // Team Ids
+                if (player.team_id === 0) {
+                    currentScoreRed += parseInt(score)
+                    currentRedTotalAccuracy += accuracy
+                    playerInformationConatiner.children[0].style.backgroundColor = "var(--teamRedColour)"
+                    currentRedCount++
+                } else if (player.team_id === 1) {
+                    currentScoreBlue += parseInt(score)
+                    currentBlueTotalAccuracy += accuracy
+                    playerInformationConatiner.children[0].style.backgroundColor = "var(--teamBlueColour)"
+                    currentBlueCount++
+                } else {
+                    playerInformationConatiner.children[0].style.backgroundColor = "green"
+                }
+            } else {
+                scoreAnimation[`playerInfoScore${player.slot_index}`].update(0)
+                scoreAnimation[`playerInfoAccuracyNumber${player.slot_index}`].update(0)
+                scoreAnimation[`playerInfoComboNumber${player.slot_index}`].update(0)
             }
+        }
+
+        // Remove anyone whose slots are not available
+        for (let i = 0; i < player_slots.length; i++) {
+            document.getElementById(`playerInfo${player_slots[i]}`).style.display = "none"
         }
 
         // Set average accuracies
@@ -422,18 +494,24 @@ socket.onmessage = event => {
         let movingScoreBarDifferencePercent = Math.min(currentScoreDelta / 1000000, 1)
         let movingScoreBarRectangleHeight = Math.min(Math.pow(movingScoreBarDifferencePercent, 0.5) * 0.8 * 484, 484)
         if (currentScoreRed > currentScoreBlue) {
+            teamRedCurrentScore.style.fontWeight = "800"
+            teamBlueCurrentScore.style.fontWeight = "500"
             currentScoreBarRed.style.height = `${movingScoreBarRectangleHeight}px`
             currentScoreBarBlue.style.height = "0px"
             currentScoreDifference.style.backgroundColor = "var(--teamRedColour)"
             currentScoreDifference.style.color = "white"
             currentScoreDifferenceNumber.style.color = "white"
         } else if (currentScoreRed === currentScoreBlue) {
+            teamRedCurrentScore.style.fontWeight = "500"
+            teamBlueCurrentScore.style.fontWeight = "500"
             currentScoreBarRed.style.height = "0px"
             currentScoreBarBlue.style.height = "0px"
             currentScoreDifference.style.backgroundColor = "white"
             currentScoreDifference.style.color = "black"
             currentScoreDifferenceNumber.style.color = "black"
         } else if (currentScoreBlue > currentScoreRed) {
+            teamRedCurrentScore.style.fontWeight = "500"
+            teamBlueCurrentScore.style.fontWeight = "800"
             currentScoreBarRed.style.height = "0px"
             currentScoreBarBlue.style.height = `${movingScoreBarRectangleHeight}px`
             currentScoreDifference.style.backgroundColor = "var(--teamBlueColour)"
