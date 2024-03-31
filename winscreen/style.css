@@ -1,7 +1,140 @@
+:root {
+    --mainColour: #5E72EB;
+    --teamBlueColour: #5E72EB;
+    --teamRedColour: #FF9190;
+    --offWhite: #FFFEFA;
+
+    --boxShadowRed: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
+    --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-ExtraBold.ttf");
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("../fonts/Inter-Italic.ttf");
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("../fonts/Inter-ExtraBold-Italic.ttf");
+    font-weight: 800;
+    font-style: italic;
+}
+
 /* Whole page */
 #main {
     position: absolute; left: 0; top: 0;
     width: 1920px; height: 1080px;
     background-image: url("static/background.png");
     background-size: cover;
+}
+
+/* Winner Container */
+#winnerContainer {
+    position: absolute; left: 275px; top: 183px;
+    width: 1370px; height: 714px;
+    /* background-color: var(--teamSectionColour); */
+    box-shadow: var(--boxShadowRed);
+}
+
+/* Winner Container Top */
+#winnerContainerTop { 
+    color: var(--offWhite); 
+    font-family: "Inter Italic";  font-style: italic; 
+}
+#winnerContainerTop > * { position: absolute; }
+.winnerContainerTopUpperSection {
+    top: 17px;
+    font-weight: 400; font-size: 32px;
+}
+.winnerContainerTopLowerSection {
+    top: 46px;
+    letter-spacing: 1.4px;
+    font-weight: 800; font-size: 60px;
+}
+.winnerContainerTopLeftSection { left: 39px;  }
+.winnerContainerTopRightSection { right: 29px;  }
+#winnerContainerTopTeamName {
+    width: 1150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* Winner container Top Cosmetics */
+#winnerContainerTopCosmetics > * { 
+    position: absolute; left: 0;
+    background-color: var(--teamRedColour); 
+}
+#winnerContainerTopCosmeticsBox {
+    top: 0;
+    width: 1370px; height: 129px;
+}
+#winnerContainerTopCosmeticVeritcalLine {
+    top: 0;
+    width: 18px; height: 203px;
+}
+#winnerContainerTopCosmeticHorizontalLine {
+    top: 185px;
+    width: 982px; height: 18px;
+}
+/* Winner container team banner */
+#winnerContainerTeamBannerContainer {
+    position: absolute; left: 34px; top: 148px;
+    width: 900px; height: 461px;
+}
+#winnerContainerTeamBanner {
+    position: absolute; left: 2px;
+    width: 896px; height: 398px;
+    background-size: cover;
+    background-image: url("https://dtoyeiqtecliyympsgji.supabase.co/storage/v1/object/public/flags/krokozyabriki/flag-1710175149012.gif")
+}
+#winnerContainerTeamGradient {
+    position: absolute; left: 0; top: 0;
+    width: inherit; height: inherit;
+    /* background-image: linear-gradient(to top, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(255, 255, 255, 1) 20%, 
+        rgba(255, 255, 255, 0.56) 42%, 
+        rgba(255, 255, 255, 0) 65%); */
+}
+/* Winner container picks won */
+#winnerContainerPicksWonText {
+    position: absolute; left: 40px; top: 571px;
+    color: #BBBFCF;
+    font-family: "Inter Italic";
+    font-size: 32px;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+#winnerContainerPicksWonPickText { font-weight: 800; }
+#winnerContainerPicksWonLine {
+    position: absolute; left: 236px; top: 588px;
+    width: 695px; height: 2px;
+    background-color: #BBBFCF;
+}
+#winnerContainerPicksWonBoxes {
+    position: absolute; left: 38px; top: 629px;
+    width: 902px;
+    display: flex;
+    justify-content: space-between;
+}
+.winnerContainerPicksWonBox {
+    flex-grow: 1;
+    margin-right: 7px;
+}
+.winnerContainerPicksWonColour {
+    background-color: var(--mainColour);
+    width: 100%; height: 24px;
+}
+.winnerContainerPicksWonModId {
+    margin-top: 10px;
+    text-align: center;
+    font-family: "Inter"; font-size: 14px;
+    color: #BBBFCF;
 }
