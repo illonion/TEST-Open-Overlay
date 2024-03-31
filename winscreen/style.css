@@ -38,7 +38,7 @@
 #winnerContainer {
     position: absolute; left: 275px; top: 183px;
     width: 1370px; height: 714px;
-    background-color: var(--teamSectionColour);
+    background-color: var(--offWhite);
     box-shadow: var(--boxShadowRed);
 }
 
@@ -180,4 +180,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* Bluebunny logo */
+#bluebunnyLogo {
+    position: absolute; right: 30px; bottom: 30px;
+    width: 69px; height: 100px;
 }
