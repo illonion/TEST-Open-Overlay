@@ -55,7 +55,7 @@ function changeStarCount(team, action) {
 // Json Bin Details
 const playerJsonBinId = "65fa6cc71f5677401f40141d"
 const mappoolJsonBinId = "65fada0a266cfc3fde9b22a2"
-const jsonBinApiKey = "" // Change api key
+const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -574,7 +574,7 @@ function sideBarChooseActionSelectValueChange() {
         sideBarMapManagement.removeChild(sideBarMapManagement.lastElementChild)
     }
     
-    if (currentAction === "setProtect") {
+    if (currentAction === "setProtect" || currentAction === "removeProtect") {
         // Append header
         const sideBarSectionHeader = document.createElement("div")
         sideBarSectionHeader.innerText = "Which team's protect?"
@@ -602,32 +602,43 @@ function sideBarChooseActionSelectValueChange() {
 
         sideBarMapManagement.append(sideBarChooseProtectSelect)
 
-        // Append header
-        const sideBarMapsHeader = document.createElement("div")
-        sideBarMapsHeader.innerText = "Which map?"
-        sideBarMapsHeader.classList.add("sideBarSectionHeader")
-        sideBarMapManagement.append(sideBarMapsHeader)
+        // Just for getting maps in
+        if (currentAction === "setProtect") {
+            // Append header
+            const sideBarMapsHeader = document.createElement("div")
+            sideBarMapsHeader.innerText = "Which map?"
+            sideBarMapsHeader.classList.add("sideBarSectionHeader")
+            sideBarMapManagement.append(sideBarMapsHeader)
 
-        // Append Container
-        const setProtectMaps = document.createElement("div")
-        setProtectMaps.classList.add("setProtectMaps")
+            // Append Container
+            const setProtectMaps = document.createElement("div")
+            setProtectMaps.classList.add("setProtectMaps")
 
-        // Append maps
-        for (let i = 0; i < allBeatmaps.length; i++) {
-            const setProtectMapButton = document.createElement("button")
-            setProtectMapButton.classList.add("setProtectMapButton")
-            setProtectMapButton.setAttribute("onclick", `pickManagementSetCurrentMap(${allBeatmaps[i].beatmapID})`)
-            setProtectMapButton.setAttribute("id",`${allBeatmaps[i].beatmapID}-setProtectMapButton`)
-            setProtectMapButton.innerText = allBeatmaps[i].mod + allBeatmaps[i].order
-            setProtectMaps.append(setProtectMapButton)
+            // Append maps
+            for (let i = 0; i < allBeatmaps.length; i++) {
+                const setProtectMapButton = document.createElement("button")
+                setProtectMapButton.classList.add("setProtectMapButton")
+                setProtectMapButton.setAttribute("onclick", `pickManagementSetCurrentMap(${allBeatmaps[i].beatmapID})`)
+                setProtectMapButton.setAttribute("id",`${allBeatmaps[i].beatmapID}-setProtectMapButton`)
+                setProtectMapButton.innerText = allBeatmaps[i].mod + allBeatmaps[i].order
+                setProtectMaps.append(setProtectMapButton)
+            }
+
+            sideBarMapManagement.append(setProtectMaps)
         }
+    }
 
-        sideBarMapManagement.append(setProtectMaps)
-
-        // Append apply changes button
+    // Append apply changes button
+    if (currentAction) {
         const applyChangesButton = document.createElement("button")
         applyChangesButton.classList.add("sideBarButton", "sideBarNextActionButton", "sideBarButtonFullWidth")
         applyChangesButton.innerText = "APPLY CHANGES"
+
+        // Apply function dependning on what currentAction is
+        switch (currentAction) {
+            case "setProtect": applyChangesButton.addEventListener("click", applyChangesSetProtect); break;
+            case "removeProtect": applyChangesButton.addEventListener("click", applyChangesRemoveProtect); break;
+        }
         applyChangesButton.addEventListener("click", applyChangesSetProtect)
         sideBarMapManagement.append(applyChangesButton)
     }
@@ -651,6 +662,7 @@ function pickManagementSetCurrentMap(beatmapID) {
     }
     pickManagementCurrentMap = beatmapID
 }
+// Apply changes for setProtect
 function applyChangesSetProtect() {
     if (pickManagementCurrentProtect === undefined || pickManagementCurrentMap === undefined) return
     
@@ -662,8 +674,20 @@ function applyChangesSetProtect() {
         currentProtectMapElement = blueTeamProtectMap
     }
 
-    console.log(currentProtectMapElement)
     if (currentProtectMapElement === undefined) return
 
     setProtect(currentProtectMapElement, currentMap)
+}
+// Apply changes for removeProtect
+function applyChangesRemoveProtect() {
+    if (pickManagementCurrentProtect === undefined) return
+    let currentProtectMapElement
+    if (pickManagementCurrentProtect === "redProtect") {
+        currentProtectMapElement = redTeamProtectMap
+    } else if (pickManagementCurrentProtect === "blueProtect") {
+        currentProtectMapElement = blueTeamProtectMap
+    }
+    if (currentProtectMapElement === undefined) return
+
+    currentProtectMapElement.style.display = "none"
 }
