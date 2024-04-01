@@ -365,20 +365,38 @@
     </div>
     <!-- Sidebar -->
     <div id="sideBar">
-        <section id="sideBarStarSection">
-            <div class="sideBarSectionHeader">Next Action</div>
-            <div class="sideBarNextActionText" id="sideBarNextActionText">Red Protect</div>
-            <div id="sideBarNextActionButtons">
-                <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Red','Protect')">Red Protect</button>
-                <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Protect')">Blue Protect</button>
-                <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Red','Ban')">Red Ban</button>
-                <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Ban')">Blue Ban</button>
-                <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Red','Pick')">Red Pick</button>
-                <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Pick')">Blue Pick</button>
-                <button class="sideBarButton sideBarNextActionButton" id="toggleAutopick" onclick="autopickToggle()">AUTOPICK: <span id="toggleAutopickText">OFF</span></button>
-            </div>
+        <section id="sideBarColumn1">
+            <section id="sideBarStarSection">
+                <div class="sideBarSectionHeader">Next Action</div>
+                <div class="sideBarNextActionText" id="sideBarNextActionText">Red Protect</div>
+                <div id="sideBarNextActionButtons">
+                    <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Red','Protect')">Red Protect</button>
+                    <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Protect')">Blue Protect</button>
+                    <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Red','Ban')">Red Ban</button>
+                    <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Ban')">Blue Ban</button>
+                    <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Red','Pick')">Red Pick</button>
+                    <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Pick')">Blue Pick</button>
+                    <button class="sideBarButton sideBarNextActionButton" id="toggleAutopick" onclick="autopickToggle()">AUTOPICK: <span id="toggleAutopickText">OFF</span></button>
+                </div>
+            </section>
+            <section id="sideBarMapSection"></section>
         </section>
-        <section id="sideBarMapSection"></section>
+        <div id="divider"></div>
+        <section id="sideBarColumn2">
+            <section id="sideBarMapManagement">
+                <div class="sideBarSectionHeader">Choose Action:</div>
+                <select id="sideBarChooseActionSelect" size="8">
+                    <option>Set Protect</option>
+                    <option>Remove Protect</option>
+                    <option>Set Ban</option>
+                    <option>Remove Ban</option>
+                    <option>Set Pick</option>
+                    <option>Remove Pick</option>
+                    <option>Set Winner</option>
+                    <option>Remove Winner</option>
+                </select>
+            </section>
+        </section>
     </div>
 
     <script src="../_shared/deps/reconnecting-websocket.min.js"></script>
