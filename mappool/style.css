@@ -661,6 +661,7 @@
     font-weight: 500;
     font-size: 24px;
     width: inherit;
+    text-align: left;
 }
 .sideBarNextActionText {
     margin: 15px 0 10px 20px;
@@ -687,7 +688,7 @@
     background-color: black;
     color: white;
 }
-#toggleAutopick {
+.sideBarButtonFullWidth {
     width: 214px;
 }
 #sideBarMapSection {
@@ -710,16 +711,31 @@
 #sideBarMapManagement {
     text-align: center;
 }
-#sideBarChooseActionSelect {
+.sideBarSelect {
     background-color: transparent;
     border: none;
 }
-#sideBarChooseActionSelect:active { border: none; }
-#sideBarChooseActionSelect::-webkit-scrollbar {
+.sideBarSelect:active { border: none; }
+.sideBarSelect::-webkit-scrollbar {
     display: none;
 }
-#sideBarChooseActionSelect option {
+.sideBarSelect option {
+    padding: 3px 10px;
     text-align: center;
     font-family: Inter;
     font-size: 16px;
+}
+.setProtectMaps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.setProtectMapButton {
+    padding: 10px 3px;
+    width: 75px;
+    font-size: 20px;
+    font-size: 16px;
+    font-family: 'Inter';
+    background-color: transparent;
+    border: none;
 }

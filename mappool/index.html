@@ -376,7 +376,7 @@
                     <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Ban')">Blue Ban</button>
                     <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Red','Pick')">Red Pick</button>
                     <button class="sideBarButton sideBarNextActionButton" onclick="changeNextAction('Blue','Pick')">Blue Pick</button>
-                    <button class="sideBarButton sideBarNextActionButton" id="toggleAutopick" onclick="autopickToggle()">AUTOPICK: <span id="toggleAutopickText">OFF</span></button>
+                    <button class="sideBarButton sideBarNextActionButton sideBarButtonFullWidth" id="toggleAutopick" onclick="autopickToggle()">AUTOPICK: <span id="toggleAutopickText">OFF</span></button>
                 </div>
             </section>
             <section id="sideBarMapSection"></section>
@@ -385,15 +385,15 @@
         <section id="sideBarColumn2">
             <section id="sideBarMapManagement">
                 <div class="sideBarSectionHeader">Choose Action:</div>
-                <select id="sideBarChooseActionSelect" size="8">
-                    <option>Set Protect</option>
-                    <option>Remove Protect</option>
-                    <option>Set Ban</option>
-                    <option>Remove Ban</option>
-                    <option>Set Pick</option>
-                    <option>Remove Pick</option>
-                    <option>Set Winner</option>
-                    <option>Remove Winner</option>
+                <select class="sideBarSelect" id="sideBarChooseActionSelect" size="8" onchange="sideBarChooseActionSelectValueChange()">
+                    <option value="setProtect">Set Protect</option>
+                    <option value="removeProtect">Remove Protect</option>
+                    <option value="setBan">Set Ban</option>
+                    <option value="rfemoveBan">Remove Ban</option>
+                    <option value="setPick">Set Pick</option>
+                    <option value="removePick">Remove Pick</option>
+                    <option value="setWinner">Set Winner</option>
+                    <option value="removeWinner">Remove Winner</option>
                 </select>
             </section>
         </section>
