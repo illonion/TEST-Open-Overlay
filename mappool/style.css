@@ -725,7 +725,7 @@
     font-family: Inter;
     font-size: 16px;
 }
-.setProtectMaps {
+.setPickManagementMaps {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

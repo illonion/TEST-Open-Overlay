@@ -608,7 +608,7 @@ function sideBarChooseActionSelectValueChange() {
     }
 
     // Bans
-    if (currentAction === "setBan") {
+    if (currentAction === "setBan" || currentAction === "removeBan") {
         // Append header
         const sideBarSectionHeader = document.createElement("div")
         sideBarSectionHeader.innerText = "Which team's ban?"
@@ -647,6 +647,7 @@ function sideBarChooseActionSelectValueChange() {
             case "setProtect": applyChangesButton.addEventListener("click", applyChangesSetProtect); break;
             case "removeProtect": applyChangesButton.addEventListener("click", applyChangesRemoveProtect); break;
             case "setBan": applyChangesButton.addEventListener("click", applyChangesSetBan); break;
+            case "removeBan": applyChangesButton.addEventListener("click", applyChangesRemoveBan); break;
         }
         applyChangesButton.addEventListener("click", applyChangesSetProtect)
         sideBarMapManagement.append(applyChangesButton)
@@ -736,4 +737,21 @@ function applyChangesSetBan() {
     if (!currentTile) return
 
     setTile(currentTile, currentMap, "Ban")
+}
+// Apply changes for removeBan()
+function applyChangesRemoveBan() {
+    if (pickManagementCurrentAction === undefined) return
+    let currentTile
+    switch (pickManagementCurrentAction) {
+        case "redBan1": currentTile = redBanTiles.children[0]; break;
+        case "redBan2": currentTile = redBanTiles.children[1]; break;
+        case "blueBan1": currentTile = blueBanTiles.children[0]; break;
+        case "blueBan2": currentTile = blueBanTiles.children[1]; break;
+    }
+
+    if (!currentTile) return
+
+    currentTile.removeAttribute("id")
+    currentTile.style.boxShadow = "none"
+    currentTile.children[8].style.display = "block"
 }
