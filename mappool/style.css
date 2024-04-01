@@ -730,7 +730,7 @@
     flex-wrap: wrap;
     justify-content: center;
 }
-.setProtectMapButton {
+.pickManagementSetMapButton {
     padding: 10px 3px;
     width: 75px;
     font-size: 20px;

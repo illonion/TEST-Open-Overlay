@@ -467,7 +467,32 @@ function setProtect(mapInformationElement, currentBeatmap) {
     mapInformationElement.children[3].innerText = currentBeatmap.songName
     mapInformationElement.children[5].innerText = currentBeatmap.mapper
     mapInformationElement.children[7].innerText = currentBeatmap.difficultyname
-}// Map click event
+}
+// Set Tile
+function setTile(currentTile, currentBeatmap, type) {
+    const currentMod = currentBeatmap.mod
+    currentTile.setAttribute("id", `${currentBeatmap.beatmapID}-${type}`)
+    currentTile.style.backgroundImage = `url(${currentBeatmap.beatmapID})`
+    currentTile.style.color = `var(--${currentMod}Colour)`
+    currentTile.style.boxShadow = `var(--boxShadow${currentMod})`
+    currentTile.children[0].style.backgroundImage = `url("${currentBeatmap.imgURL}")`
+    currentTile.children[2].style.backgroundColor = `var(--${currentMod}Colour)`
+    currentTile.children[2].children[0].innerText = currentMod
+    currentTile.children[2].children[1].innerText = currentBeatmap.order
+    currentTile.children[3].innerText = currentBeatmap.songName
+    currentTile.children[5].innerText = currentBeatmap.mapper
+    currentTile.children[7].innerText = currentBeatmap.difficultyname
+    currentTile.children[8].style.display = "none"
+}
+function setBan(banTiles, currentBeatmap) {
+    let currentTile
+    if (banTiles.children[0].hasAttribute("id")) currentTile = banTiles.children[1]
+    else currentTile = banTiles.children[0]
+
+    if (document.contains(document.getElementById(`${currentBeatmap.beatmapID}-Ban`))) return
+    setTile(currentTile, currentBeatmap, "Ban")
+}
+// Map click event
 function mapClickEvent() {
     const currentId = this.id
     const currentBeatmap = findMapInMappool(currentId)
@@ -479,35 +504,11 @@ function mapClickEvent() {
         setProtect(blueTeamProtectMap, currentBeatmap)
     }
 
-    // Set Tile
-    function setTile(currentTile, type) {
-        currentTile.setAttribute("id", `${currentId}-${type}`)
-        currentTile.style.backgroundImage = `url(${currentBeatmap.beatmapID})`
-        currentTile.style.color = `var(--${currentMod}Colour)`
-        currentTile.style.boxShadow = `var(--boxShadow${currentMod})`
-        currentTile.children[0].style.backgroundImage = `url("${currentBeatmap.imgURL}")`
-        currentTile.children[2].style.backgroundColor = `var(--${currentMod}Colour)`
-        currentTile.children[2].children[0].innerText = currentMod
-        currentTile.children[2].children[1].innerText = currentBeatmap.order
-        currentTile.children[3].innerText = currentBeatmap.songName
-        currentTile.children[5].innerText = currentBeatmap.mapper
-        currentTile.children[7].innerText = currentBeatmap.difficultyname
-        currentTile.children[8].style.display = "none"
-    }
-
     // Bans
-    function setBan(banTiles) {
-        let currentTile
-        if (banTiles.children[0].hasAttribute("id")) currentTile = banTiles.children[1]
-        else currentTile = banTiles.children[0]
-
-        if (document.contains(document.getElementById(`${currentId}-Ban`))) return
-        setTile(currentTile, "Ban")
-    }
     if (sideBarNextActionText.innerText === "Red Ban") {
-        setBan(redBanTiles)
+        setBan(redBanTiles, currentBeatmap)
     } else if (sideBarNextActionText.innerText === "Blue Ban") {
-        setBan(blueBanTiles)
+        setBan(blueBanTiles, currentBeatmap)
     }
 
     // Picks
@@ -567,11 +568,18 @@ function sideBarChooseActionSelectValueChange() {
     currentAction = sideBarChooseActionSelect.value
 
     // Reset everything 
-    pickManagementCurrentProtect = undefined
+    pickManagementCurrentAction = undefined
     pickManagementCurrentMap = undefined
 
     while (sideBarMapManagement.childElementCount > 2) {
         sideBarMapManagement.removeChild(sideBarMapManagement.lastElementChild)
+    }
+
+    function createSelectOptions(innerText, value) {
+        const selectOption = document.createElement("option")
+        selectOption.innerText = innerText
+        selectOption.setAttribute("value", value)
+        return selectOption
     }
     
     if (currentAction === "setProtect" || currentAction === "removeProtect") {
@@ -584,52 +592,52 @@ function sideBarChooseActionSelectValueChange() {
         // Append select options
         const sideBarChooseProtectSelect = document.createElement("select")
         sideBarChooseProtectSelect.classList.add("sideBarSelect")
-        sideBarChooseProtectSelect.setAttribute("onchange", "sideBarChooseProtectSelectValueChange()")
+        sideBarChooseProtectSelect.setAttribute("onchange", "sideBarChooseSelectValueChange()")
         sideBarChooseProtectSelect.setAttribute("id", "sideBarChooseProtectSelect")
         sideBarChooseProtectSelect.setAttribute("size", 2)
 
-        // Append red's select options
-        const redProtectOption = document.createElement("option")
-        redProtectOption.innerText = `Red Protect`
-        redProtectOption.setAttribute("value", "redProtect")
-        sideBarChooseProtectSelect.append(redProtectOption)
-
-        // Append blue's select options
-        const blueProtectOption = document.createElement("option")
-        blueProtectOption.innerText = `Blue Protect`
-        blueProtectOption.setAttribute("value", "blueProtect")
-        sideBarChooseProtectSelect.append(blueProtectOption)
-
+        // Append select options
+        sideBarChooseProtectSelect.append(createSelectOptions("Red Protect", "redProtect"))
+        sideBarChooseProtectSelect.append(createSelectOptions("Blue Protect", "blueProtect"))
         sideBarMapManagement.append(sideBarChooseProtectSelect)
 
         // Just for getting maps in
         if (currentAction === "setProtect") {
-            // Append header
-            const sideBarMapsHeader = document.createElement("div")
-            sideBarMapsHeader.innerText = "Which map?"
-            sideBarMapsHeader.classList.add("sideBarSectionHeader")
-            sideBarMapManagement.append(sideBarMapsHeader)
+            sideBarMapManagement.append(pickManagementCreateSelectMaps())
+        }
+    }
 
-            // Append Container
-            const setProtectMaps = document.createElement("div")
-            setProtectMaps.classList.add("setProtectMaps")
+    // Bans
+    if (currentAction === "setBan") {
+        // Append header
+        const sideBarSectionHeader = document.createElement("div")
+        sideBarSectionHeader.innerText = "Which team's ban?"
+        sideBarSectionHeader.classList.add("sideBarSectionHeader")
+        sideBarMapManagement.append(sideBarSectionHeader)
 
-            // Append maps
-            for (let i = 0; i < allBeatmaps.length; i++) {
-                const setProtectMapButton = document.createElement("button")
-                setProtectMapButton.classList.add("setProtectMapButton")
-                setProtectMapButton.setAttribute("onclick", `pickManagementSetCurrentMap(${allBeatmaps[i].beatmapID})`)
-                setProtectMapButton.setAttribute("id",`${allBeatmaps[i].beatmapID}-setProtectMapButton`)
-                setProtectMapButton.innerText = allBeatmaps[i].mod + allBeatmaps[i].order
-                setProtectMaps.append(setProtectMapButton)
-            }
+        // Append select options
+        const sideBarChooseBanSelect = document.createElement("select")
+        sideBarChooseBanSelect.classList.add("sideBarSelect")
+        sideBarChooseBanSelect.setAttribute("onchange", "sideBarChooseSelectValueChange()")
+        sideBarChooseBanSelect.setAttribute("id", "sideBarChooseProtectSelect")
+        sideBarChooseBanSelect.setAttribute("size", 4)
 
-            sideBarMapManagement.append(setProtectMaps)
+        // Append select options
+        sideBarChooseBanSelect.append(createSelectOptions("Red Ban 1", "redBan1"))
+        sideBarChooseBanSelect.append(createSelectOptions("Blue Ban 1", "blueBan1"))
+        sideBarChooseBanSelect.append(createSelectOptions("Red Ban 2", "redBan2"))
+        sideBarChooseBanSelect.append(createSelectOptions("Blue Ban 2", "blueBan2"))
+        sideBarMapManagement.append(sideBarChooseBanSelect)
+
+        // Just for getting maps in
+        if (currentAction === "setBan") {
+            sideBarMapManagement.append(pickManagementCreateSelectMaps())
         }
     }
 
     // Append apply changes button
     if (currentAction) {
+        sideBarMapManagement.append()
         const applyChangesButton = document.createElement("button")
         applyChangesButton.classList.add("sideBarButton", "sideBarNextActionButton", "sideBarButtonFullWidth")
         applyChangesButton.innerText = "APPLY CHANGES"
@@ -638,56 +646,94 @@ function sideBarChooseActionSelectValueChange() {
         switch (currentAction) {
             case "setProtect": applyChangesButton.addEventListener("click", applyChangesSetProtect); break;
             case "removeProtect": applyChangesButton.addEventListener("click", applyChangesRemoveProtect); break;
+            case "setBan": applyChangesButton.addEventListener("click", applyChangesSetBan); break;
         }
         applyChangesButton.addEventListener("click", applyChangesSetProtect)
         sideBarMapManagement.append(applyChangesButton)
     }
 }
+// Create elements to select maps
+function pickManagementCreateSelectMaps() {
+    // Append header
+    const sideBarMapsHeader = document.createElement("div")
+    sideBarMapsHeader.innerText = "Which map?"
+    sideBarMapsHeader.classList.add("sideBarSectionHeader")
+    sideBarMapManagement.append(sideBarMapsHeader)
+    // Append Container
+    const setPickManagementMaps = document.createElement("div")
+    setPickManagementMaps.classList.add("setPickManagementMaps")
+    // Append maps
+    for (let i = 0; i < allBeatmaps.length; i++) {
+        const setBanMapButton = document.createElement("button")
+        setBanMapButton.classList.add("pickManagementSetMapButton")
+        setBanMapButton.setAttribute("onclick", `pickManagementSetCurrentMap(${allBeatmaps[i].beatmapID})`)
+        setBanMapButton.setAttribute("id",`${allBeatmaps[i].beatmapID}-pickManagementSetMapButton`)
+        setBanMapButton.innerText = allBeatmaps[i].mod + allBeatmaps[i].order
+        setPickManagementMaps.append(setBanMapButton)
+    }
+    return setPickManagementMaps
+}
 // Capture value of setProtect
-let pickManagementCurrentProtect
-function sideBarChooseProtectSelectValueChange() {
+let pickManagementCurrentAction
+function sideBarChooseSelectValueChange() {
     const sideBarChooseProtectSelect = document.getElementById("sideBarChooseProtectSelect")
-    pickManagementCurrentProtect = sideBarChooseProtectSelect.value
+    pickManagementCurrentAction = sideBarChooseProtectSelect.value
 }
 // Capture value of setcurrentmap
-const setProtectMapButtons = document.getElementsByClassName("setProtectMapButton")
+const pickManagementSetMapButtons = document.getElementsByClassName("pickManagementSetMapButton")
 let pickManagementCurrentMap
 function pickManagementSetCurrentMap(beatmapID) {
-    for (let i = 0; i < setProtectMapButtons.length; i++) {
-        setProtectMapButtons[i].style.backgroundColor = "transparent"
+    for (let i = 0; i < pickManagementSetMapButtons.length; i++) {
+        pickManagementSetMapButtons[i].style.backgroundColor = "transparent"
     }
-    const setProtectMapButton = document.getElementById(`${beatmapID}-setProtectMapButton`)
-    if (document.contains(setProtectMapButton)) {
-        setProtectMapButton.style.backgroundColor = "rgb(206,206,206)"
+    const pickManagementSetMapButton = document.getElementById(`${beatmapID}-pickManagementSetMapButton`)
+    if (document.contains(pickManagementSetMapButton)) {
+        pickManagementSetMapButton.style.backgroundColor = "rgb(206,206,206)"
     }
     pickManagementCurrentMap = beatmapID
 }
 // Apply changes for setProtect
 function applyChangesSetProtect() {
-    if (pickManagementCurrentProtect === undefined || pickManagementCurrentMap === undefined) return
+    if (!pickManagementCurrentAction || !pickManagementCurrentMap) return
     
     const currentMap = findMapInMappool(pickManagementCurrentMap)
     let currentProtectMapElement
-    if (pickManagementCurrentProtect === "redProtect") {
+    if (pickManagementCurrentAction === "redProtect") {
         currentProtectMapElement = redTeamProtectMap
-    } else if (pickManagementCurrentProtect === "blueProtect") {
+    } else if (pickManagementCurrentAction === "blueProtect") {
         currentProtectMapElement = blueTeamProtectMap
     }
 
-    if (currentProtectMapElement === undefined) return
+    if (!currentProtectMapElement) return
 
     setProtect(currentProtectMapElement, currentMap)
 }
 // Apply changes for removeProtect
 function applyChangesRemoveProtect() {
-    if (pickManagementCurrentProtect === undefined) return
+    if (!pickManagementCurrentAction) return
     let currentProtectMapElement
-    if (pickManagementCurrentProtect === "redProtect") {
+    if (pickManagementCurrentAction === "redProtect") {
         currentProtectMapElement = redTeamProtectMap
-    } else if (pickManagementCurrentProtect === "blueProtect") {
+    } else if (pickManagementCurrentAction === "blueProtect") {
         currentProtectMapElement = blueTeamProtectMap
     }
-    if (currentProtectMapElement === undefined) return
+    if (!currentProtectMapElement) return
 
     currentProtectMapElement.style.display = "none"
+}
+// Apply changes for setBan
+function applyChangesSetBan() {
+    if (pickManagementCurrentAction === undefined || pickManagementCurrentMap === undefined) return
+    const currentMap = findMapInMappool(pickManagementCurrentMap)
+    let currentTile
+    switch (pickManagementCurrentAction) {
+        case "redBan1": currentTile = redBanTiles.children[0]; break;
+        case "redBan2": currentTile = redBanTiles.children[1]; break;
+        case "blueBan1": currentTile = blueBanTiles.children[0]; break;
+        case "blueBan2": currentTile = blueBanTiles.children[1]; break;
+    }
+
+    if (!currentTile) return
+
+    setTile(currentTile, currentMap, "Ban")
 }
