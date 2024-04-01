@@ -583,11 +583,7 @@ function sideBarChooseActionSelectValueChange() {
     }
     
     if (currentAction === "setProtect" || currentAction === "removeProtect") {
-        // Append header
-        const sideBarSectionHeader = document.createElement("div")
-        sideBarSectionHeader.innerText = "Which team's protect?"
-        sideBarSectionHeader.classList.add("sideBarSectionHeader")
-        sideBarMapManagement.append(sideBarSectionHeader)
+        sideBarMapManagement.append(createSectionSideHeader("protect"))
 
         // Append select options
         const sideBarChooseProtectSelect = document.createElement("select")
@@ -609,11 +605,7 @@ function sideBarChooseActionSelectValueChange() {
 
     // Bans
     if (currentAction === "setBan" || currentAction === "removeBan") {
-        // Append header
-        const sideBarSectionHeader = document.createElement("div")
-        sideBarSectionHeader.innerText = "Which team's ban?"
-        sideBarSectionHeader.classList.add("sideBarSectionHeader")
-        sideBarMapManagement.append(sideBarSectionHeader)
+        sideBarMapManagement.append(createSectionSideHeader("ban"))
 
         // Append select options
         const sideBarChooseBanSelect = document.createElement("select")
@@ -635,6 +627,30 @@ function sideBarChooseActionSelectValueChange() {
         }
     }
 
+    // Picks
+    if (currentAction === "setPick") {
+        sideBarMapManagement.append(createSectionSideHeader("pick"))
+
+        // Append select options
+        const sideBarChoosePickSelect = document.createElement("select")
+        sideBarChoosePickSelect.classList.add("sideBarSelect")
+        sideBarChoosePickSelect.setAttribute("onchange", "sideBarChooseSelectValueChange()")
+        sideBarChoosePickSelect.setAttribute("id", "sideBarChooseProtectSelect")
+        
+        for (let i = 0; i < redPickTiles.childElementCount; i++) {
+            sideBarChoosePickSelect.append(createSelectOptions(`Red pick ${i + 1}`, `redPick${i + 1}`))
+            sideBarChoosePickSelect.append(createSelectOptions(`Blue pick ${i + 1}`, `bluePick${i + 1}`))
+        }
+        sideBarChoosePickSelect.append(createSelectOptions("Tiebreaker", "tiebreaker"))
+        sideBarChoosePickSelect.setAttribute("size", sideBarChoosePickSelect.childElementCount)
+        sideBarMapManagement.append(sideBarChoosePickSelect)
+
+        // Just for getting maps in
+        if (currentAction === "setPick") {
+            sideBarMapManagement.append(pickManagementCreateSelectMaps())
+        }
+    }
+
     // Append apply changes button
     if (currentAction) {
         sideBarMapManagement.append()
@@ -648,10 +664,18 @@ function sideBarChooseActionSelectValueChange() {
             case "removeProtect": applyChangesButton.addEventListener("click", applyChangesRemoveProtect); break;
             case "setBan": applyChangesButton.addEventListener("click", applyChangesSetBan); break;
             case "removeBan": applyChangesButton.addEventListener("click", applyChangesRemoveBan); break;
+            case "setPick": applyChangesButton.addEventListener("click", applyChangesSetPick); break;
         }
         applyChangesButton.addEventListener("click", applyChangesSetProtect)
         sideBarMapManagement.append(applyChangesButton)
     }
+}
+// Create section side header
+function createSectionSideHeader(action) {
+    const sideBarSectionHeader = document.createElement("div")
+    sideBarSectionHeader.innerText = `Which team's ${action}?`
+    sideBarSectionHeader.classList.add("sideBarSectionHeader")
+    return sideBarSectionHeader
 }
 // Create elements to select maps
 function pickManagementCreateSelectMaps() {
@@ -722,10 +746,8 @@ function applyChangesRemoveProtect() {
 
     currentProtectMapElement.style.display = "none"
 }
-// Apply changes for setBan
-function applyChangesSetBan() {
-    if (pickManagementCurrentAction === undefined || pickManagementCurrentMap === undefined) return
-    const currentMap = findMapInMappool(pickManagementCurrentMap)
+// Check bans
+function applyChangesCheckBan() {
     let currentTile
     switch (pickManagementCurrentAction) {
         case "redBan1": currentTile = redBanTiles.children[0]; break;
@@ -733,25 +755,65 @@ function applyChangesSetBan() {
         case "blueBan1": currentTile = blueBanTiles.children[0]; break;
         case "blueBan2": currentTile = blueBanTiles.children[1]; break;
     }
+    return currentTile
+}
+// Apply changes for setBan
+function applyChangesSetBan() {
+    if (!pickManagementCurrentAction || !pickManagementCurrentMap) return
+    const currentMap = findMapInMappool(pickManagementCurrentMap)
 
+    currentTile = applyChangesCheckBan()
     if (!currentTile) return
 
     setTile(currentTile, currentMap, "Ban")
 }
-// Apply changes for removeBan()
+// Apply changes for removeBan
 function applyChangesRemoveBan() {
-    if (pickManagementCurrentAction === undefined) return
-    let currentTile
-    switch (pickManagementCurrentAction) {
-        case "redBan1": currentTile = redBanTiles.children[0]; break;
-        case "redBan2": currentTile = redBanTiles.children[1]; break;
-        case "blueBan1": currentTile = blueBanTiles.children[0]; break;
-        case "blueBan2": currentTile = blueBanTiles.children[1]; break;
-    }
+    if (!pickManagementCurrentAction) return
 
+    currentTile = applyChangesCheckBan()
     if (!currentTile) return
 
     currentTile.removeAttribute("id")
     currentTile.style.boxShadow = "none"
     currentTile.children[8].style.display = "block"
+}
+// Apply changes for setPick
+const tiebreakerContainer = document.getElementsByClassName("tiebreakerContainer")[0]
+function applyChangesSetPick() {
+    if (!pickManagementCurrentAction || !pickManagementCurrentMap) return
+
+    // See if tile is possible
+    let possiblePickManagementCurrentActions = []
+    for (let i = 0; i < redPickTiles.childElementCount; i++) {
+        possiblePickManagementCurrentActions.push(`redPick${i + 1}`)
+        possiblePickManagementCurrentActions.push(`bluePick${i + 1}`)
+    }
+    possiblePickManagementCurrentActions.push("tiebreaker")
+    
+    let arrayIndex = possiblePickManagementCurrentActions.indexOf(pickManagementCurrentAction)
+    if (arrayIndex === -1) return
+    
+    // Find correct tile
+    let tileContainer
+    let currentTile
+    console.log(arrayIndex, )
+    if (arrayIndex === possiblePickManagementCurrentActions.length - 1) currentTile = tiebreakerContainer
+    else if (arrayIndex % 2 === 0) tileContainer = redPickTiles
+    else if (arrayIndex % 2 === 1) {
+        tileContainer = bluePickTiles
+        arrayIndex--
+    }
+
+    console.log(tileContainer, arrayIndex, currentTile)
+
+    if (currentTile !== tiebreakerContainer) currentTile = tileContainer.children[Math.floor(arrayIndex / 2)]
+    if (!currentTile) return
+
+    // Find map
+    let currentBeatmap = findMapInMappool(pickManagementCurrentMap)
+    if (!currentBeatmap) return
+
+    // Set Tile
+    setTile(currentTile, currentBeatmap, "Pick")
 }

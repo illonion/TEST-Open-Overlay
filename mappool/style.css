@@ -469,9 +469,7 @@
     /* box-shadow: var(--boxShadowLM); */
     margin-bottom: 10px;
 }
-#tiebreakerContainer {
-    position: relative; left: 50%; transform: translateX(-50%);
-}
+.tiebreakerContainer { position: relative; left: 50%; transform: translateX(-50%); }
 /* Map Information Background Image */
 .mapInformationGradient {
     position: absolute; top: 0; left: 0;
