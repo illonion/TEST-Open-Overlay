@@ -626,9 +626,9 @@
 .redTeamChat { color: var(--teamRedColour); }
 .blueTeamChat { color: var(--teamBlueColour); }
 /* Scrollbar */
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
     display: none;
-} */
+}
 
 /* Sidebar */
 #sideBar {

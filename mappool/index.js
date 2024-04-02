@@ -49,6 +49,11 @@ function changeStarCount(team, action) {
         if (team === "blue" && action === "plus") currentStarBlue++
         if (team === "blue" && action === "minus") currentStarBlue--
         generateStarsDisplay()
+
+        if (action === "plus" && currentStarRed === currentStarBlue && currentStarRed + 1 === currentFirstTo &&
+            window.getComputedStyle(tiebreakerContainer).display === "none") {
+            changeNextAction("Tiebreaker", "Plus")
+        }
     }
 }
 
@@ -424,6 +429,11 @@ function changeNextAction(colour, action) {
 
     // Function to add class to the appropriate tile
     function handleAction(action, tiles) {
+        if (tiles === tiebreakerContainer) {
+            const targetElement = action === "Pick" ? tiles.lastElementChild.previousElementSibling : tiles.lastElementChild
+            targetElement.classList.add("mapInformationPickerCurrent")
+            return
+        }
         for (let i = 0; i < tiles.childElementCount; i++) {
             const tile = tiles.children[i]
             if (tile.hasAttribute("id")) continue
@@ -433,14 +443,20 @@ function changeNextAction(colour, action) {
         }
     }
 
-    // Red ban
-    if (action === "Ban" && colour === "Red") {
+    if (action === "Pick" && colour === "Tiebreaker") {
+        // Tiebreaker
+        handleAction(action, tiebreakerContainer)
+    } else if (action === "Ban" && colour === "Red") {
+        // Red Ban
         handleAction(action, redBanTiles)
     } else if (action === "Ban" && colour === "Blue") {
+        // Blue Ban
         handleAction(action, blueBanTiles)
     } else if (action === "Pick" && colour === "Red") {
+        // Red Pick
         handleAction(action, redPickTiles)
     } else if (action === "Pick" && colour === "Blue") {
+        // Blue Pick
         handleAction(action, bluePickTiles)
     }
 }
@@ -471,6 +487,10 @@ function setProtect(mapInformationElement, currentBeatmap) {
 // Set Tile
 function setTile(currentTile, currentBeatmap, type) {
     const currentMod = currentBeatmap.mod
+
+    // Check for tiebreaker
+    if (currentMod === "TB") { currentTile = tiebreakerContainer }
+
     currentTile.setAttribute("id", `${currentBeatmap.beatmapID}-${type}`)
     currentTile.style.backgroundImage = `url(${currentBeatmap.beatmapID})`
     currentTile.style.color = `var(--${currentMod}Colour)`
@@ -512,18 +532,19 @@ function mapClickEvent() {
     }
 
     // Picks
-    function setPicks(banTiles) {
+    function setPicks(pickTiles) {
         let currentTile
-        for (let i = 0; i < banTiles.childElementCount; i++) {
-            if (banTiles.children[i].hasAttribute("id")) continue
-            currentTile = banTiles.children[i]
+        for (let i = 0; i < pickTiles.childElementCount; i++) {
+            if (pickTiles.children[i].hasAttribute("id")) continue
+            currentTile = pickTiles.children[i]
             break
         }
 
         if (document.contains(document.getElementById(`${currentId}-Pick`))) return
+        if (currentBeatmap.mod === "TB") currentTile = tiebreakerContainer
         if (currentTile === undefined) return
 
-        setTile(currentTile, "Pick")
+        setTile(currentTile, currentBeatmap, "Pick")
         currentPickedTile = currentTile
     }
     if (sideBarNextActionText.innerText === "Red Pick") {
