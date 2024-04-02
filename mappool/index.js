@@ -519,7 +519,6 @@ function setBan(banTiles, currentBeatmap) {
 function mapClickEvent() {
     const currentId = this.id
     const currentBeatmap = findMapInMappool(currentId)
-    const currentMod = currentBeatmap.mod
 
     if (sideBarNextActionText.innerText === "Red Protect") {
         setProtect(redTeamProtectMap, currentBeatmap)
@@ -552,8 +551,10 @@ function mapClickEvent() {
     }
     if (sideBarNextActionText.innerText === "Red Pick") {
         setPicks(redPickTiles)
+        document.cookie = "currentPicker=redPicker; path=/"
     } else if (sideBarNextActionText.innerText === "Blue Pick") {
         setPicks(bluePickTiles)
+        document.cookie = "currentPicker=bluePicker; path=/"
     }
 
     // Set new picks

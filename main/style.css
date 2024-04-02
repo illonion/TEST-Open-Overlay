@@ -284,6 +284,7 @@
     line-height: 23px;
     font-family: "Inter"; font-size: 12px; font-weight: 500;
     text-align: center;
+    display: none;
 }
 #teamRedMapPick {
     top: 62px;
@@ -454,7 +455,7 @@
     background-color: black;
     color: white;
 }
-#warmupButton {
+.fullWidthButton {
     width: 214px;
 }
 

@@ -258,7 +258,14 @@
                 <button class="sideBarStarButton" onclick="changeStarCount('red','minus')">Red --</button>
                 <button class="sideBarStarButton" onclick="changeStarCount('blue','plus')">Blue ++</button>
                 <button class="sideBarStarButton" onclick="changeStarCount('blue','minus')">Blue --</button>
-                <button class="sideBarStarButton" id="warmupButton" onclick="warmupToggle()">WARMUP: <span id="warmupText">ON</span></button>
+                <button class="sideBarStarButton fullWidthButton" id="warmupButton" onclick="warmupToggle()">WARMUP: <span id="warmupText">ON</span></button>
+            </div>
+        </section>
+        <section id="sideBarStarSection">
+            <div class="sideBarSectionHeader">Current Picker</div>
+            <div id="sideBarStarButtons">
+                <button class="sideBarStarButton fullWidthButton" onclick="changeCurrentPicker('redPicker')">Red</button>
+                <button class="sideBarStarButton fullWidthButton" onclick="changeCurrentPicker('bluePicker')">Blue</button>
             </div>
         </section>
     </div>

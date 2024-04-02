@@ -56,6 +56,7 @@ function changeStarCount(team, action) {
 
 // Warmup mode
 let warmupMode = true
+const teamMapPicks = document.getElementsByClassName("teamMapPick")
 const warmupText = document.getElementById("warmupText")
 function warmupToggle() {
     warmupMode = !warmupMode
@@ -63,6 +64,7 @@ function warmupToggle() {
         warmupText.innerText = "ON"
         teamRedWinStars.style.display = "none"
         teamBlueWinStars.style.display = "none"
+        for (let i = 0; i < teamMapPicks.length; i++) teamMapPicks[i].style.display = "none"
     } else {
         warmupText.innerText = "OFF"
         teamRedWinStars.style.display = "flex"
@@ -594,3 +596,48 @@ function adjustNowPlaying(element, wrapperElement, foundMappoolMap) {
         }
     }
 }
+
+// Get Cookie
+function getCookie(cname) {
+    let name = cname + "="
+    let ca = document.cookie.split(';')
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i]
+        while (c.charAt(0) == ' ') c = c.substring(1)
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
+// Change map picker
+let currentMapPicker
+function changeCurrentPicker(team) {
+    currentMapPicker = team
+    document.cookie = `currentPicker=${currentMapPicker}; path=/`
+    setCurrentPicker()
+}
+
+// Set current picker
+function setCurrentPicker() {
+    // Set current picker
+    if (currentMapPicker === "redPicker") { 
+        teamMapPicks[0].style.display = "block"
+        teamMapPicks[1].style.display = "none"
+    } else if (currentMapPicker === "bluePicker") {
+        teamMapPicks[0].style.display = "none"
+        teamMapPicks[1].style.display = "block"
+    }
+}
+
+// Set cookie information
+setInterval(() => {
+    // --- Set map picker ---
+    currentMapPicker = getCookie("currentPicker")
+    
+    // Check if tiebreaker
+    // Check if warmup
+    if (findMapInBeatmaps(currentId).mod === "TB" || warmupMode) return
+
+    // Set current picker
+    setCurrentPicker()
+}, 500)
