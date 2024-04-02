@@ -570,6 +570,7 @@ function sideBarChooseActionSelectValueChange() {
     // Reset everything 
     pickManagementCurrentAction = undefined
     pickManagementCurrentMap = undefined
+    pickManagementChooseWinnerMap = undefined
 
     while (sideBarMapManagement.childElementCount > 2) {
         sideBarMapManagement.removeChild(sideBarMapManagement.lastElementChild)
@@ -628,7 +629,7 @@ function sideBarChooseActionSelectValueChange() {
     }
 
     // Picks
-    if (currentAction === "setPick") {
+    if (currentAction === "setPick" || currentAction === "removePick") {
         sideBarMapManagement.append(createSectionSideHeader("pick"))
 
         // Append select options
@@ -651,6 +652,41 @@ function sideBarChooseActionSelectValueChange() {
         }
     }
 
+    // Winner
+    if (currentAction === "setWinner" || currentAction === "removeWinner") {
+        // Set winner only
+        if (currentAction === "setWinner") {
+            // Which team's win
+            sideBarMapManagement.append(createSectionSideHeader("win"))
+            // Append select options
+            const sideBarChooseWinnerSelect = document.createElement("select")
+            sideBarChooseWinnerSelect.classList.add("sideBarSelect")
+            sideBarChooseWinnerSelect.setAttribute("onchange", "sideBarChooseSelectWinnerMapValueChange()")
+            sideBarChooseWinnerSelect.setAttribute("id", "sideBarChooseWinnerSelect")
+            sideBarChooseWinnerSelect.setAttribute("size", 2)
+            // append options
+            sideBarChooseWinnerSelect.append(createSelectOptions(`Red Team`, `redTeam`))
+            sideBarChooseWinnerSelect.append(createSelectOptions(`Blue Team`, `blueTeam`))
+            sideBarMapManagement.append(sideBarChooseWinnerSelect)
+        }
+
+        // Which team's map
+        sideBarMapManagement.append(createSectionSideHeader("map"))
+        // Append select options
+        const sideBarChooseWinnerMapSelect = document.createElement("select")
+        sideBarChooseWinnerMapSelect.classList.add("sideBarSelect")
+        sideBarChooseWinnerMapSelect.setAttribute("onchange", "sideBarChooseSelectValueChange()")
+        sideBarChooseWinnerMapSelect.setAttribute("id", "sideBarChooseProtectSelect")
+        
+        for (let i = 0; i < redPickTiles.childElementCount; i++) {
+            sideBarChooseWinnerMapSelect.append(createSelectOptions(`Red pick ${i + 1}`, `redPick${i + 1}`))
+            sideBarChooseWinnerMapSelect.append(createSelectOptions(`Blue pick ${i + 1}`, `bluePick${i + 1}`))
+        }
+        sideBarChooseWinnerMapSelect.append(createSelectOptions("Tiebreaker", "tiebreaker"))
+        sideBarChooseWinnerMapSelect.setAttribute("size", sideBarChooseWinnerMapSelect.childElementCount)
+        sideBarMapManagement.append(sideBarChooseWinnerMapSelect)
+    }
+
     // Append apply changes button
     if (currentAction) {
         sideBarMapManagement.append()
@@ -665,6 +701,9 @@ function sideBarChooseActionSelectValueChange() {
             case "setBan": applyChangesButton.addEventListener("click", applyChangesSetBan); break;
             case "removeBan": applyChangesButton.addEventListener("click", applyChangesRemoveBan); break;
             case "setPick": applyChangesButton.addEventListener("click", applyChangesSetPick); break;
+            case "removePick": applyChangesButton.addEventListener("click", applyChangesRemovePick); break;
+            case "setWinner": applyChangesButton.addEventListener("click", applyChangesSetWinner); break;
+            case "removeWinner": applyChangesButton.addEventListener("click", applyChangesRemoveWinner); break;
         }
         applyChangesButton.addEventListener("click", applyChangesSetProtect)
         sideBarMapManagement.append(applyChangesButton)
@@ -704,6 +743,12 @@ function sideBarChooseSelectValueChange() {
     const sideBarChooseProtectSelect = document.getElementById("sideBarChooseProtectSelect")
     pickManagementCurrentAction = sideBarChooseProtectSelect.value
 }
+// Capture value of pick for setWinner
+let pickManagementChooseWinnerMap
+function sideBarChooseSelectWinnerMapValueChange() {
+    const sideBarChooseWinnerSelect = document.getElementById("sideBarChooseWinnerSelect")
+    pickManagementChooseWinnerMap = sideBarChooseWinnerSelect.value
+}
 // Capture value of setcurrentmap
 const pickManagementSetMapButtons = document.getElementsByClassName("pickManagementSetMapButton")
 let pickManagementCurrentMap
@@ -718,30 +763,25 @@ function pickManagementSetCurrentMap(beatmapID) {
     pickManagementCurrentMap = beatmapID
 }
 // Apply changes for setProtect
+function applyChangesCheckProtect() {
+    if (pickManagementCurrentAction === "redProtect") return redTeamProtectMap
+    else if (pickManagementCurrentAction === "blueProtect") return blueTeamProtectMap
+    return 
+}
 function applyChangesSetProtect() {
     if (!pickManagementCurrentAction || !pickManagementCurrentMap) return
     
     const currentMap = findMapInMappool(pickManagementCurrentMap)
-    let currentProtectMapElement
-    if (pickManagementCurrentAction === "redProtect") {
-        currentProtectMapElement = redTeamProtectMap
-    } else if (pickManagementCurrentAction === "blueProtect") {
-        currentProtectMapElement = blueTeamProtectMap
-    }
-
-    if (!currentProtectMapElement) return
+    const currentProtectMapElement = applyChangesCheckProtect()
+    if (!currentProtectMapElement || !currentMap) return
 
     setProtect(currentProtectMapElement, currentMap)
 }
 // Apply changes for removeProtect
 function applyChangesRemoveProtect() {
     if (!pickManagementCurrentAction) return
-    let currentProtectMapElement
-    if (pickManagementCurrentAction === "redProtect") {
-        currentProtectMapElement = redTeamProtectMap
-    } else if (pickManagementCurrentAction === "blueProtect") {
-        currentProtectMapElement = blueTeamProtectMap
-    }
+
+    const currentProtectMapElement = applyChangesCheckProtect()
     if (!currentProtectMapElement) return
 
     currentProtectMapElement.style.display = "none"
@@ -760,10 +800,10 @@ function applyChangesCheckBan() {
 // Apply changes for setBan
 function applyChangesSetBan() {
     if (!pickManagementCurrentAction || !pickManagementCurrentMap) return
-    const currentMap = findMapInMappool(pickManagementCurrentMap)
 
-    currentTile = applyChangesCheckBan()
-    if (!currentTile) return
+    const currentMap = findMapInMappool(pickManagementCurrentMap)
+    const currentTile = applyChangesCheckBan()
+    if (!currentTile || !currentMap) return
 
     setTile(currentTile, currentMap, "Ban")
 }
@@ -771,7 +811,7 @@ function applyChangesSetBan() {
 function applyChangesRemoveBan() {
     if (!pickManagementCurrentAction) return
 
-    currentTile = applyChangesCheckBan()
+    const currentTile = applyChangesCheckBan()
     if (!currentTile) return
 
     currentTile.removeAttribute("id")
@@ -780,9 +820,7 @@ function applyChangesRemoveBan() {
 }
 // Apply changes for setPick
 const tiebreakerContainer = document.getElementsByClassName("tiebreakerContainer")[0]
-function applyChangesSetPick() {
-    if (!pickManagementCurrentAction || !pickManagementCurrentMap) return
-
+function applyChangesCheckPick() {
     // See if tile is possible
     let possiblePickManagementCurrentActions = []
     for (let i = 0; i < redPickTiles.childElementCount; i++) {
@@ -797,7 +835,6 @@ function applyChangesSetPick() {
     // Find correct tile
     let tileContainer
     let currentTile
-    console.log(arrayIndex, )
     if (arrayIndex === possiblePickManagementCurrentActions.length - 1) currentTile = tiebreakerContainer
     else if (arrayIndex % 2 === 0) tileContainer = redPickTiles
     else if (arrayIndex % 2 === 1) {
@@ -805,15 +842,67 @@ function applyChangesSetPick() {
         arrayIndex--
     }
 
-    console.log(tileContainer, arrayIndex, currentTile)
-
     if (currentTile !== tiebreakerContainer) currentTile = tileContainer.children[Math.floor(arrayIndex / 2)]
     if (!currentTile) return
 
+    return currentTile
+}
+function applyChangesSetPick() {
+    if (!pickManagementCurrentAction || !pickManagementCurrentMap) return
+
+    // Find tile
+    const currentTile = applyChangesCheckPick()
+    if (!currentTile) return
+
     // Find map
-    let currentBeatmap = findMapInMappool(pickManagementCurrentMap)
+    const currentBeatmap = findMapInMappool(pickManagementCurrentMap)
     if (!currentBeatmap) return
 
     // Set Tile
     setTile(currentTile, currentBeatmap, "Pick")
+}
+// Apply changes for removePick
+function applyChangesRemovePick() {
+    if (!pickManagementCurrentAction) return
+
+    // Find tile
+    const currentTile = applyChangesCheckPick()
+    if (!currentTile) return
+
+    // Do actions
+    currentTile.removeAttribute("id")
+    currentTile.style.boxShadow = "none"
+    currentTile.children[8].style.display = "block"
+}
+// Apply changes for setWinner
+function applyChangesSetWinner() {
+    if (!pickManagementCurrentAction || !pickManagementChooseWinnerMap) return
+
+    // Find tile
+    const currentTile = applyChangesCheckPick()
+    if (!currentTile) return
+
+    // Find winner
+    if (pickManagementChooseWinnerMap !== "redTeam" && pickManagementChooseWinnerMap !== "blueTeam") return
+
+    // Set winner
+    currentTile.lastElementChild.classList.remove("mapInformationWinnerRed")
+    currentTile.lastElementChild.classList.remove("mapInformationWinnerBlue")
+    currentTile.lastElementChild.style.display = "block"
+    
+    if (pickManagementChooseWinnerMap === "redTeam") currentTile.lastElementChild.classList.add("mapInformationWinnerRed")
+    else currentTile.lastElementChild.classList.add("mapInformationWinnerBlue")
+}
+// Apply changes for removeWinner
+function applyChangesRemoveWinner() {
+    if (!pickManagementCurrentAction) return
+
+    // Find tile
+    const currentTile = applyChangesCheckPick()
+    if (!currentTile) return
+
+    // Remove winner
+    currentTile.lastElementChild.classList.remove("mapInformationWinnerRed")
+    currentTile.lastElementChild.classList.remove("mapInformationWinnerBlue")
+    currentTile.lastElementChild.style.display = "none"
 }
