@@ -15,11 +15,6 @@ let currentBestOf = 0, currentFirstTo = 0
 let currentStarRed = 0, currentStarBlue = 0
 // Generate stars
 function generateStarsDisplay() {
-    if (currentStarRed > currentFirstTo) currentStarRed = currentFirstTo
-    if (currentStarBlue > currentFirstTo) currentStarBlue = currentFirstTo
-    if (currentStarRed < 0) currentStarRed = 0
-    if (currentStarBlue < 0) currentStarBlue = 0
-
     // Generate or remove new (blank) stars
     teamRedWinStars.innerHTML = ""
     teamBlueWinStars.innerHTML = ""
@@ -34,12 +29,10 @@ function generateStarsDisplay() {
 }
 function createStars(container, starClass, fillClass, count) {
     for (let i = 0; i < count; i++) {
-        const teamWinStars = document.createElement("div");
-        teamWinStars.classList.add("teamWinStar", starClass);
-        if (fillClass && i < count) {
-            teamWinStars.classList.add(fillClass);
-        }
-        container.append(teamWinStars);
+        const teamWinStars = document.createElement("div")
+        teamWinStars.classList.add("teamWinStar", starClass)
+        if (fillClass && i < count) teamWinStars.classList.add(fillClass)
+        container.append(teamWinStars)
     }
 }
 function changeStarCount(team, action) {
@@ -48,7 +41,16 @@ function changeStarCount(team, action) {
         if (team === "red" && action === "minus") currentStarRed--
         if (team === "blue" && action === "plus") currentStarBlue++
         if (team === "blue" && action === "minus") currentStarBlue--
+
+        if (currentStarRed > currentFirstTo) currentStarRed = currentFirstTo
+        if (currentStarBlue > currentFirstTo) currentStarBlue = currentFirstTo
+        if (currentStarRed < 0) currentStarRed = 0
+        if (currentStarBlue < 0) currentStarBlue = 0
         generateStarsDisplay()
+
+        // Set cookies
+        document.cookie = `currentStarRed=${currentStarRed}; path=/`
+        document.cookie = `currentStarBlue=${currentStarBlue}; path=/`
     }
 }
 

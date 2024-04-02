@@ -11,10 +11,11 @@ socket.onopen = () => {
 // Star system
 const redTeamWinStars = document.getElementById("redTeamWinStars")
 const blueTeamWinStars = document.getElementById("blueTeamWinStars")
+const tiebreakerContainer = document.getElementsByClassName("tiebreakerContainer")[0]
 let currentBestOf = 0, currentFirstTo = 0
 let currentStarRed = 0, currentStarBlue = 0
 // Generate stars
-function generateStarsDisplay() {
+function generateStarsDisplay(action) {
     if (currentStarRed > currentFirstTo) currentStarRed = currentFirstTo
     if (currentStarBlue > currentFirstTo) currentStarBlue = currentFirstTo
     if (currentStarRed < 0) currentStarRed = 0
@@ -31,15 +32,18 @@ function generateStarsDisplay() {
     // Blue stars
     createStars(blueTeamWinStars, "teamBlueWinStar", "teamBlueWinStarFill", currentStarBlue)
     createStars(blueTeamWinStars, "teamBlueWinStar", null, currentFirstTo - currentStarBlue)
+
+    if (action === "plus" && currentStarRed === currentStarBlue && currentStarRed + 1 === currentFirstTo &&
+        window.getComputedStyle(tiebreakerContainer).display === "none") {
+        changeNextAction("Tiebreaker", "Plus")
+    }
 }
 function createStars(container, starClass, fillClass, count) {
     for (let i = 0; i < count; i++) {
-        const teamWinStars = document.createElement("div");
-        teamWinStars.classList.add("teamWinStar", starClass);
-        if (fillClass && i < count) {
-            teamWinStars.classList.add(fillClass);
-        }
-        container.append(teamWinStars);
+        const teamWinStars = document.createElement("div")
+        teamWinStars.classList.add("teamWinStar", starClass)
+        if (fillClass && i < count) teamWinStars.classList.add(fillClass)
+        container.append(teamWinStars)
     }
 }
 function changeStarCount(team, action) {
@@ -48,12 +52,12 @@ function changeStarCount(team, action) {
         if (team === "red" && action === "minus") currentStarRed--
         if (team === "blue" && action === "plus") currentStarBlue++
         if (team === "blue" && action === "minus") currentStarBlue--
-        generateStarsDisplay()
 
-        if (action === "plus" && currentStarRed === currentStarBlue && currentStarRed + 1 === currentFirstTo &&
-            window.getComputedStyle(tiebreakerContainer).display === "none") {
-            changeNextAction("Tiebreaker", "Plus")
-        }
+        if (currentStarRed > currentFirstTo) currentStarRed = currentFirstTo
+        if (currentStarBlue > currentFirstTo) currentStarBlue = currentFirstTo
+        if (currentStarRed < 0) currentStarRed = 0
+        if (currentStarBlue < 0) currentStarBlue = 0
+        generateStarsDisplay(action)
     }
 }
 
@@ -119,7 +123,7 @@ mappoolRequest.onreadystatechange = () => {
                 currentFirstTo = 7
                 break
         }
-        generateStarsDisplay()
+        generateStarsDisplay("plus")
 
         // Generate pick tiles
         for (let i = 0; i < (currentFirstTo - 1) * 2; i++) {
@@ -210,6 +214,12 @@ let currentRedTotalAccuracy
 let currentBlueTotalAccuracy
 let currentRedAvgAccuracy
 let currentBlueAvgAccuracy
+
+const toggleAutopickText = document.getElementById("toggleAutopickText")
+function autopickToggle() {
+    if (toggleAutopickText.innerText === "ON") toggleAutopickText.innerText = "OFF"
+    else toggleAutopickText.innerText = "ON"
+}
 
 // Whenever socket sends a message
 socket.onmessage = event => {
@@ -461,13 +471,6 @@ function changeNextAction(colour, action) {
     }
 }
 changeNextAction("Red", "Ban")
-
-
-const toggleAutopickText = document.getElementById("toggleAutopickText")
-function autopickToggle() {
-    if (toggleAutopickText.innerText === "ON") toggleAutopickText.innerText = "OFF"
-    else toggleAutopickText.innerText = "ON"
-}
 
 const redTeamProtectMap = document.getElementById("redTeamProtectMap")
 const blueTeamProtectMap = document.getElementById("blueTeamProtectMap")
@@ -840,7 +843,6 @@ function applyChangesRemoveBan() {
     currentTile.children[8].style.display = "block"
 }
 // Apply changes for setPick
-const tiebreakerContainer = document.getElementsByClassName("tiebreakerContainer")[0]
 function applyChangesCheckPick() {
     // See if tile is possible
     let possiblePickManagementCurrentActions = []
@@ -927,3 +929,21 @@ function applyChangesRemoveWinner() {
     currentTile.lastElementChild.classList.remove("mapInformationWinnerBlue")
     currentTile.lastElementChild.style.display = "none"
 }
+
+// Get Cookie
+function getCookie(cname) {
+    let name = cname + "="
+    let ca = document.cookie.split(';')
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i]
+        while (c.charAt(0) == ' ') c = c.substring(1)
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
+setInterval(() => {
+    currentStarRed = parseInt(getCookie("currentStarRed"))
+    currentStarBlue = parseInt(getCookie("currentStarBlue"))
+    generateStarsDisplay("plus")
+}, 500)
