@@ -51,6 +51,17 @@ function changeStarCount(team, action) {
         // Set cookies
         document.cookie = `currentStarRed=${currentStarRed}; path=/`
         document.cookie = `currentStarBlue=${currentStarBlue}; path=/`
+
+        // Set match winner
+        if (currentStarRed === currentFirstTo) {
+            document.cookie = `currentMatchWinner=${currentTeamRedName}; path=/`
+            document.cookie = `currentMatchWinnerColour=red; path=/`
+        } else if (currentStarBlue === currentFirstTo) {
+            document.cookie = `currentMatchWinner=${currentTeamBlueName}; path=/`
+            document.cookie = `currentMatchWinnerColour=blue; path=/`
+        } else {
+            document.cookie = `currentMatchWinner=noWinner; path=/`
+        }
     }
 }
 
@@ -371,14 +382,11 @@ socket.onmessage = event => {
             resultsDisplayed = true
             
             // Set star count
-            if (currentScoreRed > currentScoreBlue) {
-                changeStarCount("red", "plus")
-            } else if (currentScoreBlue > currentScoreRed) {
-                changeStarCount("blue", "plus")
-            } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
-                changeStarCount("red", "plus")
-            } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
-                changeStarCount("blue", "plus")
+            if (!warmupMode) {
+                if (currentScoreRed > currentScoreBlue) changeStarCount("red", "plus")
+                else if (currentScoreBlue > currentScoreRed) changeStarCount("blue", "plus")
+                else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) changeStarCount("red", "plus")
+                else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) changeStarCount("blue", "plus")
             }
 
             setTimeout(() => {
@@ -626,6 +634,9 @@ function setCurrentPicker() {
     } else if (currentMapPicker === "bluePicker") {
         teamMapPicks[0].style.display = "none"
         teamMapPicks[1].style.display = "block"
+    } else {
+        teamMapPicks[0].style.display = "none"
+        teamMapPicks[1].style.display = "none"
     }
 }
 
@@ -636,7 +647,7 @@ setInterval(() => {
     
     // Check if tiebreaker
     // Check if warmup
-    if (findMapInBeatmaps(currentId).mod === "TB" || warmupMode) return
+    if (findMapInBeatmaps(currentId).mod === "TB" || warmupMode) currentMapPicker = "noPicker"
 
     // Set current picker
     setCurrentPicker()

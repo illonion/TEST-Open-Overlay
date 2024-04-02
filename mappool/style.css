@@ -570,6 +570,9 @@
     border: 5px solid var(--teamBlueColour);
     background-color: rgb(41, 48, 218, 0.25);
 }
+.mapInformationWinnerText {
+    display: none;
+}
 
 /* Chat */
 #chatDisplay {

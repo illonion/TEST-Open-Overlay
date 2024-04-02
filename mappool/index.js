@@ -125,6 +125,9 @@ mappoolRequest.onreadystatechange = () => {
         }
         generateStarsDisplay("plus")
 
+        // Cookies for best of
+        document.cookie = `currentBestOf=${currentBestOf}; path=/`
+
         // Generate pick tiles
         for (let i = 0; i < (currentFirstTo - 1) * 2; i++) {
             const mapInformationContainer = document.createElement("div")
@@ -168,10 +171,13 @@ mappoolRequest.onreadystatechange = () => {
             const mapInformationWinner = document.createElement("div")
             mapInformationWinner.classList.add("mapInformationWinner")
 
+            const mapInformationWinnerText = document.createElement("div")
+            mapInformationWinnerText.classList.add("mapInformationWinnerText")
+
             mapInformationModContainer.append(mapInformationModIdText, mapInformationModIdNumber)
             mapInformationContainer.append(mapInformationBackgroundImage, mapInformationGradient, mapInformationModContainer, 
                 mapInformationSongName, mapInformationMapperText, mapInformationMapperName, mapInformationDifficultyText,
-                mapInformationDifficultyName, mapInformationPickerOverlay, mapInformationWinner)
+                mapInformationDifficultyName, mapInformationPickerOverlay, mapInformationWinner, mapInformationWinnerText)
 
             if (i % 2 === 0) {
                 redPickTiles.append(mapInformationContainer)
@@ -330,21 +336,25 @@ socket.onmessage = event => {
             resultsDisplayed = true
 
             // Add block to winner
-            currentPickedTile.lastElementChild.style.display = "none"
-            currentPickedTile.lastElementChild.classList.remove("mapInformationWinnerRed")
-            currentPickedTile.lastElementChild.classList.remove("mapInformationWinnerBlue")
+            currentPickedTile.children[9].style.display = "none"
+            currentPickedTile.children[9].classList.remove("mapInformationWinnerRed")
+            currentPickedTile.children[9].classList.remove("mapInformationWinnerBlue")
             if (currentScoreRed > currentScoreBlue) {
-                currentPickedTile.lastElementChild.style.display = "block"
-                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerRed")
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
+                currentPickedTile.children[10].innerText = "red"
             } else if (currentScoreBlue > currentScoreRed) {
-                currentPickedTile.lastElementChild.style.display = "block"
-                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerBlue")
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
+                currentPickedTile.children[10].innerText = "blue"
             } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
-                currentPickedTile.lastElementChild.style.display = "block"
-                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerRed")
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
+                currentPickedTile.children[10].innerText = "red"
             } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
-                currentPickedTile.lastElementChild.style.display = "block"
-                currentPickedTile.lastElementChild.classList.add("mapInformationWinnerBlue")
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
+                currentPickedTile.children[10].innerText = "blue"
             }
         }
     }
@@ -428,8 +438,8 @@ function changeNextAction(colour, action) {
     // Remove all animations
     function removeAllTileAnimations(tiles) {
         for (let i = 0; i < tiles.childElementCount; i++) {
-            tiles.children[i].lastElementChild.classList.remove("mapInformationPickerCurrent")
-            tiles.children[i].lastElementChild.previousElementSibling.classList.remove("mapInformationPickerCurrent")
+            tiles.children[i].children[8].classList.remove("mapInformationPickerCurrent")
+            tiles.children[i].children[8].previousElementSibling.classList.remove("mapInformationPickerCurrent")
         }
     }
     removeAllTileAnimations(redBanTiles)
@@ -440,14 +450,14 @@ function changeNextAction(colour, action) {
     // Function to add class to the appropriate tile
     function handleAction(action, tiles) {
         if (tiles === tiebreakerContainer) {
-            const targetElement = action === "Pick" ? tiles.lastElementChild.previousElementSibling : tiles.lastElementChild
+            const targetElement = tiles.children[8]
             targetElement.classList.add("mapInformationPickerCurrent")
             return
         }
         for (let i = 0; i < tiles.childElementCount; i++) {
             const tile = tiles.children[i]
             if (tile.hasAttribute("id")) continue
-            const targetElement = action === "Pick" ? tile.lastElementChild.previousElementSibling : tile.lastElementChild
+            const targetElement = tile.children[8]
             targetElement.classList.add("mapInformationPickerCurrent")
             break
         }
@@ -515,6 +525,44 @@ function setBan(banTiles, currentBeatmap) {
     if (document.contains(document.getElementById(`${currentBeatmap.beatmapID}-Ban`))) return
     setTile(currentTile, currentBeatmap, "Ban")
 }
+
+// First picker
+const sideBarFirstPickerText = document.getElementById("sideBarFirstPickerText")
+let firstPicker
+// Check first picker
+function checkFirstPicker() {
+    let numRedPicks = 0
+    let numBluePicks = 0
+
+    // Check red picks
+    for (let i = 0; i < redPickTiles.childElementCount; i++) {
+        if (window.getComputedStyle(redPickTiles.children[i].children[8]).display === "none") numRedPicks++
+    }
+    
+    // Check blue picks
+    for (let i = 0; i < bluePickTiles.childElementCount; i++) {
+        if (window.getComputedStyle(bluePickTiles.children[i].children[8]).display === "none") numBluePicks++
+    }
+
+    console.log(numRedPicks, numBluePicks)
+
+    // Go through all checks
+    if (numRedPicks > 1) return
+    if (numBluePicks > 1) return
+    if (numRedPicks + numBluePicks > 1) return
+    if (window.getComputedStyle(tiebreakerContainer.children[8]).display === "none") return
+
+    // Set first picker
+    if (numRedPicks === 1) setFirstPicker("red")
+    else if (numBluePicks === 1) setFirstPicker("blue")
+}
+// set first picker
+function setFirstPicker(colour) {
+    firstPicker = colour
+    sideBarFirstPickerText.innerText = `${firstPicker.charAt(0).toUpperCase() + firstPicker.slice(1)} First Pick`
+    document.cookie = `firstPicker=${firstPicker}; path=/`
+}
+
 // Map click event
 function mapClickEvent() {
     const currentId = this.id
@@ -551,9 +599,11 @@ function mapClickEvent() {
     }
     if (sideBarNextActionText.innerText === "Red Pick") {
         setPicks(redPickTiles)
+        checkFirstPicker()
         document.cookie = "currentPicker=redPicker; path=/"
     } else if (sideBarNextActionText.innerText === "Blue Pick") {
         setPicks(bluePickTiles)
+        checkFirstPicker()
         document.cookie = "currentPicker=bluePicker; path=/"
     }
 
@@ -646,6 +696,7 @@ function sideBarChooseActionSelectValueChange() {
         sideBarChooseBanSelect.append(createSelectOptions("Red Ban 2", "redBan2"))
         sideBarChooseBanSelect.append(createSelectOptions("Blue Ban 2", "blueBan2"))
         sideBarMapManagement.append(sideBarChooseBanSelect)
+        sideBarChooseBanSelect.children[0].setAttribute("selected", "selected")
 
         // Just for getting maps in
         if (currentAction === "setBan") {
@@ -670,6 +721,7 @@ function sideBarChooseActionSelectValueChange() {
         sideBarChoosePickSelect.append(createSelectOptions("Tiebreaker", "tiebreaker"))
         sideBarChoosePickSelect.setAttribute("size", sideBarChoosePickSelect.childElementCount)
         sideBarMapManagement.append(sideBarChoosePickSelect)
+        sideBarChoosePickSelect.children[0].setAttribute("selected", "selected")
 
         // Just for getting maps in
         if (currentAction === "setPick") {
@@ -693,6 +745,7 @@ function sideBarChooseActionSelectValueChange() {
             sideBarChooseWinnerSelect.append(createSelectOptions(`Red Team`, `redTeam`))
             sideBarChooseWinnerSelect.append(createSelectOptions(`Blue Team`, `blueTeam`))
             sideBarMapManagement.append(sideBarChooseWinnerSelect)
+            sideBarChooseWinnerSelect.children[0].setAttribute("selected", "selected")
         }
 
         // Which team's map
@@ -710,6 +763,7 @@ function sideBarChooseActionSelectValueChange() {
         sideBarChooseWinnerMapSelect.append(createSelectOptions("Tiebreaker", "tiebreaker"))
         sideBarChooseWinnerMapSelect.setAttribute("size", sideBarChooseWinnerMapSelect.childElementCount)
         sideBarMapManagement.append(sideBarChooseWinnerMapSelect)
+        sideBarChooseWinnerMapSelect.children[0].setAttribute("selected", "selected")
     }
 
     // Append apply changes button
@@ -727,7 +781,10 @@ function sideBarChooseActionSelectValueChange() {
             case "removeBan": applyChangesButton.addEventListener("click", applyChangesRemoveBan); break;
             case "setPick": applyChangesButton.addEventListener("click", applyChangesSetPick); break;
             case "removePick": applyChangesButton.addEventListener("click", applyChangesRemovePick); break;
-            case "setWinner": applyChangesButton.addEventListener("click", applyChangesSetWinner); break;
+            case "setWinner": {
+                console.log("hello")
+                applyChangesButton.addEventListener("click", applyChangesSetWinner); break;
+            }
             case "removeWinner": applyChangesButton.addEventListener("click", applyChangesRemoveWinner); break;
         }
         applyChangesButton.addEventListener("click", applyChangesSetProtect)
@@ -897,25 +954,29 @@ function applyChangesRemovePick() {
     currentTile.removeAttribute("id")
     currentTile.style.boxShadow = "none"
     currentTile.children[8].style.display = "block"
+    currentTile.children[9].style.display = "none"
+    currentTile.children[10].innerText = ""
 }
 // Apply changes for setWinner
 function applyChangesSetWinner() {
     if (!pickManagementCurrentAction || !pickManagementChooseWinnerMap) return
-
+    console.log("do we get here")
     // Find tile
     const currentTile = applyChangesCheckPick()
     if (!currentTile) return
-
+    console.log("do we get here")
     // Find winner
     if (pickManagementChooseWinnerMap !== "redTeam" && pickManagementChooseWinnerMap !== "blueTeam") return
 
+    console.log("do we get here")
     // Set winner
-    currentTile.lastElementChild.classList.remove("mapInformationWinnerRed")
-    currentTile.lastElementChild.classList.remove("mapInformationWinnerBlue")
-    currentTile.lastElementChild.style.display = "block"
+    currentTile.children[9].classList.remove("mapInformationWinnerRed")
+    currentTile.children[9].classList.remove("mapInformationWinnerBlue")
+    currentTile.children[9].style.display = "block"
+    currentTile.children[10].innerText = pickManagementChooseWinnerMap == "redTeam"? "red": "blue"
     
-    if (pickManagementChooseWinnerMap === "redTeam") currentTile.lastElementChild.classList.add("mapInformationWinnerRed")
-    else currentTile.lastElementChild.classList.add("mapInformationWinnerBlue")
+    if (pickManagementChooseWinnerMap === "redTeam") currentTile.children[9].classList.add("mapInformationWinnerRed")
+    else currentTile.children[9].classList.add("mapInformationWinnerBlue")
 }
 // Apply changes for removeWinner
 function applyChangesRemoveWinner() {
@@ -926,9 +987,10 @@ function applyChangesRemoveWinner() {
     if (!currentTile) return
 
     // Remove winner
-    currentTile.lastElementChild.classList.remove("mapInformationWinnerRed")
-    currentTile.lastElementChild.classList.remove("mapInformationWinnerBlue")
-    currentTile.lastElementChild.style.display = "none"
+    currentTile.children[9].classList.remove("mapInformationWinnerRed")
+    currentTile.children[9].classList.remove("mapInformationWinnerBlue")
+    currentTile.children[9].style.display = "none"
+    currentTile.children[10].innerText = ""
 }
 
 // Get Cookie
@@ -944,7 +1006,83 @@ function getCookie(cname) {
 }
 
 setInterval(() => {
+    // Display stars
     currentStarRed = parseInt(getCookie("currentStarRed"))
     currentStarBlue = parseInt(getCookie("currentStarBlue"))
     generateStarsDisplay("plus")
+
+    // Set array required for map ids in winner screen
+    let mapIds = []
+    if (firstPicker === "red") {
+        for (let i = 0; i < redPickTiles.childElementCount; i++) {
+            console.log(i)
+            const redPickTileElement = redPickTiles.children[i]
+            const bluePickTileElement = bluePickTiles.children[i]
+            const redPickTileElementMod = redPickTileElement.children[2]
+            const bluePickTileElementMod = bluePickTileElement.children[2]
+
+            if (window.getComputedStyle(redPickTileElement.children[8]).display === "none") {
+                mapIds.push(`${redPickTileElementMod.children[0].innerText}${redPickTileElementMod.children[1].innerText}`)
+            }
+            if (window.getComputedStyle(bluePickTileElement.children[8]).display === "none") {
+                mapIds.push(`${bluePickTileElementMod.children[0].innerText}${bluePickTileElementMod.children[1].innerText}`)
+            }
+        }
+        if (window.getComputedStyle(tiebreakerContainer.children[8]).display === "none") mapIds.push("TB")
+
+        document.cookie = `mapIds=${JSON.stringify(mapIds)}; path=/`
+    } else if (firstPicker === "blue") {
+        for (let i = 0; i < redPickTiles.childElementCount; i++) {
+            const redPickTileElement = redPickTiles.children[i]
+            const bluePickTileElement = bluePickTiles.children[i]
+            const redPickTileElementMod = redPickTileElement.children[2]
+            const bluePickTileElementMod = bluePickTileElement.children[2]
+
+            if (window.getComputedStyle(bluePickTileElement.children[8]).display === "none") {
+                mapIds.push(`${bluePickTileElementMod.children[0].innerText}${bluePickTileElementMod.children[1].innerText}`)
+            }
+            if (window.getComputedStyle(redPickTileElement.children[8]).display === "none") {
+                mapIds.push(`${redPickTileElementMod.children[0].innerText}${redPickTileElementMod.children[1].innerText}`)
+            }
+        }
+        if (window.getComputedStyle(tiebreakerContainer.children[8]).display === "none") mapIds.push("TB")
+
+        document.cookie = `mapIds=${JSON.stringify(mapIds)}; path=/`
+    }
+    
+    // Set array required for winner colours in winner screen
+    let mapWinners = []
+    if (firstPicker === "red") {
+        for (let i = 0; i < redPickTiles.childElementCount; i++) {
+            const redPickTileElement = redPickTiles.children[i]
+            const bluePickTileElement = bluePickTiles.children[i]
+
+            if (redPickTileElement.children[10].innerText === "red") mapWinners.push("red")
+            else if (redPickTileElement.children[10].innerText === "blue") mapWinners.push("blue")
+
+            if (bluePickTileElement.children[10].innerText === "red") mapWinners.push("red")
+            else if (bluePickTileElement.children[10].innerText === "blue") mapWinners.push("blue")
+        }
+
+        if (tiebreakerContainer.children[10].innerText === "red") mapWinners.push("red")
+        else if (tiebreakerContainer.children[10].innerText === "blue") mapWinners.push("blue")
+
+        document.cookie = `mapWinners=${JSON.stringify(mapWinners)}; path=/`
+    } else if (firstPicker === "blue") {
+        for (let i = 0; i < redPickTiles.childElementCount; i++) {
+            const redPickTileElement = redPickTiles.children[i]
+            const bluePickTileElement = bluePickTiles.children[i]
+
+            if (bluePickTileElement.children[10].innerText === "red") mapWinners.push("red")
+            else if (bluePickTileElement.children[10].innerText === "blue") mapWinners.push("blue")
+
+            if (redPickTileElement.children[10].innerText === "red") mapWinners.push("red")
+            else if (redPickTileElement.children[10].innerText === "blue") mapWinners.push("blue")
+        }
+
+        if (tiebreakerContainer.children[10].innerText === "red") mapWinners.push("red")
+        else if (tiebreakerContainer.children[10].innerText === "blue") mapWinners.push("blue")
+
+        document.cookie = `mapWinners=${JSON.stringify(mapWinners)}; path=/`
+    }
 }, 500)
