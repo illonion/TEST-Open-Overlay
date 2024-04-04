@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../_shared/commentators/index.css">
+    <link rel="stylesheet" href="../_shared/logo/index.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="main">
+        <!-- Logo -->
+        <img id="logoImage" src="../_shared/logo/static/logo.png">
+        <div id="logoTextContainer">
+            <img id="roundName" src="../_shared/logo/static/quarterfinals.png">
+            <img id="logoText" src="../_shared/logo/static/logo-text.png">
+        </div>
+
+        <!-- Commentators Section-->
+        <div class="sideContainer" id="commentatorsContainer">
+            <div id="commentatorsText">COMMENTATORS</div>
+            <div class="sideSectionLine1"></div>
+            <div class="sideSectionLine2"></div>
+        </div>
+
+        <!-- Red Team Intro Section -->
+        <section class="teamIntroTeam" id="redTeamIntroTeam">
+            <!-- Top Section-->
+            <section class="teamIntroTopSection">
+                <div class="teamIntroBannerImage" id="redTeamIntroBannerImage"></div>
+                <div class="teamIntroBottomFullBlock" id="redTeamIntroBottomFullBlock"></div>
+                <div class="teamIntroGradient" id="redTeamIntroGradient"></div>
+                <div class="teamIntroTeamName" id="redTeamIntroTeamName">Parker</div>
+                <div class="teamIntroSeedText" id="redTeamIntroSeedText">SEED</div>
+                <div class="teamIntroSeedNumber" id="redTeamIntroSeedNumber">00</div>
+                <div class="teamIntroAvgRank">AVG RANK: <span class="teamIntroAvgRankNumber" id="redTeamIntroAvgRankNumber">00000</div>
+            </section>
+            <!-- Bottom Section -->
+            <section id="redTeamIntroBottomSection">
+                <!-- Header -->
+                <div class="teamIntroBottomHeader">
+                    <div class="teamIntroBottomHeaderLine1" id="redTeamIntroBottomHeaderLine1"></div>
+                    <div class="teamIntroBottomHeaderLine2" id="redTeamIntroBottomHeaderLine2"></div>
+                    <div class="teamIntroBottomHeaderText" id="redTeamIntroBottomHeaderText"><span class="teamIntroBottomHeaderTextPlay">PLAY</span>ERS</div>
+                </div>
+                <!-- Players -->
+                <!-- Red Players -->
+                <div class="teamIntroPlayers" id="redTeamIntroPlayers"></div>
+            </section>
+        </section>
+
+        <!-- Blue Team Intro Section -->
+        <section class="teamIntroTeam" id="blueTeamIntroTeam">
+            <!-- Top Section-->
+            <section class="teamIntroTopSection">
+                <div class="teamIntroBannerImage" id="blueTeamIntroBannerImage"></div>
+                <div class="teamIntroBottomFullBlock" id="blueTeamIntroBottomFullBlock"></div>
+                <div class="teamIntroGradient" id="blueTeamIntroGradient"></div>
+                <div class="teamIntroTeamName" id="blueTeamIntroTeamName">Parker</div>
+                <div class="teamIntroSeedText" id="blueTeamIntroSeedText">SEED</div>
+                <div class="teamIntroSeedNumber" id="blueTeamIntroSeedNumber">00</div>
+                <div class="teamIntroAvgRank">AVG RANK: <span class="teamIntroAvgRankNumber" id="blueTeamIntroAvgRankNumber">00000</div>
+            </section>
+            <!-- Bottom Section -->
+            <section id="blueTeamIntroBottomSection">
+                <!-- Header -->
+                <div class="teamIntroBottomHeader">
+                    <div class="teamIntroBottomHeaderLine1" id="blueTeamIntroBottomHeaderLine1"></div>
+                    <div class="teamIntroBottomHeaderLine2" id="blueTeamIntroBottomHeaderLine2"></div>
+                    <div class="teamIntroBottomHeaderText" id="blueTeamIntroBottomHeaderText"><span class="teamIntroBottomHeaderTextPlay">PLAY</span>ERS</div>
+                </div>
+                <!-- Players -->
+                <!-- Blue Players -->
+                <div class="teamIntroPlayers" id="blueTeamIntroPlayers"></div>
+            </section>
+        </section>
+    </div>
+    <!-- Sidebar -->
+    <div id="sideBar">
+        <section id="sideBarStarSection">
+            <div class="sideBarSectionHeader">Which match?</div>
+            <div id="sideBarStarButtons">
+                <select id="sideBarSelect"></select>
+                <button class="sideBarStarButton fullWidthButton" id="warmupButton" onclick="applyChanges()">Apply Changes</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

@@ -8,6 +8,50 @@ socket.onopen = () => {
     console.log('Successfully Connected')
 }
 
+const sceneCollection = document.getElementById("sceneCollection")
+let autoadvance_button = document.getElementById('autoAdvanceButton')
+let autoadvance_timer_container = document.getElementById('autoAdvanceTimer')
+let autoadvance_timer_label = document.getElementById('autoAdvanceTimerLabel')
+autoadvance_timer_container.style.opacity = '0'
+
+let enableAutoAdvance = false
+const gameplay_scene_name = "Gameplay"
+const mappool_scene_name = "Mappool"
+
+function switchAutoAdvance() {
+    enableAutoAdvance = !enableAutoAdvance
+    if (enableAutoAdvance) {
+        autoadvance_button.innerHTML = 'AUTO ADVANCE: ON'
+        autoadvance_button.style.backgroundColor = '#9ffcb3'
+    } else {
+        autoadvance_button.innerHTML = 'AUTO ADVANCE: OFF'
+        autoadvance_button.style.backgroundColor = '#fc9f9f'
+    }
+}
+
+const obsGetCurrentScene = window.obsstudio?.getCurrentScene ?? (() => {})
+const obsGetScenes = window.obsstudio?.getScenes ?? (() => {})
+const obsSetCurrentScene = window.obsstudio?.setCurrentScene ?? (() => {})
+
+obsGetScenes(scenes => {
+    for (const scene of scenes) {
+        let clone = document.getElementById("sceneButtonTemplate").content.cloneNode(true)
+        let buttonNode = clone.querySelector('div')
+        buttonNode.id = `scene__${scene}`
+        buttonNode.textContent = `GO TO: ${scene}`
+        buttonNode.onclick = function() { obsSetCurrentScene(scene); }
+        sceneCollection.appendChild(clone)
+    }
+
+    obsGetCurrentScene((scene) => { document.getElementById(`scene__${scene.name}`).classList.add("activeScene") })
+})
+
+window.addEventListener('obsSceneChanged', function(event) {
+    let activeButton = document.getElementById(`scene__${event.detail.name}`)
+    for (const scene of sceneCollection.children) { scene.classList.remove("activeScene") }
+    activeButton.classList.add("activeScene")
+})
+
 // Star system
 const redTeamWinStars = document.getElementById("redTeamWinStars")
 const blueTeamWinStars = document.getElementById("blueTeamWinStars")
@@ -62,8 +106,8 @@ function changeStarCount(team, action) {
 }
 
 // Json Bin Details
-const playerJsonBinId = "65fa6cc71f5677401f40141d"
-const mappoolJsonBinId = "65fada0a266cfc3fde9b22a2"
+const playerJsonBinId = "65fada0a266cfc3fde9b22a2"
+const mappoolJsonBinId = "65fa6cc71f5677401f40141d"
 const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" // Change api key
 // Player information
 let allPlayers
@@ -227,13 +271,17 @@ function autopickToggle() {
     else toggleAutopickText.innerText = "ON"
 }
 
+// Room State
+let currentRoomState
+let previousRoomState
+
 // Whenever socket sends a message
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
 
     console.log(data)
-
+    
     // Autopick with beatmap
     if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!" &&
         toggleAutopickText.innerText === "ON" && !document.contains(document.getElementById(`${message.online_id}-Pick`)) &&
@@ -250,6 +298,44 @@ socket.onmessage = event => {
          *     room_state: string
          * }} message
          */
+        previousRoomState = currentRoomState
+        currentRoomState = message.room_state
+
+        if (currentRoomState == "Results" && !resultsDisplayed) {
+            resultsDisplayed = true
+
+            setTimeout(() => {
+                // Transition to mappool screen
+                if (enableAutoAdvance) {
+                    obsGetCurrentScene((scene) => {
+                        if (scene.name !== gameplay_scene_name) return
+                        obsSetCurrentScene(mappool_scene_name)
+                    })
+                }
+            }, 20000)
+
+            // Add block to winner
+            currentPickedTile.children[9].style.display = "none"
+            currentPickedTile.children[9].classList.remove("mapInformationWinnerRed")
+            currentPickedTile.children[9].classList.remove("mapInformationWinnerBlue")
+            if (currentScoreRed > currentScoreBlue) {
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
+                currentPickedTile.children[10].innerText = "red"
+            } else if (currentScoreBlue > currentScoreRed) {
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
+                currentPickedTile.children[10].innerText = "blue"
+            } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
+                currentPickedTile.children[10].innerText = "red"
+            } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
+                currentPickedTile.children[9].style.display = "block"
+                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
+                currentPickedTile.children[10].innerText = "blue"
+            }
+        }
 
         // Room Name
         const roomName = message.room_name
@@ -265,6 +351,7 @@ socket.onmessage = event => {
                 updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
             }
         }
+
     }
 
     // Chat messages
@@ -319,43 +406,6 @@ socket.onmessage = event => {
             }
 
             chatContainerDisplay.scrollTop = chatContainerDisplay.scrollHeight;
-        }
-    }
-
-    // For what information to show on left
-    if (data.type === "MultiplayerRoomState") {
-        /**
-         * @typedef {{
-         *     room_name: string
-         *     room_state: string
-         * }} message
-         */
-
-        if (message.room_state == "Results" && !resultsDisplayed) {
-            // Show chat after 20 seconds
-            resultsDisplayed = true
-
-            // Add block to winner
-            currentPickedTile.children[9].style.display = "none"
-            currentPickedTile.children[9].classList.remove("mapInformationWinnerRed")
-            currentPickedTile.children[9].classList.remove("mapInformationWinnerBlue")
-            if (currentScoreRed > currentScoreBlue) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
-                currentPickedTile.children[10].innerText = "red"
-            } else if (currentScoreBlue > currentScoreRed) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
-                currentPickedTile.children[10].innerText = "blue"
-            } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
-                currentPickedTile.children[10].innerText = "red"
-            } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
-                currentPickedTile.children[10].innerText = "blue"
-            }
         }
     }
 

@@ -1,5 +1,6 @@
 /* Commentator */
 #commentatorsContainer {
+    position: absolute;
     top: 134px;
     height: 140px;
 }

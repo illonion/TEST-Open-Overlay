@@ -1,5 +1,5 @@
 // Json Bin Details
-const playerJsonBinId = "65fa6cc71f5677401f40141d"
+const playerJsonBinId = "65fada0a266cfc3fde9b22a2"
 const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO"
 // Player information
 let allPlayers

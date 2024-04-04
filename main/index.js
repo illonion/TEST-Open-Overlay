@@ -85,8 +85,8 @@ function warmupToggle() {
 warmupToggle()
 
 // Json Bin Details
-const playerJsonBinId = "65fa6cc71f5677401f40141d"
-const mappoolJsonBinId = "65fada0a266cfc3fde9b22a2"
+const playerJsonBinId = "65fada0a266cfc3fde9b22a2"
+const mappoolJsonBinId = "65fa6cc71f5677401f40141d"
 const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" // Change api key
 // Player information
 let allPlayers
@@ -647,6 +647,7 @@ setInterval(() => {
     
     // Check if tiebreaker
     // Check if warmup
+    if (!findMapInBeatmaps(currentId)) return
     if (findMapInBeatmaps(currentId).mod === "TB" || warmupMode) currentMapPicker = "noPicker"
 
     // Set current picker

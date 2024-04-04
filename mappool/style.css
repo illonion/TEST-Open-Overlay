@@ -636,27 +636,26 @@
 /* Sidebar */
 #sideBar {
     position: absolute; left: 1920px; top: 0;
-    width: 500px; height: 1080px;
+    width: 750px; height: 1080px;
     background-color: #EBA791;
     font-family: "Inter"
 }
-#sideBarColumn1 {
-    position: absolute; left: 0; top: 0;
+.sideBarColumn {
+    position: absolute; top: 0;
     width: 250px; height: 1080px;
     background-color: #EBA791;
     font-family: "Inter"
 }
-#divider {
-    position: absolute; left: 249px; top: 0;
+#sideBarColumn1 { left: 0; }
+#sideBarColumn2 { left: 250px; }
+#sideBarColumn3 { left: 500px; }
+.divider {
+    position: absolute; top: 0;
     width: 2px; height: 1080px;
     background-color: black;
 }
-#sideBarColumn2 {
-    position: absolute; left: 250px; top: 0;
-    width: 250px; height: 1080px;
-    background-color: #EBA791;
-    font-family: "Inter"
-}
+#divider { left: 249px; }
+#divider2 { left: 499px; }
 .sideBarSectionHeader {
     margin: 15px 0 10px 20px;
     font-weight: 500;
@@ -739,4 +738,52 @@
     font-family: 'Inter';
     background-color: transparent;
     border: none;
+}
+
+.controlLabel {
+    color: black;
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
+.sceneButton {
+    width: 360px;
+    height: 64px;
+    margin-bottom: 12px;
+    letter-spacing: normal;
+    font-family: sans-serif;
+    padding-left: 8px;
+    font-size: 20px;
+    display: flex;
+    text-align: left;
+    align-items: center;
+    justify-content: left;
+    color: var(--red);
+}
+
+.activeScene {
+    background-color: #3a8f29!important;
+}
+
+.pickButton {
+    width: 250px;
+    height: 40px;
+    margin-bottom: 12px;
+    font-family: 'Helvetica Now';
+    font-size: 20px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.switchPickButton {
+    color: #202020;
+    background-color: #e6e6e6;
+    cursor: pointer;
+}
+
+.switchPickButton:hover {
+    color: #202020;
+    background-color: #bebebe;
 }

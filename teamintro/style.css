@@ -1,0 +1,256 @@
+:root {
+    --mainColour: #5E72EB;
+    --teamBlueColour: #5E72EB;
+    --teamRedColour: #FF9190;
+    --teamSectionColour: #FFFEFA;
+
+    --boxShadowRed: 0 4px 15px 0 rgba(255, 145, 144, 0.45);
+    --boxShadowPurple: 0 4px 15px 0 rgba(94, 114, 235, 0.45);
+
+    --nowPlayingBoxHeight: 80px;
+    --outsideSectionContainerWidth: 330px;
+    --middleSectionContainerWidth: 315px;
+    --sideSectionContainerLeft: 15px;
+    --sideSectionLowerContainerHeight: 105px;
+}
+
+/* Fonts */
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-ExtraBold.ttf");
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-Medium.ttf");
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("../fonts/Inter-ExtraBold-Italic.ttf");
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("../fonts/Inter-Medium-Italic.ttf");
+    font-weight: 500;
+}
+
+/* Whole page */
+#main {
+    position: absolute; left: 0; top: 0;
+    width: 1920px; height: 1080px;
+    background-image: url("static/background.png");
+    background-size: cover;
+}
+
+/* Commentators  */
+.sideContainer {
+    position: absolute; 
+    width: var(--outsideSectionContainerWidth);
+    box-shadow: var(--boxShadowPurple);
+    background-color: var(--teamSectionColour);
+    color: var(--mainColour);
+}
+#commentatorsContainer { 
+    top: 15px; left: unset; right: 0; 
+    height: 110px;
+}
+
+/* Team Intro */
+.teamIntroTeam {
+    position: absolute; top: 144px;
+    width: 740px; height: 851px;
+    color: white;
+    background-color: #FFFEFA;
+}
+#redTeamIntroTeam {
+    left: 235px;
+    box-shadow: var(--boxShadowRed);
+}
+#blueTeamIntroTeam {
+    right: 171px;
+    box-shadow: var(--boxShadowPurple);
+}
+/* Team Intro Top Section */
+.teamIntroTopSection {
+    position: absolute; left: 0; top: 0;
+    width: inherit; height: 390px;
+}
+/* Team Intro Banner Image */
+.teamIntroBannerImage {
+    position: absolute; left: 0; top: 0;
+    width: inherit; height: inherit;
+    background-size: cover;
+    background-position: center;
+    background-image: url("https://dtoyeiqtecliyympsgji.supabase.co/storage/v1/object/public/flags/krokozyabriki/flag-1710175149012.gif")
+}
+/* Team Intro Full Block */
+.teamIntroBottomFullBlock {
+    position: absolute; left: 0; bottom: 0;
+    width: inherit; height: 60px;
+}
+#redTeamIntroBottomFullBlock { background-color: var(--teamRedColour); }
+#blueTeamIntroBottomFullBlock { background-color: var(--teamBlueColour); }
+/* Team Intro Gradient */
+.teamIntroGradient {
+    position: absolute; left: 0; top: 0;
+    width: inherit; height: 330px;
+}
+#redTeamIntroGradient { background: linear-gradient(to top, var(--teamRedColour) 0%, var(--teamRedColour) 5%, rgba(255, 145, 144, 0.3) 20%, rgba(255, 145, 144, 0.15) 35%, transparent 50%, transparent 100%) }
+#blueTeamIntroGradient { background: linear-gradient(to top, var(--teamBlueColour) 0%, var(--teamBlueColour) 5%, rgba(94, 114, 235, 0.3) 20%, rgba(94, 114, 235, 0.15) 35%, transparent 50%, transparent 100%) }
+/* Team Intro Team Name */
+.teamIntroTeamName {
+    position: absolute; left: 30px; top: 274px;
+    width: 675px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: "Inter"; font-size: 64px; font-weight: 800;
+}
+/* Team Intro Seed Text */
+.teamIntroSeedText {
+    position: absolute; left: 32px; top: 348px;
+    font-family: "Inter Italic"; font-size: 24px; font-weight: 500;
+}
+/* Team Intro Seed Number */
+.teamIntroSeedNumber { 
+    position: absolute; left: 100px; top: 348px;
+    font-family: "Inter Italic"; font-size: 24px; font-weight: 800; 
+}
+/* Team Intro Average Rank */
+.teamIntroAvgRank {
+    position: absolute; right: 36px; top: 348px;
+    font-family: "Inter Italic"; font-size: 24px; font-weight: 500;
+    letter-spacing: 0.5px;
+}
+.teamIntroAvgRankNumber { font-weight: 800; }
+
+/* Team Intro Header Section */
+.teamIntroBottomHeader { position: absolute; top: 408px; }
+/* Header Section Line 1 */
+.teamIntroBottomHeaderLine1 {
+    position: absolute; 
+    width: 333px; height: 4px; 
+}
+#redTeamIntroBottomHeaderLine1 { background-color: var(--teamRedColour); }
+#blueTeamIntroBottomHeaderLine1 { background-color: var(--teamBlueColour); }
+/* Header Section Line 2 */
+.teamIntroBottomHeaderLine2 {
+    position: absolute; left: 30px; top: 14px;
+    width: 30px; height: 7px;
+}
+#redTeamIntroBottomHeaderLine2 { background-color: var(--teamRedColour); }
+#blueTeamIntroBottomHeaderLine2 { background-color: var(--teamBlueColour); }
+/* Header Section Player Text */
+.teamIntroBottomHeaderText {
+    position: absolute; left: 30px; top: 27px;
+    font-family: "Inter Italic"; font-size: 40px; font-weight: 500;
+    letter-spacing: 1px;
+}
+#redTeamIntroBottomHeaderText { color: var(--teamRedColour); }
+#blueTeamIntroBottomHeaderText { color: var(--teamBlueColour); }
+.teamIntroBottomHeaderTextPlay { font-weight: 800; }
+
+/* Team Intro Players Section */
+.teamIntroPlayers {
+    position: absolute; left: 20px; top: 501px;
+    width: 700px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+/* Team Intro Player */
+.teamIntroPlayer {
+    position: relative;
+    width: 335px; height: 100px;
+    margin-bottom: 10px;
+}
+/* Team Intro Player Lines 1 */
+.teamIntroPlayerLine1 {
+    position: absolute; top: 10px;
+    width: inherit; height: 35px;
+}
+.redTeamIntroPlayerLine1 { background-color: var(--teamRedColour); }
+.blueTeamIntroPlayerLine1 { background-color: var(--teamBlueColour); }
+/* Team Intro Player Lines 2 */
+.teamIntroPlayerLine2 {
+    position: absolute; top: 45px;
+    width: 10px; height: 25px;
+}
+.redTeamIntroPlayerLine2 { background-color: var(--teamRedColour); }
+.blueTeamIntroPlayerLine2 { background-color: var(--teamBlueColour); }
+/* Team Intro Player Lines 3 */
+.teamIntroPlayerLine3 {
+    position: absolute; left: 10px; top: 60px;
+    width: 130px; height: 10px;
+}
+.redTeamIntroPlayerLine3 { background-color: var(--teamRedColour); }
+.blueTeamIntroPlayerLine3 { background-color: var(--teamBlueColour); }
+/* Team Intro Player Profile Picture */
+.teamIntroPlayerProfilePicture {
+    position: absolute; left: 10px;
+    width: 100px; height: 100px;
+}
+/* Team Intro Player Name */
+.teamIntroPlayerPlayerName {
+    position: absolute; left: 120px; top: 12px;
+    font-family: "Inter Italic"; font-weight: 800; font-size: 24px;
+    letter-spacing: 0.5px;
+    width: 210px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* Team Intro Player Red */
+.teamIntroPlayerRank {
+    position: absolute; left: 148px; top: 56px;
+    font-family: "Inter"; font-weight: 500;
+}
+.redTeamIntroPlayerRank { color: var(--teamRedColour); }
+.blueTeamIntroPlayerRank { color: var(--teamBlueColour); }
+
+/* Sidebar */
+#sideBar {
+    position: absolute; left: 1920px; top: 0;
+    width: 250px; height: 1080px;
+    background-color: #EBA791;
+    font-family: "Inter"
+}
+.sideBarSectionHeader {
+    margin: 15px 0 10px 0;
+    font-weight: 500;
+    font-size: 30px;
+    width: inherit; text-align: center;
+}
+#sideBarStarButtons {
+    width: inherit;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.sideBarStarButton {
+    width: 100px; height: 50px;
+    margin: 7px;
+    border-radius: 10px;
+    background-color: white;
+    border-color: black;
+    font-size: 18px;
+}
+.sideBarStarButton:active {
+    border-color: black;
+    background-color: black;
+    color: white;
+}
+.fullWidthButton {
+    width: 214px;
+}
+select::-webkit-scrollbar { display: none; }
+select {
+    background-color: transparent;
+    margin-bottom: 10px;
+}
+select option {
+    font-family: "Inter"; font-size: 20px;
+    padding: 10px;
+}

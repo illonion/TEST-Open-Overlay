@@ -454,9 +454,7 @@
     background-color: black;
     color: white;
 }
-.fullWidthButton {
-    width: 214px;
-}
+.fullWidthButton { width: 214px; }
 
 /* Player Information */
 .playerInfo {

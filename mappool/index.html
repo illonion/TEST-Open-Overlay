@@ -366,7 +366,7 @@
     </div>
     <!-- Sidebar -->
     <div id="sideBar">
-        <section id="sideBarColumn1">
+        <section class="sideBarColumn" id="sideBarColumn1">
             <section id="sideBarStarSection">
                 <div class="sideBarSectionHeader">Next Action</div>
                 <div class="sideBarNextActionText" id="sideBarNextActionText">Red Protect</div>
@@ -390,8 +390,8 @@
                 </div>
             </section>
         </section>
-        <div id="divider"></div>
-        <section id="sideBarColumn2">
+        <div class="divider" id="divider"></div>
+        <section class="sideBarColumn" id="sideBarColumn2">
             <section id="sideBarMapManagement">
                 <div class="sideBarSectionHeader">Choose Action:</div>
                 <select class="sideBarSelect" id="sideBarChooseActionSelect" size="8" onchange="sideBarChooseActionSelectValueChange()">
@@ -404,6 +404,25 @@
                     <option value="setWinner">Set Winner</option>
                     <option value="removeWinner">Remove Winner</option>
                 </select>
+            </section>
+        </section>
+        <div class="divider" id="divider2"></div>
+        <section class="sideBarColumn" id="sideBarColumn3">
+            <section id="sideBarStarSection">
+                <hr>
+                <div id="autoAdvanceButton" class="pickButton switchPickButton" onclick="switchAutoAdvance()">AUTO ADVANCE: OFF</div>
+                <div id="autoAdvanceTimer" class="controlLabel">
+                    <span id="autoAdvanceTimerLabel">Switching to __SCENE__ in</span> <span id="autoAdvanceTimerTime"></span>
+                </div>
+                <br>
+                <br>
+                <div class="controlLabel">Scenes<br>(click to override)</div>
+                <br>
+                <div id="sceneCollection">
+                    <template id="sceneButtonTemplate">
+                        <div class="sceneButton switchPickButton">SWITCH TO __SCENE_NAME__</div>
+                    </template>
+                </div>
             </section>
         </section>
     </div>
