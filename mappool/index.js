@@ -17,6 +17,7 @@ autoadvance_timer_container.style.opacity = '0'
 let enableAutoAdvance = false
 const gameplay_scene_name = "Gameplay"
 const mappool_scene_name = "Mappool"
+const team_win_scene_name = "Team Win"
 
 function switchAutoAdvance() {
     enableAutoAdvance = !enableAutoAdvance
@@ -306,20 +307,6 @@ socket.onmessage = event => {
         if (currentRoomState == "Results" && !resultsDisplayed) {
             resultsDisplayed = true
 
-            setTimeout(() => {
-                // Transition to mappool screen
-                console.log("hello james")
-                if (enableAutoAdvance) {
-                    console.log("hello james 2")
-                    obsGetCurrentScene((scene) => {
-                        console.log("hello james 3")
-                        if (scene.name !== gameplay_scene_name) return
-                        console.log("hello james 4")
-                        obsSetCurrentScene(mappool_scene_name)
-                    })
-                }
-            }, 5000)
-
             // Add block to winner
             if (currentPickedTile) {
                 currentPickedTile.children[9].style.display = "none"
@@ -343,24 +330,43 @@ socket.onmessage = event => {
                     currentPickedTile.children[10].innerText = "blue"
                 }
             }
-        } else {
+
+            // Set match winner
+            setTimeout(() => {
+                if (currentStarRed === currentFirstTo || currentStarBlue === currentFirstTo) {
+                    if (enableAutoAdvance) {
+                        obsGetCurrentScene((scene) => {
+                            if (scene.name === team_win_scene_name) return
+                            obsSetCurrentScene(team_win_scene_name)
+                        })
+                    }
+                }
+            }, 20000)
+        } else if (currentRoomState === "Open") {
+            // Transition to mappool screen
+            if (enableAutoAdvance) {
+                obsGetCurrentScene((scene) => {
+                    if (scene.name !== gameplay_scene_name) return
+                    obsSetCurrentScene(mappool_scene_name)
+                })
+            }
             resultsDisplayed = false
         }
 
         // Room Name
-        // const roomName = message.room_name
-        // currentTeamRedName = roomName.split("(")[1].split(")")[0]
-        // currentTeamBlueName = roomName.split("(")[2].split(")")[0]
-        // redTeamNameText.innerText = currentTeamRedName
-        // blueTeamNameText.innerText = currentTeamBlueName
+        const roomName = message.room_name
+        currentTeamRedName = roomName.split("(")[1].split(")")[0]
+        currentTeamBlueName = roomName.split("(")[2].split(")")[0]
+        redTeamNameText.innerText = currentTeamRedName
+        blueTeamNameText.innerText = currentTeamBlueName
 
-        // for (let i = 0; i < allPlayers.length; i++) {
-        //     if (currentTeamRedName === allPlayers[i].team_name) {
-        //         updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
-        //     } else if (currentTeamBlueName === allPlayers[i].team_name) {
-        //         updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
-        //     }
-        // }
+        for (let i = 0; i < allPlayers.length; i++) {
+            if (currentTeamRedName === allPlayers[i].team_name) {
+                updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
+            } else if (currentTeamBlueName === allPlayers[i].team_name) {
+                updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
+            }
+        }
     }
 
     // Chat messages
@@ -655,6 +661,14 @@ function mapClickEvent() {
 
         setTile(currentTile, currentBeatmap, "Pick")
         currentPickedTile = currentTile
+
+        setTimeout(() => {
+            if (enableAutoAdvance) {
+                obsGetCurrentScene((scene) => {
+                    obsSetCurrentScene(gameplay_scene_name)
+                })
+            }
+        }, 10000)
     }
     if (sideBarNextActionText.innerText === "Red Pick") {
         setPicks(redPickTiles)
@@ -1074,7 +1088,6 @@ setInterval(() => {
     let mapIds = []
     if (firstPicker === "red") {
         for (let i = 0; i < redPickTiles.childElementCount; i++) {
-            console.log(i)
             const redPickTileElement = redPickTiles.children[i]
             const bluePickTileElement = bluePickTiles.children[i]
             const redPickTileElementMod = redPickTileElement.children[2]
