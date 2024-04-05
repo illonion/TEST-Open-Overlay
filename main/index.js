@@ -265,8 +265,8 @@ socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
 
-    console.log(data.type)
-    console.log(message)
+    // console.log(data.type)
+    // console.log(message)
 
     // todo: complete this typedef
     /**
@@ -356,7 +356,8 @@ socket.onmessage = event => {
      *     room_state: string
      * }} message
      */
-        
+        console.log(message)
+
         roomState = message.room_state
         // Room state
         if (roomState == "Open" || roomState == "Closed") {

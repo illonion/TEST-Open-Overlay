@@ -280,7 +280,7 @@ socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
 
-    console.log(data)
+    // console.log(data)
     
     // Autopick with beatmap
     if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!" &&
@@ -298,6 +298,8 @@ socket.onmessage = event => {
          *     room_state: string
          * }} message
          */
+
+        console.log(message)
         previousRoomState = currentRoomState
         currentRoomState = message.room_state
 
@@ -306,52 +308,59 @@ socket.onmessage = event => {
 
             setTimeout(() => {
                 // Transition to mappool screen
+                console.log("hello james")
                 if (enableAutoAdvance) {
+                    console.log("hello james 2")
                     obsGetCurrentScene((scene) => {
+                        console.log("hello james 3")
                         if (scene.name !== gameplay_scene_name) return
+                        console.log("hello james 4")
                         obsSetCurrentScene(mappool_scene_name)
                     })
                 }
-            }, 20000)
+            }, 5000)
 
             // Add block to winner
-            currentPickedTile.children[9].style.display = "none"
-            currentPickedTile.children[9].classList.remove("mapInformationWinnerRed")
-            currentPickedTile.children[9].classList.remove("mapInformationWinnerBlue")
-            if (currentScoreRed > currentScoreBlue) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
-                currentPickedTile.children[10].innerText = "red"
-            } else if (currentScoreBlue > currentScoreRed) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
-                currentPickedTile.children[10].innerText = "blue"
-            } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
-                currentPickedTile.children[10].innerText = "red"
-            } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
-                currentPickedTile.children[9].style.display = "block"
-                currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
-                currentPickedTile.children[10].innerText = "blue"
+            if (currentPickedTile) {
+                currentPickedTile.children[9].style.display = "none"
+                currentPickedTile.children[9].classList.remove("mapInformationWinnerRed")
+                currentPickedTile.children[9].classList.remove("mapInformationWinnerBlue")
+                if (currentScoreRed > currentScoreBlue) {
+                    currentPickedTile.children[9].style.display = "block"
+                    currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
+                    currentPickedTile.children[10].innerText = "red"
+                } else if (currentScoreBlue > currentScoreRed) {
+                    currentPickedTile.children[9].style.display = "block"
+                    currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
+                    currentPickedTile.children[10].innerText = "blue"
+                } else if (currentRedAvgAccuracy > currentBlueAvgAccuracy) {
+                    currentPickedTile.children[9].style.display = "block"
+                    currentPickedTile.children[9].classList.add("mapInformationWinnerRed")
+                    currentPickedTile.children[10].innerText = "red"
+                } else if (currentBlueAvgAccuracy > currentRedAvgAccuracy) {
+                    currentPickedTile.children[9].style.display = "block"
+                    currentPickedTile.children[9].classList.add("mapInformationWinnerBlue")
+                    currentPickedTile.children[10].innerText = "blue"
+                }
             }
+        } else {
+            resultsDisplayed = false
         }
 
         // Room Name
-        const roomName = message.room_name
-        currentTeamRedName = roomName.split("(")[1].split(")")[0]
-        currentTeamBlueName = roomName.split("(")[2].split(")")[0]
-        redTeamNameText.innerText = currentTeamRedName
-        blueTeamNameText.innerText = currentTeamBlueName
+        // const roomName = message.room_name
+        // currentTeamRedName = roomName.split("(")[1].split(")")[0]
+        // currentTeamBlueName = roomName.split("(")[2].split(")")[0]
+        // redTeamNameText.innerText = currentTeamRedName
+        // blueTeamNameText.innerText = currentTeamBlueName
 
-        for (let i = 0; i < allPlayers.length; i++) {
-            if (currentTeamRedName === allPlayers[i].team_name) {
-                updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
-            } else if (currentTeamBlueName === allPlayers[i].team_name) {
-                updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
-            }
-        }
-
+        // for (let i = 0; i < allPlayers.length; i++) {
+        //     if (currentTeamRedName === allPlayers[i].team_name) {
+        //         updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
+        //     } else if (currentTeamBlueName === allPlayers[i].team_name) {
+        //         updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
+        //     }
+        // }
     }
 
     // Chat messages
