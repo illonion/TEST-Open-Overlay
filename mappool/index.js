@@ -1,3 +1,5 @@
+console.log(window.obsstudio)
+
 // Websocket
 const socket = new ReconnectingWebSocket('ws://127.0.0.1:7270/')
 socket.onclose = event => {
@@ -15,7 +17,8 @@ let autoadvance_timer_label = document.getElementById('autoAdvanceTimerLabel')
 autoadvance_timer_container.style.opacity = '0'
 
 let enableAutoAdvance = false
-const gameplay_scene_name = "Gameplay"
+const gameplay_scene_name = "Gameplay (Gameplay)"
+const idle_scene_name = "Gameplay (Idle)"
 const mappool_scene_name = "Mappool"
 const team_win_scene_name = "Team Win"
 
@@ -342,12 +345,21 @@ socket.onmessage = event => {
                     }
                 }
             }, 20000)
-        } else if (currentRoomState === "Open") {
+        } else if (currentRoomState == "Open") {
             // Transition to mappool screen
             if (enableAutoAdvance) {
                 obsGetCurrentScene((scene) => {
-                    if (scene.name !== gameplay_scene_name) return
+                    if (scene.name !== gameplay_scene_name && scene.name !== idle_scene_name) return
                     obsSetCurrentScene(mappool_scene_name)
+                })
+            }
+            resultsDisplayed = false
+        } else if (currentRoomState == "WaitingForLoad" || currentRoomState === "Playing") {
+            // Transition to gameplay scene
+            if (enableAutoAdvance) {
+                obsGetCurrentScene((scene) => {
+                    if (scene.name === gameplay_scene_name) return
+                    obsSetCurrentScene(gameplay_scene_name)
                 })
             }
             resultsDisplayed = false
@@ -665,7 +677,11 @@ function mapClickEvent() {
         setTimeout(() => {
             if (enableAutoAdvance) {
                 obsGetCurrentScene((scene) => {
-                    obsSetCurrentScene(gameplay_scene_name)
+                    if (currentRoomState === "WaitingForLoad" || currentRoomState === "Playing") {
+                        obsSetCurrentScene(gameplay_scene_name)
+                    } else {
+                        obsSetCurrentScene(idle_scene_name)
+                    }
                 })
             }
         }, 10000)
