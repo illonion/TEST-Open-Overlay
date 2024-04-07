@@ -281,8 +281,6 @@ let previousRoomState
 socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
-
-    // console.log(data)
     
     // Autopick with beatmap
     if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!" &&
@@ -301,7 +299,6 @@ socket.onmessage = event => {
          * }} message
          */
 
-        console.log(message)
         previousRoomState = currentRoomState
         currentRoomState = message.room_state
 
@@ -487,8 +484,6 @@ socket.onmessage = event => {
         // Set average accuracies
         currentRedAvgAccuracy = currentRedTotalAccuracy / currentRedCount
         currentBlueAvgAccuracy = currentBlueTotalAccuracy / currentBlueCount
-        console.log(message)
-        console.log(currentScoreRed, currentScoreBlue, currentRedAvgAccuracy, currentBlueAvgAccuracy)
     }
 }
 
@@ -625,8 +620,6 @@ function checkFirstPicker() {
     for (let i = 0; i < bluePickTiles.childElementCount; i++) {
         if (window.getComputedStyle(bluePickTiles.children[i].children[8]).display === "none") numBluePicks++
     }
-
-    console.log(numRedPicks, numBluePicks)
 
     // Go through all checks
     if (numRedPicks > 1) return
@@ -1054,15 +1047,12 @@ function applyChangesRemovePick() {
 // Apply changes for setWinner
 function applyChangesSetWinner() {
     if (!pickManagementCurrentAction || !pickManagementChooseWinnerMap) return
-    console.log("do we get here")
     // Find tile
     const currentTile = applyChangesCheckPick()
     if (!currentTile) return
-    console.log("do we get here")
     // Find winner
     if (pickManagementChooseWinnerMap !== "redTeam" && pickManagementChooseWinnerMap !== "blueTeam") return
 
-    console.log("do we get here")
     // Set winner
     currentTile.children[9].classList.remove("mapInformationWinnerRed")
     currentTile.children[9].classList.remove("mapInformationWinnerBlue")
