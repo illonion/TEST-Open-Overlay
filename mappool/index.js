@@ -1,5 +1,3 @@
-console.log(window.obsstudio)
-
 // Websocket
 const socket = new ReconnectingWebSocket('ws://127.0.0.1:7270/')
 socket.onclose = event => {
@@ -125,17 +123,17 @@ allPlayersRequest.open("GET", `https://api.jsonbin.io/v3/b/${playerJsonBinId}`, 
 allPlayersRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
 allPlayersRequest.send()
 // Mappool information
-let mappool
-let allBeatmaps
-let mappoolRequest = new XMLHttpRequest()
 const roundName = document.getElementById("roundName")
 const redBanTiles = document.getElementById("redBanTiles")
 const blueBanTiles = document.getElementById("blueBanTiles")
 const redPickTiles = document.getElementById("redPickTiles")
 const bluePickTiles = document.getElementById("bluePickTiles")
 const sideBarMapSection = document.getElementById("sideBarMapSection")
-let currentPickedTile
+let mappool, allBeatmaps
 let resultsDisplayed = false
+let currentPickedTile
+
+let mappoolRequest = new XMLHttpRequest()
 mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
         // beatmap info
@@ -347,21 +345,24 @@ socket.onmessage = event => {
             }, 20000)
         } else if (currentRoomState == "Open") {
             // Transition to mappool screen
-            if (enableAutoAdvance) {
+            if (enableAutoAdvance && previousRoomState === "Results" && !warmupMode) {
                 obsGetCurrentScene((scene) => {
                     if (scene.name !== gameplay_scene_name && scene.name !== idle_scene_name) return
                     obsSetCurrentScene(mappool_scene_name)
+                })
+            } else {
+                obsGetCurrentScene((scene) => {
+                    if (scene.name !== gameplay_scene_name && scene.name !== idle_scene_name) return
+                    obsSetCurrentScene(idle_scene_name)
                 })
             }
             resultsDisplayed = false
         } else if (currentRoomState == "WaitingForLoad" || currentRoomState === "Playing") {
             // Transition to gameplay scene
-            if (enableAutoAdvance) {
-                obsGetCurrentScene((scene) => {
-                    if (scene.name === gameplay_scene_name) return
-                    obsSetCurrentScene(gameplay_scene_name)
-                })
-            }
+            obsGetCurrentScene((scene) => {
+                if (scene.name === gameplay_scene_name) return
+                obsSetCurrentScene(gameplay_scene_name)
+            })
             resultsDisplayed = false
         }
 
@@ -486,6 +487,8 @@ socket.onmessage = event => {
         // Set average accuracies
         currentRedAvgAccuracy = currentRedTotalAccuracy / currentRedCount
         currentBlueAvgAccuracy = currentBlueTotalAccuracy / currentBlueCount
+        console.log(message)
+        console.log(currentScoreRed, currentScoreBlue, currentRedAvgAccuracy, currentBlueAvgAccuracy)
     }
 }
 
@@ -593,6 +596,7 @@ function setTile(currentTile, currentBeatmap, type) {
     currentTile.children[5].innerText = currentBeatmap.mapper
     currentTile.children[7].innerText = currentBeatmap.difficultyname
     currentTile.children[8].style.display = "none"
+    return 
 }
 function setBan(banTiles, currentBeatmap) {
     let currentTile
@@ -601,6 +605,7 @@ function setBan(banTiles, currentBeatmap) {
 
     if (document.contains(document.getElementById(`${currentBeatmap.beatmapID}-Ban`))) return
     setTile(currentTile, currentBeatmap, "Ban")
+    return "Ban has been set"
 }
 
 // First picker
@@ -652,10 +657,11 @@ function mapClickEvent() {
     }
 
     // Bans
+    let message
     if (sideBarNextActionText.innerText === "Red Ban") {
-        setBan(redBanTiles, currentBeatmap)
+        message = setBan(redBanTiles, currentBeatmap)
     } else if (sideBarNextActionText.innerText === "Blue Ban") {
-        setBan(blueBanTiles, currentBeatmap)
+        message = setBan(blueBanTiles, currentBeatmap)
     }
 
     // Picks
@@ -685,16 +691,20 @@ function mapClickEvent() {
                 })
             }
         }, 10000)
+
+        return "Pick has been set"
     }
     if (sideBarNextActionText.innerText === "Red Pick") {
-        setPicks(redPickTiles)
+        message = setPicks(redPickTiles)
         checkFirstPicker()
         document.cookie = "currentPicker=redPicker; path=/"
     } else if (sideBarNextActionText.innerText === "Blue Pick") {
-        setPicks(bluePickTiles)
+        message = setPicks(bluePickTiles)
         checkFirstPicker()
         document.cookie = "currentPicker=bluePicker; path=/"
     }
+
+    if (!message) return
 
     // Set new picks
     if (sideBarNextActionText.innerText === "Red Pick") sideBarNextActionText.innerText = "Blue Pick"
@@ -785,7 +795,6 @@ function sideBarChooseActionSelectValueChange() {
         sideBarChooseBanSelect.append(createSelectOptions("Red Ban 2", "redBan2"))
         sideBarChooseBanSelect.append(createSelectOptions("Blue Ban 2", "blueBan2"))
         sideBarMapManagement.append(sideBarChooseBanSelect)
-        sideBarChooseBanSelect.children[0].setAttribute("selected", "selected")
 
         // Just for getting maps in
         if (currentAction === "setBan") {
@@ -810,7 +819,7 @@ function sideBarChooseActionSelectValueChange() {
         sideBarChoosePickSelect.append(createSelectOptions("Tiebreaker", "tiebreaker"))
         sideBarChoosePickSelect.setAttribute("size", sideBarChoosePickSelect.childElementCount)
         sideBarMapManagement.append(sideBarChoosePickSelect)
-        sideBarChoosePickSelect.children[0].setAttribute("selected", "selected")
+        sideBarChooseSelectValueChange()
 
         // Just for getting maps in
         if (currentAction === "setPick") {
@@ -834,7 +843,6 @@ function sideBarChooseActionSelectValueChange() {
             sideBarChooseWinnerSelect.append(createSelectOptions(`Red Team`, `redTeam`))
             sideBarChooseWinnerSelect.append(createSelectOptions(`Blue Team`, `blueTeam`))
             sideBarMapManagement.append(sideBarChooseWinnerSelect)
-            sideBarChooseWinnerSelect.children[0].setAttribute("selected", "selected")
         }
 
         // Which team's map
@@ -852,7 +860,7 @@ function sideBarChooseActionSelectValueChange() {
         sideBarChooseWinnerMapSelect.append(createSelectOptions("Tiebreaker", "tiebreaker"))
         sideBarChooseWinnerMapSelect.setAttribute("size", sideBarChooseWinnerMapSelect.childElementCount)
         sideBarMapManagement.append(sideBarChooseWinnerMapSelect)
-        sideBarChooseWinnerMapSelect.children[0].setAttribute("selected", "selected")
+        sideBarChooseSelectValueChange()
     }
 
     // Append apply changes button
@@ -870,10 +878,7 @@ function sideBarChooseActionSelectValueChange() {
             case "removeBan": applyChangesButton.addEventListener("click", applyChangesRemoveBan); break;
             case "setPick": applyChangesButton.addEventListener("click", applyChangesSetPick); break;
             case "removePick": applyChangesButton.addEventListener("click", applyChangesRemovePick); break;
-            case "setWinner": {
-                console.log("hello")
-                applyChangesButton.addEventListener("click", applyChangesSetWinner); break;
-            }
+            case "setWinner": applyChangesButton.addEventListener("click", applyChangesSetWinner); break;
             case "removeWinner": applyChangesButton.addEventListener("click", applyChangesRemoveWinner); break;
         }
         applyChangesButton.addEventListener("click", applyChangesSetProtect)
@@ -1094,7 +1099,11 @@ function getCookie(cname) {
     return "";
 }
 
+let warmupMode
 setInterval(() => {
+    // Get warmup mode
+    warmupMode = (getCookie("warmupMode") == true) ? true : false
+
     // Display stars
     currentStarRed = parseInt(getCookie("currentStarRed"))
     currentStarBlue = parseInt(getCookie("currentStarBlue"))

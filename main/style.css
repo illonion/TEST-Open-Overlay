@@ -407,7 +407,7 @@
     width: 154px;
     margin-left: 5px;
 }
-.unknownTeamChat { color: #00b140; }
+.unknownTeamChat { color: darkslategray; }
 .redTeamChat { color: var(--teamRedColour); }
 .blueTeamChat { color: var(--teamBlueColour); }
 
@@ -495,6 +495,10 @@
 }
 .playerInfoCombo {
     position: absolute; right: 10px; top: 13px;
+}
+.playerReadyState {
+    position: absolute; right: 10px; top: 12px;
+    display: none;
 }
 
 /* Scrollbar */

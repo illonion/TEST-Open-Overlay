@@ -625,7 +625,7 @@
     width: 154px;
     margin-left: 5px;
 }
-.unknownTeamChat { color: #00b140; }
+.unknownTeamChat { color: darkslategray; }
 .redTeamChat { color: var(--teamRedColour); }
 .blueTeamChat { color: var(--teamBlueColour); }
 /* Scrollbar */

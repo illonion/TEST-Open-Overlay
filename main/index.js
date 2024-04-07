@@ -81,6 +81,7 @@ function warmupToggle() {
         teamRedWinStars.style.display = "flex"
         teamBlueWinStars.style.display = "flex"
     }
+    document.cookie = `warmupMode=${warmupMode}; path=/`
 }
 warmupToggle()
 
@@ -197,6 +198,7 @@ let currentRedAvgAccuracy
 let currentBlueAvgAccuracy
 
 // Player Scores
+const playerInfoScores = document.getElementsByClassName("playerInfoScore")
 const playerInfoScore0 = document.getElementById("playerInfoScore0")
 const playerInfoScore1 = document.getElementById("playerInfoScore1")
 const playerInfoScore2 = document.getElementById("playerInfoScore2")
@@ -204,6 +206,7 @@ const playerInfoScore3 = document.getElementById("playerInfoScore3")
 const playerInfoScore4 = document.getElementById("playerInfoScore4")
 const playerInfoScore5 = document.getElementById("playerInfoScore5")
 // Player accuracies
+const playerInfoAccuracies = document.getElementsByClassName("playerInfoAccuracy")
 const playerInfoAccuracyNumber0 = document.getElementById("playerInfoAccuracyNumber0")
 const playerInfoAccuracyNumber1 = document.getElementById("playerInfoAccuracyNumber1")
 const playerInfoAccuracyNumber2 = document.getElementById("playerInfoAccuracyNumber2")
@@ -211,12 +214,15 @@ const playerInfoAccuracyNumber3 = document.getElementById("playerInfoAccuracyNum
 const playerInfoAccuracyNumber4 = document.getElementById("playerInfoAccuracyNumber4")
 const playerInfoAccuracyNumber5 = document.getElementById("playerInfoAccuracyNumber5")
 // Player combos
+const playerInfoCombos = document.getElementsByClassName("playerInfoCombo")
 const playerInfoComboNumber0 = document.getElementById("playerInfoComboNumber0")
 const playerInfoComboNumber1 = document.getElementById("playerInfoComboNumber1")
 const playerInfoComboNumber2 = document.getElementById("playerInfoComboNumber2")
 const playerInfoComboNumber3 = document.getElementById("playerInfoComboNumber3")
 const playerInfoComboNumber4 = document.getElementById("playerInfoComboNumber4")
 const playerInfoComboNumber5 = document.getElementById("playerInfoComboNumber5")
+// Ready states
+const playerReadyStates = document.getElementsByClassName("playerReadyState")
 
 // Score animation
 let scoreAnimation = {
@@ -369,6 +375,48 @@ socket.onmessage = event => {
             teamBlueScoreSection.style.opacity = 0
             chatDisplay.style.left = "15px"
             currentScoreBar.style.opacity = 0
+
+            // Show ready states
+            for (let i = 0; i < playerReadyStates.length; i++) {
+                playerReadyStates[i].style.display = "block"
+                playerInfoCombos[i].style.display = "none"
+                playerInfoAccuracies[i].style.display = "none"
+                playerInfoScores[i].style.display = "none"
+            }
+
+            let player_slots = [0, 1, 2, 3, 4, 5]
+
+            // Show current ready state
+            let playersShown = 0
+            for (let key in message.room_users) {
+                const player = message.room_users[key]
+                console.log(player)
+
+                if (playersShown > 6) break
+                if (player.slot_index >= 0 && player.slot_index <= 5) {
+                    playersShown++
+                }
+                if (player.user_state === "Spectating") continue
+
+                console.log(player)
+
+                // Displaying player information
+                player_slots = player_slots.filter(int => int !== player.slot_index)
+                const playerInformationConatiner = document.getElementById(`playerInfo${player.slot_index}`)
+                playerInformationConatiner.style.display = "block"
+                playerInformationConatiner.children[1].style.backgroundImage = `url("https://a.ppy.sh/${key}")`
+                playerInformationConatiner.children[2].innerText = player.username
+
+                if (player.user_state === "Ready") {
+                    playerInformationConatiner.children[6].setAttribute("src", "static/check.svg")
+                } else {
+                    playerInformationConatiner.children[6].setAttribute("src", "static/blank.png")
+                }
+            }
+
+            for (let i = 0; i < player_slots.length; i++) {
+                document.getElementById(`playerInfo${player_slots[i]}`).style.display = "none"
+            }
         } else if (roomState == "WaitingForLoad" || roomState == "Playing") {
             // Gameplay showing
             resultsDisplayed = false
@@ -378,6 +426,14 @@ socket.onmessage = event => {
             teamBlueScoreSection.style.opacity = 1
             chatDisplay.style.left = "-335px"
             currentScoreBar.style.opacity = 1
+
+            // Hide ready state
+            for (let i = 0; i < playerReadyStates.length; i++) {
+                playerReadyStates[i].style.display = "none"
+                playerInfoCombos[i].style.display = "block"
+                playerInfoAccuracies[i].style.display = "block"
+                playerInfoScores[i].style.display = "block"
+            }
         } else if (roomState == "Results" && !resultsDisplayed) {
             // Show chat after 20 seconds
             resultsDisplayed = true
@@ -398,6 +454,14 @@ socket.onmessage = event => {
                 chatDisplay.style.left = "15px"
                 currentScoreBar.style.opacity = 0
             }, 20000)
+
+            // Hide ready state
+            for (let i = 0; i < playerReadyStates.length; i++) {
+                playerReadyStates[i].style.display = "none"
+                playerInfoCombos[i].style.display = "block"
+                playerInfoAccuracies[i].style.display = "block"
+                playerInfoScores[i].style.display = "block"
+            }
         }
 
         // Room Name
@@ -456,11 +520,13 @@ socket.onmessage = event => {
             const accuracy = player.accuracy
 
             // Displaying player information
-            player_slots = player_slots.filter(int => int !== player.slot_index)
             const playerInformationConatiner = document.getElementById(`playerInfo${player.slot_index}`)
-            playerInformationConatiner.style.display = "block"
-            playerInformationConatiner.children[1].style.backgroundImage = `url("https://a.ppy.sh/${key}")`
-            playerInformationConatiner.children[2].innerText = player.username
+            if (roomState === "Playing" || roomState === "WaitingForLoad") {
+                player_slots = player_slots.filter(int => int !== player.slot_index)
+                playerInformationConatiner.style.display = "block"
+                playerInformationConatiner.children[1].style.backgroundImage = `url("https://a.ppy.sh/${key}")`
+                playerInformationConatiner.children[2].innerText = player.username
+            }
 
             if (roomState !== "Open") {
                 scoreAnimation[`playerInfoScore${player.slot_index}`].update(player.total_score)
@@ -479,7 +545,7 @@ socket.onmessage = event => {
                     playerInformationConatiner.children[0].style.backgroundColor = "var(--teamBlueColour)"
                     currentBlueCount++
                 } else {
-                    playerInformationConatiner.children[0].style.backgroundColor = "green"
+                    playerInformationConatiner.children[0].style.backgroundColor = "darkslategray"
                 }
             } else {
                 scoreAnimation[`playerInfoScore${player.slot_index}`].update(0)

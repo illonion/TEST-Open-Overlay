@@ -1,5 +1,6 @@
 const matchJsonBinId = "660e9931e41b4d34e4df1743"
 const playerJsonBinId = "65fada0a266cfc3fde9b22a2"
+const mappoolJsonBinId = "65fa6cc71f5677401f40141d"
 const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" 
 
 // Match information
@@ -21,6 +22,19 @@ allMatchesRequest.onreadystatechange = () => {
 allMatchesRequest.open("GET", `https://api.jsonbin.io/v3/b/${matchJsonBinId}`, false)
 allMatchesRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
 allMatchesRequest.send()
+
+// Mappool
+let mappoolRequest = new XMLHttpRequest()
+mappoolRequest.onreadystatechange = () => {
+    if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
+        // Round name info
+        const currentRoundName = JSON.parse(mappoolRequest.responseText).record.roundName
+        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.toLowerCase().replace(/ /g, "-")}.png`)
+    }
+}
+mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
+mappoolRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
+mappoolRequest.send()
 
 // Player information
 let allPlayers
