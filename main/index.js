@@ -271,9 +271,6 @@ socket.onmessage = event => {
     const data = JSON.parse(event.data)
     const message = data.message
 
-    // console.log(data.type)
-    // console.log(message)
-
     // todo: complete this typedef
     /**
      * @typedef {{
@@ -315,8 +312,9 @@ socket.onmessage = event => {
         // put find beatmap function here
         const currentMap = findMapInBeatmaps(currentId)
         if (currentMap) {
+            console.log(currentMap.songLength % 60).toString().padStart(2, '0')
             nowPlayingStatsCSNumber.innerText = `${Math.round(parseFloat(currentMap.cs) * 10) / 10}`
-            nowPlayingStatsLENNumber.innerText = `${Math.floor(currentMap.songLength / 60)}:${(num => (num < 10 ? '0' : '') + num)(Math.round(currentMap.songLength) % 60)}`
+            nowPlayingStatsLENNumber.innerText = `${Math.floor(currentMap.songLength / 60)}:${Math.round(currentMap.songLength % 60).toString().padStart(2, '0')}`
             nowPlayingStatsARNumber.innerText = `${Math.round(parseFloat(currentMap.ar) * 10) / 10}`
             nowPlayingStatsBPMNumber.innerText = `${Math.round(parseFloat(currentMap.bpm) * 10) / 10}`
             nowPlayingStatsODNumber.innerText = `${Math.round(parseFloat(currentMap.od) * 10) / 10}`
@@ -341,7 +339,7 @@ socket.onmessage = event => {
         } else {
             nowPlayingStatsCSNumber.innerText = `${message.difficulty.circle_size}`;
             let seconds = message.length / 1000
-            nowPlayingStatsLENNumber.innerText = `${Math.floor(seconds / 60)}:${Math.round((num => (num < 10 ? '0' : '') + num)(seconds % 60))}`
+            nowPlayingStatsLENNumber.innerText =`${Math.floor(seconds / 60)}:${(Math.round(seconds % 60)).toString().padStart(2, '0')}`
             nowPlayingStatsARNumber.innerText = `${message.difficulty.approach_rate}`
             nowPlayingStatsBPMNumber.innerText = `${Math.round(message.bpm)}`
             nowPlayingStatsODNumber.innerText = `${message.difficulty.overall_difficulty}`
@@ -362,8 +360,6 @@ socket.onmessage = event => {
      *     room_state: string
      * }} message
      */
-        console.log(message)
-
         roomState = message.room_state
         // Room state
         if (roomState == "Open" || roomState == "Closed") {
@@ -390,23 +386,21 @@ socket.onmessage = event => {
             let playersShown = 0
             for (let key in message.room_users) {
                 const player = message.room_users[key]
-                console.log(player)
 
-                if (playersShown > 6) break
+                if (playersShown >= 6) break
                 if (player.slot_index >= 0 && player.slot_index <= 5) {
                     playersShown++
-                }
+                } else continue
                 if (player.user_state === "Spectating") continue
-
-                console.log(player)
 
                 // Displaying player information
                 player_slots = player_slots.filter(int => int !== player.slot_index)
+                console.log("hello")
                 const playerInformationConatiner = document.getElementById(`playerInfo${player.slot_index}`)
                 playerInformationConatiner.style.display = "block"
                 playerInformationConatiner.children[1].style.backgroundImage = `url("https://a.ppy.sh/${key}")`
                 playerInformationConatiner.children[2].innerText = player.username
-
+                console.log(playerInformationConatiner)
                 if (player.user_state === "Ready") {
                     playerInformationConatiner.children[6].setAttribute("src", "static/check.svg")
                 } else {
@@ -555,8 +549,10 @@ socket.onmessage = event => {
         }
 
         // Remove anyone whose slots are not available
-        for (let i = 0; i < player_slots.length; i++) {
-            document.getElementById(`playerInfo${player_slots[i]}`).style.display = "none"
+        if (roomState === "Playing") {
+            for (let i = 0; i < player_slots.length; i++) {
+                document.getElementById(`playerInfo${player_slots[i]}`).style.display = "none"
+            }
         }
 
         // Set average accuracies

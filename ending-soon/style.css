@@ -25,18 +25,17 @@
 }
 
 body > * {
-    position: absolute; left: 100px; 
+    position: absolute; left: 130px; 
     font-family: "Inter Italic";
     font-weight: 800;
-    color: white;
+    color: rgb(47, 34, 123);
 }
 #artistName {
-    top: 30px;
+    top: 870px;
     font-size: 35px;
-    color: white;
 }
 #songName {
-    top: 60px;
+    top: 900px;
     font-size: 60px;
     width: 1000px;
     white-space: nowrap;

@@ -126,12 +126,16 @@ allPlayersRequest.send()
 const roundName = document.getElementById("roundName")
 const redBanTiles = document.getElementById("redBanTiles")
 const blueBanTiles = document.getElementById("blueBanTiles")
+const pickTiles = document.getElementById("pickTiles")
 const redPickTiles = document.getElementById("redPickTiles")
 const bluePickTiles = document.getElementById("bluePickTiles")
+const banLines = document.querySelectorAll(".banLine")
+const pickLines = document.querySelectorAll(".pickLine")
 const sideBarMapSection = document.getElementById("sideBarMapSection")
 let mappool, allBeatmaps
 let resultsDisplayed = false
 let currentPickedTile
+let numBanTiles
 
 let mappoolRequest = new XMLHttpRequest()
 mappoolRequest.onreadystatechange = () => {
@@ -159,20 +163,86 @@ mappoolRequest.onreadystatechange = () => {
             case "Round of 32": case "Round of 16":
                 currentBestOf = 9
                 currentFirstTo = 5
+                numBanTiles = 2
+                banLines.forEach(banLine => banLine.style.height = "90px")
+                pickLines.forEach(pickLine => pickLine.style.top = "238px")
+                pickTiles.style.top = "238px"
                 break
-            case "Quarterfinals": case "Semifinals":
+            case "Quarterfinals":
                 currentBestOf = 11
                 currentFirstTo = 6
+                numBanTiles = 2
+                banLines.forEach(banLine => banLine.style.height = "90px")
+                pickLines.forEach(pickLine => pickLine.style.top = "238px")
+                pickTiles.style.top = "238px"
+                break
+            case "Semifinals":
+                currentBestOf = 11
+                currentFirstTo = 6
+                numBanTiles = 4
                 break
             case "Finals": case "Grand Finals":
                 currentBestOf = 13
                 currentFirstTo = 7
+                numBanTiles = 4
                 break
         }
         generateStarsDisplay("plus")
 
         // Cookies for best of
         document.cookie = `currentBestOf=${currentBestOf}; path=/`
+
+        // Generate ban tiles
+        for (let i = 0; i < numBanTiles; i++) {
+            const mapInformationContainer = document.createElement("div")
+            mapInformationContainer.classList.add("mapInformationContainer")
+
+            const mapInformationBackgroundImage = document.createElement("div")
+            mapInformationBackgroundImage.classList.add("mapInformationBackgroundImage")
+
+            const mapInformationGradient = document.createElement("div")
+            mapInformationGradient.classList.add("mapInformationGradient")
+
+            const mapInformationModContainer = document.createElement("div")
+            mapInformationModContainer.classList.add("mapInformationModContainer")
+
+            const mapInformationModIdText = document.createElement("div")
+            mapInformationModIdText.classList.add("mapInformationModIdText")
+
+            const mapInformationModIdNumber = document.createElement("div")
+            mapInformationModIdNumber.classList.add("mapInformationModIdNumber")
+
+            const mapInformationSongName = document.createElement("div")
+            mapInformationSongName.classList.add("mapInformationSongName")
+
+            const mapInformationMapperText = document.createElement("div")
+            mapInformationMapperText.innerText = "MAPPER"
+            mapInformationMapperText.classList.add("mapInformationMapperText")
+
+            const mapInformationMapperName = document.createElement("div")
+            mapInformationMapperName.classList.add("mapInformationMapperName")
+
+            const mapInformationDifficultyText = document.createElement("div")
+            mapInformationDifficultyText.innerText = "DIFFICULTY"
+            mapInformationDifficultyText.classList.add("mapInformationDifficultyText")
+
+            const mapInformationDifficultyName = document.createElement("div")
+            mapInformationDifficultyName.classList.add("mapInformationDifficultyName")
+
+            const mapInformationPickerOverlay = document.createElement("div")
+            mapInformationPickerOverlay.classList.add("mapInformationPickerOverlay")
+
+            mapInformationModContainer.append(mapInformationModIdText, mapInformationModIdNumber)
+            mapInformationContainer.append(mapInformationBackgroundImage, mapInformationGradient, mapInformationModContainer, 
+                mapInformationSongName, mapInformationMapperText, mapInformationMapperName, mapInformationDifficultyText,
+                mapInformationDifficultyName, mapInformationPickerOverlay)
+
+            if (i % 2 === 0) {
+                redBanTiles.append(mapInformationContainer)
+            } else {
+                blueBanTiles.append(mapInformationContainer)
+            }  
+        }
 
         // Generate pick tiles
         for (let i = 0; i < (currentFirstTo - 1) * 2; i++) {
@@ -303,6 +373,7 @@ socket.onmessage = event => {
         currentRoomState = message.room_state
 
         if (currentRoomState == "Results" && !resultsDisplayed) {
+            changeNextAction(sideBarNextActionText.innerText.split(" "[0]), sideBarNextActionText.innerText.split(" "[1]))
             resultsDisplayed = true
 
             // Add block to winner
@@ -707,10 +778,12 @@ function mapClickEvent() {
     const banNumber = banCounter()
     if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 1) changeNextAction("Red", "Ban")
     else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 1) changeNextAction("Blue", "Ban")
-    else if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 2) changeNextAction("Blue", "Ban")
-    else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 2) changeNextAction("Red", "Ban")
-    else if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 3) changeNextAction("Red", "Ban")
-    else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 3) changeNextAction("Blue", "Ban")
+    if (numBanTiles === 4) {
+        if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 2) changeNextAction("Blue", "Ban")
+        else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 2) changeNextAction("Red", "Ban")
+        else if (sideBarNextActionText.innerText === "Blue Ban" && banNumber === 3) changeNextAction("Red", "Ban")
+        else if (sideBarNextActionText.innerText === "Red Ban" && banNumber === 3) changeNextAction("Blue", "Ban")
+    }
 
     // Set new protects
     if (sideBarNextActionText.innerText === "Red Protect") changeNextAction("Blue", "Protect")

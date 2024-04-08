@@ -1,0 +1,44 @@
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-ExtraBold.ttf");
+    font-weight: 800;
+}
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-Medium.ttf");
+    font-weight: 500;
+}
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-Regular.ttf");
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("../fonts/Inter-Italic.ttf");
+    font-weight: 400;
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("../fonts/Inter-ExtraBold-Italic.ttf");
+    font-weight: 800;
+}
+
+body > * {
+    position: absolute; left: 100px; 
+    font-family: "Inter Italic";
+    font-weight: 800;
+    color: white;
+}
+#artistName {
+    top: 30px;
+    font-size: 35px;
+}
+#songName {
+    top: 60px;
+    font-size: 60px;
+    width: 1000px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
