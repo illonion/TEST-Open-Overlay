@@ -413,6 +413,9 @@ socket.onmessage = event => {
                 playerInformationConatiner.children[1].style.backgroundImage = `url("https://a.ppy.sh/${key}")`
                 playerInformationConatiner.children[2].innerText = player.username
                 playerInformationConatiner.children[6].setAttribute("src", `static/${(player.user_state === "Ready")? "check.svg" : "blank.png"}`)
+
+                // Team Ids
+                playerInformationConatiner.children[0].style.backgroundColor = player.team_id === 0 ? "var(--teamRedColour)" : player.team_id === 1 ? "var(--teamBlueColour)" : "darkslategray";
             }
 
             for (let i = 0; i < player_slots.length; i++) {

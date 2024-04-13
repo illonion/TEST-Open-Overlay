@@ -121,6 +121,16 @@ function changeStarCount(team, action) {
         }
     }
 }
+function resetStars() {
+    currentStarRed = 0
+    currentStarBlue = 0
+
+    document.cookie = `currentStarRed=${currentStarRed}; path=/`
+    document.cookie = `currentStarBlue=${currentStarBlue}; path=/`
+
+    generateStarsDisplay()
+}
+
 
 // Json Bin Details
 const playerJsonBinId = "66180208acd3cb34a836d684"
@@ -800,8 +810,6 @@ function banCounter() {
     let banCounter = 0
     for (let i = 0; i < redBanTiles.childElementCount; i++) {
         if (redBanTiles.children[i].hasAttribute("id")) banCounter++
-    }
-    for (let i = 0; i < blueBanTiles.childElementCount; i++) {
         if (blueBanTiles.children[i].hasAttribute("id")) banCounter++
     }
     return banCounter
