@@ -73,6 +73,11 @@ const teamMapPicks = document.getElementsByClassName("teamMapPick")
 const warmupText = document.getElementById("warmupText")
 function warmupToggle() {
     warmupMode = !warmupMode
+    document.cookie = `warmupMode=${warmupMode}; path=/`
+    warmupCheck()
+}
+warmupToggle()
+function warmupCheck() {
     if (warmupMode) {
         warmupText.innerText = "ON"
         teamRedWinStars.style.display = "none"
@@ -83,9 +88,7 @@ function warmupToggle() {
         teamRedWinStars.style.display = "flex"
         teamBlueWinStars.style.display = "flex"
     }
-    document.cookie = `warmupMode=${warmupMode}; path=/`
 }
-warmupToggle()
 
 // Reset stars
 function resetStars() {
@@ -715,6 +718,11 @@ function setCurrentPicker() {
 
 // Set cookie information
 setInterval(() => {
+    // Get warmup mode
+    warmupMode = (getCookie("warmupMode") == "true") ? true : false
+    console.log(warmupMode, getCookie("warmupMode"))
+    warmupCheck()
+    
     // --- Set map picker ---
     currentMapPicker = getCookie("currentPicker")
 

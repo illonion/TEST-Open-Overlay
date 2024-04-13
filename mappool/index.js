@@ -131,7 +131,6 @@ function resetStars() {
     generateStarsDisplay()
 }
 
-
 // Json Bin Details
 const playerJsonBinId = "66180208acd3cb34a836d684"
 const mappoolJsonBinId = "66180211acd3cb34a836d689"
@@ -1177,10 +1176,24 @@ function getCookie(cname) {
     return "";
 }
 
+
+// Warmup
 let warmupMode
+const warmupText = document.getElementById("warmupText")
+function warmupToggle() {
+    warmupMode = !warmupMode
+    document.cookie = `warmupMode=${warmupMode}; path=/`
+    warmupCheck()
+}
+function warmupCheck() {
+    if (warmupMode) warmupText.innerText = "ON"
+    else warmupText.innerText = "OFF"
+}
+
 setInterval(() => {
     // Get warmup mode
-    warmupMode = (getCookie("warmupMode") == true) ? true : false
+    warmupMode = (getCookie("warmupMode") == "true") ? true : false
+    warmupCheck()
 
     // Display stars
     currentStarRed = parseInt(getCookie("currentStarRed"))
