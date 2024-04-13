@@ -586,7 +586,7 @@ function changeNextAction(colour, action) {
     removeAllTileAnimations(bluePickTiles)
 
     // Function to add class to the appropriate tile
-    function handleAction(action, tiles) {
+    function handleAction(tiles) {
         if (tiles === tiebreakerContainer) {
             const targetElement = tiles.children[8]
             targetElement.classList.add("mapInformationPickerCurrent")
@@ -603,19 +603,19 @@ function changeNextAction(colour, action) {
 
     if (action === "Pick" && colour === "Tiebreaker") {
         // Tiebreaker
-        handleAction(action, tiebreakerContainer)
+        handleAction(tiebreakerContainer)
     } else if (action === "Ban" && colour === "Red") {
         // Red Ban
-        handleAction(action, redBanTiles)
+        handleAction(redBanTiles)
     } else if (action === "Ban" && colour === "Blue") {
         // Blue Ban
-        handleAction(action, blueBanTiles)
+        handleAction(blueBanTiles)
     } else if (action === "Pick" && colour === "Red") {
         // Red Pick
-        handleAction(action, redPickTiles)
+        handleAction(redPickTiles)
     } else if (action === "Pick" && colour === "Blue") {
         // Blue Pick
-        handleAction(action, bluePickTiles)
+        handleAction(bluePickTiles)
     }
 }
 changeNextAction("Red", "Ban")
