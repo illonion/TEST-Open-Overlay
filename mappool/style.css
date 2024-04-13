@@ -800,3 +800,30 @@
     color: #202020;
     background-color: #bebebe;
 }
+
+.sideBarSectionHeader {
+    margin: 15px 0 10px 0;
+    font-weight: 500;
+    font-size: 30px;
+    width: inherit; text-align: center;
+}
+#sideBarStarButtons {
+    width: inherit;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.sideBarStarButton {
+    width: 100px; height: 50px;
+    margin: 7px;
+    border-radius: 10px;
+    background-color: white;
+    border-color: black;
+    font-size: 18px;
+}
+.sideBarStarButton:active {
+    border-color: black;
+    background-color: black;
+    color: white;
+}
+.fullWidthButton { width: 214px; }

@@ -104,6 +104,21 @@ function changeStarCount(team, action) {
         if (currentStarRed < 0) currentStarRed = 0
         if (currentStarBlue < 0) currentStarBlue = 0
         generateStarsDisplay(action)
+
+        // Set cookies
+        document.cookie = `currentStarRed=${currentStarRed}; path=/`
+        document.cookie = `currentStarBlue=${currentStarBlue}; path=/`
+
+        // Set match winner
+        if (currentStarRed === currentFirstTo) {
+            document.cookie = `currentMatchWinner=${currentTeamRedName}; path=/`
+            document.cookie = `currentMatchWinnerColour=red; path=/`
+        } else if (currentStarBlue === currentFirstTo) {
+            document.cookie = `currentMatchWinner=${currentTeamBlueName}; path=/`
+            document.cookie = `currentMatchWinnerColour=blue; path=/`
+        } else {
+            document.cookie = `currentMatchWinner=noWinner; path=/`
+        }
     }
 }
 

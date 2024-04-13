@@ -372,6 +372,17 @@
             <button class="sideBarButton sideBarNextActionButton sideBarButtonFullWidth" id="toggleAutopick" onclick="resetProtects()">RESET PROTECTS</button>
             <button class="sideBarButton sideBarNextActionButton sideBarButtonFullWidth" id="toggleAutopick" onclick="resetBans()">RESET BANS</button>
             <button class="sideBarButton sideBarNextActionButton sideBarButtonFullWidth" id="toggleAutopick" onclick="resetPicks()">RESET PICKS</button>
+            <section id="sideBarStarSection">
+                <div class="sideBarSectionHeader">Stars</div>
+                <div id="sideBarStarButtons">
+                    <button class="sideBarStarButton" onclick="changeStarCount('red','plus')">Red ++</button>
+                    <button class="sideBarStarButton" onclick="changeStarCount('red','minus')">Red --</button>
+                    <button class="sideBarStarButton" onclick="changeStarCount('blue','plus')">Blue ++</button>
+                    <button class="sideBarStarButton" onclick="changeStarCount('blue','minus')">Blue --</button>
+                    <button class="sideBarStarButton fullWidthButton" id="warmupButton" onclick="warmupToggle()">WARMUP: <span id="warmupText">ON</span></button>
+                    <button class="sideBarStarButton fullWidthButton" id="warmupButton" onclick="resetStars()">Reset Stars</button>
+                </div>
+            </section>
         </section>
     </div>
 

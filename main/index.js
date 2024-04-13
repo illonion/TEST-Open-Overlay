@@ -408,17 +408,11 @@ socket.onmessage = event => {
 
                 // Displaying player information
                 player_slots = player_slots.filter(int => int !== player.slot_index)
-                console.log("hello")
                 const playerInformationConatiner = document.getElementById(`playerInfo${player.slot_index}`)
                 playerInformationConatiner.style.display = "block"
                 playerInformationConatiner.children[1].style.backgroundImage = `url("https://a.ppy.sh/${key}")`
                 playerInformationConatiner.children[2].innerText = player.username
-                console.log(playerInformationConatiner)
-                if (player.user_state === "Ready") {
-                    playerInformationConatiner.children[6].setAttribute("src", "static/check.svg")
-                } else {
-                    playerInformationConatiner.children[6].setAttribute("src", "static/blank.png")
-                }
+                playerInformationConatiner.children[6].setAttribute("src", `static/${(player.user_state === "Ready")? "check.svg" : "blank.png"}`)
             }
 
             for (let i = 0; i < player_slots.length; i++) {
@@ -720,12 +714,16 @@ function setCurrentPicker() {
 setInterval(() => {
     // --- Set map picker ---
     currentMapPicker = getCookie("currentPicker")
-    
+
+    // Display stars
+    currentStarRed = parseInt(getCookie("currentStarRed"))
+    currentStarBlue = parseInt(getCookie("currentStarBlue"))
+    generateStarsDisplay()
+
     // Check if tiebreaker
     // Check if warmup
     if (!findMapInBeatmaps(currentId)) return
     if (findMapInBeatmaps(currentId).mod === "TB" || warmupMode) currentMapPicker = "noPicker"
-
     // Set current picker
     setCurrentPicker()
 }, 500)
