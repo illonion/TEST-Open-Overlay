@@ -1,6 +1,6 @@
 // Json Bin Details
-const playerJsonBinId = "65fada0a266cfc3fde9b22a2"
-const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO"
+const playerJsonBinId = "66180208acd3cb34a836d684"
+const jsonBinApiKey = "" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()

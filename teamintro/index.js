@@ -1,7 +1,7 @@
-const matchJsonBinId = "660e9931e41b4d34e4df1743"
-const playerJsonBinId = "65fada0a266cfc3fde9b22a2"
-const mappoolJsonBinId = "65fa6cc71f5677401f40141d"
-const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" 
+const matchJsonBinId = "661801daad19ca34f8586133"
+const playerJsonBinId = "66180208acd3cb34a836d684"
+const mappoolJsonBinId = "66180211acd3cb34a836d689"
+const jsonBinApiKey = "" // Change api key
 
 // Match information
 const sideBarSelect = document.getElementById("sideBarSelect")

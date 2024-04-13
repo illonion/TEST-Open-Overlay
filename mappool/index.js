@@ -108,9 +108,9 @@ function changeStarCount(team, action) {
 }
 
 // Json Bin Details
-const playerJsonBinId = "65fada0a266cfc3fde9b22a2"
-const mappoolJsonBinId = "65fa6cc71f5677401f40141d"
-const jsonBinApiKey = "$2a$10$BwMkRPtCAPkgA9C5IDwGteR3aAZCWrJdy9eBvvETkRCq6Ckba0KgO" // Change api key
+const playerJsonBinId = "66180208acd3cb34a836d684"
+const mappoolJsonBinId = "66180211acd3cb34a836d689"
+const jsonBinApiKey = "" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -372,8 +372,8 @@ socket.onmessage = event => {
         previousRoomState = currentRoomState
         currentRoomState = message.room_state
 
-        if (currentRoomState == "Results" && !resultsDisplayed) {
-            changeNextAction(sideBarNextActionText.innerText.split(" "[0]), sideBarNextActionText.innerText.split(" "[1]))
+        if (currentRoomState == "Results" && !resultsDisplayed && !warmupMode) {
+            if (sideBarNextActionText.innerText !== "") changeNextAction(sideBarNextActionText.innerText.split(" ")[0], sideBarNextActionText.innerText.split(" ")[1])
             resultsDisplayed = true
 
             // Add block to winner
@@ -1246,3 +1246,37 @@ setInterval(() => {
         document.cookie = `mapWinners=${JSON.stringify(mapWinners)}; path=/`
     }
 }, 500)
+
+// Reset protects
+function resetProtects() {
+    redTeamProtectMap.style.display = "none"
+    blueTeamProtectMap.style.display = "none"
+}
+// Reset bans
+function resetBans() {
+    resetTiles(redBanTiles)
+    resetTiles(blueBanTiles)
+}
+// Reset picks
+function resetPicks() {
+    resetTiles(redPickTiles)
+    resetTiles(bluePickTiles)
+    resetTile(tiebreakerContainer)
+}
+// Reset tiles
+function resetTiles(tileContainer) {
+    for (let i = 0; i < tileContainer.childElementCount; i++) {
+        resetTile(tileContainer.children[i])
+    }
+}
+function resetTile(tile) {
+    if (tile.hasAttribute("id")) tile.removeAttribute("id")
+    tile.style.boxShadow = "none"
+    tile.children[8].style.display = "block"
+    tile.children[8].classList.remove("mapInformationPickerCurrent")
+
+    if (tile.childElementCount > 9) {
+        tile.children[9].style.display = "none"
+        tile.children[10].innerText = ""
+    }
+}

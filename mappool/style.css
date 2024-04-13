@@ -647,7 +647,7 @@
 /* Sidebar */
 #sideBar {
     position: absolute; left: 1920px; top: 0;
-    width: 750px; height: 1080px;
+    width: 1000px; height: 1080px;
     background-color: #EBA791;
     font-family: "Inter"
 }
@@ -660,6 +660,7 @@
 #sideBarColumn1 { left: 0; }
 #sideBarColumn2 { left: 250px; }
 #sideBarColumn3 { left: 500px; }
+#sideBarColumn4 { left: 750px; }
 .divider {
     position: absolute; top: 0;
     width: 2px; height: 1080px;
@@ -667,6 +668,7 @@
 }
 #divider { left: 249px; }
 #divider2 { left: 499px; }
+#divider3 { left: 749px; }
 .sideBarSectionHeader {
     margin: 15px 0 10px 20px;
     font-weight: 500;
