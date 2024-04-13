@@ -402,28 +402,20 @@ socket.onmessage = event => {
 
             // Set match winner
             setTimeout(() => {
-                if (currentStarRed === currentFirstTo || currentStarBlue === currentFirstTo) {
-                    if (enableAutoAdvance) {
-                        obsGetCurrentScene((scene) => {
-                            if (scene.name === team_win_scene_name) return
-                            obsSetCurrentScene(team_win_scene_name)
-                        })
-                    }
+                if ((currentStarRed === currentFirstTo || currentStarBlue === currentFirstTo) && enableAutoAdvance) {
+                    obsGetCurrentScene((scene) => {
+                        if (scene.name === team_win_scene_name) return
+                        obsSetCurrentScene(team_win_scene_name)
+                    })
                 }
             }, 20000)
         } else if (currentRoomState == "Open") {
             // Transition to mappool screen
-            if (enableAutoAdvance && previousRoomState === "Results" && !warmupMode) {
-                obsGetCurrentScene((scene) => {
-                    if (scene.name !== gameplay_scene_name && scene.name !== idle_scene_name) return
-                    obsSetCurrentScene(mappool_scene_name)
-                })
-            } else {
-                obsGetCurrentScene((scene) => {
-                    if (scene.name !== gameplay_scene_name && scene.name !== idle_scene_name) return
-                    obsSetCurrentScene(idle_scene_name)
-                })
-            }
+            obsGetCurrentScene((scene) => {
+                if (scene.name !== gameplay_scene_name && scene.name !== idle_scene_name) return
+                if (enableAutoAdvance && previousRoomState === "Results" && !warmupMode) obsSetCurrentScene(mappool_scene_name)
+                else obsSetCurrentScene(idle_scene_name)
+            })
             resultsDisplayed = false
         } else if (currentRoomState == "WaitingForLoad" || currentRoomState === "Playing") {
             // Transition to gameplay scene
