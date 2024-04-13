@@ -13,6 +13,8 @@ const teamRedWinStars = document.getElementById("teamRedWinStars")
 const teamBlueWinStars = document.getElementById("teamBlueWinStars")
 let currentBestOf = 0, currentFirstTo = 0
 let currentStarRed = 0, currentStarBlue = 0
+document.cookie = `currentStarRed=${currentStarRed}; path=/`
+document.cookie = `currentStarBlue=${currentStarBlue}; path=/`
 // Generate stars
 function generateStarsDisplay() {
     // Generate or remove new (blank) stars
