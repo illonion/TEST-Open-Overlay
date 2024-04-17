@@ -134,7 +134,7 @@ function resetStars() {
 // Json Bin Details
 const playerJsonBinId = "66180208acd3cb34a836d684"
 const mappoolJsonBinId = "66180211acd3cb34a836d689"
-const jsonBinApiKey = "" // Change api key
+const jsonBinApiKey = "$2a$10$2VisaCnG83oxRZcO.szDy.x7PxoJvW22tzOYD7AQFcbHaHjfGvICy" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -160,6 +160,9 @@ let mappool, allBeatmaps
 let resultsDisplayed = false
 let currentPickedTile
 let numBanTiles
+
+// Pick removed event
+let pickRemoved = false
 
 let mappoolRequest = new XMLHttpRequest()
 mappoolRequest.onreadystatechange = () => {
@@ -760,12 +763,16 @@ function mapClickEvent() {
         setTile(currentTile, currentBeatmap, "Pick")
         currentPickedTile = currentTile
 
+        // set pick removed
+        pickRemoved = false
+
         setTimeout(() => {
             if (enableAutoAdvance) {
                 obsGetCurrentScene((scene) => {
-                    if (currentRoomState === "WaitingForLoad" || currentRoomState === "Playing") {
+                    
+                    if ((currentRoomState === "WaitingForLoad" || currentRoomState === "Playing") && !pickRemoved) {
                         obsSetCurrentScene(gameplay_scene_name)
-                    } else {
+                    } else if (!pickRemoved) {
                         obsSetCurrentScene(idle_scene_name)
                     }
                 })
@@ -1117,12 +1124,15 @@ function applyChangesSetPick() {
     setTile(currentTile, currentBeatmap, "Pick")
 }
 // Apply changes for removePick
-function applyChangesRemovePick() {
+function applyChangesRemovePick() 
     if (!pickManagementCurrentAction) return
 
     // Find tile
     const currentTile = applyChangesCheckPick()
     if (!currentTile) return
+
+    // set pick removed
+    pickRemoved = true
 
     // Do actions
     currentTile.removeAttribute("id")
@@ -1130,7 +1140,7 @@ function applyChangesRemovePick() {
     currentTile.children[8].style.display = "block"
     currentTile.children[9].style.display = "none"
     currentTile.children[10].innerText = ""
-}
+
 // Apply changes for setWinner
 function applyChangesSetWinner() {
     if (!pickManagementCurrentAction || !pickManagementChooseWinnerMap) return

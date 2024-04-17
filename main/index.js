@@ -189,6 +189,7 @@ const funMods = [
     { modAbbreviation: "GR", modMessage: "The circles are moving closer... Make sure to hit it at the right timing! Don't forget about the note underneath!"},
     { modAbbreviation: "RP", modMessage: "The circles are moving away! Can the players catch them before time runs out?"},
     { modAbbreviation: "DP", modMessage: "The circles are growing and expanding. Almost 3D!"},
+    { modAbbreviation: "SI", modMessage: "The circles are spinning! Can the players hit them on time?"},
 ]
 
 // Team Sections
