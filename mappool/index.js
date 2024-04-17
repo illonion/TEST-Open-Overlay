@@ -380,11 +380,39 @@ socket.onmessage = event => {
     const message = data.message
     
     // Autopick with beatmap
-    if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!" &&
-        toggleAutopickText.innerText === "ON" && !document.contains(document.getElementById(`${message.online_id}-Pick`)) &&
-        document.contains(document.getElementById(`${message.online_id}`))) {
-            
-        document.getElementById(message.online_id).click()
+    if (data.type === "Beatmap") {
+        let hasAutopicked = false
+
+        // If no map
+        if (message.online_id === 0 || message.metadata.title === "no beatmaps available!") return
+        // Find map
+        let currentMap = findMapInMappool(message.online_id)
+        // Autopick
+        if (toggleAutopickText.innerText === "ON" && !document.contains(document.getElementById(`${message.online_id}-Pick`)) &&
+        document.contains(document.getElementById(`${currentMap.beatmapID}`)) && sideBarNextActionText.innerText.includes("Pick") && currentMap) {
+            hasAutopicked = true
+            document.getElementById(currentMap.beatmapID).click()
+
+            return
+        }
+        // If first picker is set
+        if (!hasAutopicked && firstPicker && toggleAutopickText.innerText === "ON") {
+            let currentTileContainer
+            if (firstPicker === "red") currentTileContainer = redPickTiles
+            else if (firstPicker === "blue") currentTileContainer = bluePickTiles
+
+            // If no first picker
+            if (!currentTileContainer) return
+
+            // Find the tile
+            let currentAutopickTile
+            for (let i = 0; i < currentTileContainer.childElementCount; i++) {
+                if (currentTileContainer.children[i].hasAttribute("id")) continue
+                currentAutopickTile = currentTileContainer.children[i]
+                setTile(currentAutopickTile, currentMap, "Pick")
+                break
+            }
+        }
     }
 
     // Team details changing
@@ -673,7 +701,6 @@ function setTile(currentTile, currentBeatmap, type) {
     if (currentMod === "TB") { currentTile = tiebreakerContainer }
 
     currentTile.setAttribute("id", `${currentBeatmap.beatmapID}-${type}`)
-    currentTile.style.backgroundImage = `url(${currentBeatmap.beatmapID})`
     currentTile.style.color = `var(--${currentMod}Colour)`
     currentTile.style.boxShadow = `var(--boxShadow${currentMod})`
     currentTile.children[0].style.backgroundImage = `url("${currentBeatmap.imgURL}")`
@@ -727,7 +754,9 @@ function checkFirstPicker() {
 // set first picker
 function setFirstPicker(colour) {
     firstPicker = colour
-    sideBarFirstPickerText.innerText = `${firstPicker.charAt(0).toUpperCase() + firstPicker.slice(1)} First Pick`
+    if (colour === "") sideBarFirstPickerText.innerText = ``
+    else sideBarFirstPickerText.innerText = `${firstPicker.charAt(0).toUpperCase() + firstPicker.slice(1)} First Pick`
+
     document.cookie = `firstPicker=${firstPicker}; path=/`
 }
 
@@ -772,7 +801,6 @@ function mapClickEvent() {
         setTimeout(() => {
             if (enableAutoAdvance) {
                 obsGetCurrentScene((scene) => {
-                    
                     if ((currentRoomState === "WaitingForLoad" || currentRoomState === "Playing") && !pickRemoved) {
                         obsSetCurrentScene(gameplay_scene_name)
                     } else if (!pickRemoved) {
