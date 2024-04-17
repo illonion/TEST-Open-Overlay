@@ -1124,7 +1124,7 @@ function applyChangesSetPick() {
     setTile(currentTile, currentBeatmap, "Pick")
 }
 // Apply changes for removePick
-function applyChangesRemovePick() 
+function applyChangesRemovePick() {
     if (!pickManagementCurrentAction) return
 
     // Find tile
@@ -1140,6 +1140,7 @@ function applyChangesRemovePick()
     currentTile.children[8].style.display = "block"
     currentTile.children[9].style.display = "none"
     currentTile.children[10].innerText = ""
+}
 
 // Apply changes for setWinner
 function applyChangesSetWinner() {
