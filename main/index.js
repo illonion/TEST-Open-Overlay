@@ -474,18 +474,21 @@ socket.onmessage = event => {
 
         // Room Name
         const roomName = message.room_name
-        currentTeamRedName = roomName.split("(")[1].split(")")[0]
-        currentTeamBlueName = roomName.split("(")[2].split(")")[0]
-        teamRedName.innerText = currentTeamRedName
-        teamBlueName.innerText = currentTeamBlueName
-
-        for (let i = 0; i < allPlayers.length; i++) {
-            if (currentTeamRedName === allPlayers[i].team_name) {
-                teamRedBanner.style.backgroundImage = `url("${allPlayers[i].banner_url}")`
-                teamRedSeedNumber.innerText = `#${allPlayers[i].seed}`
-            } else if (currentTeamBlueName === allPlayers[i].team_name) {
-                teamBlueBanner.style.backgroundImage = `url("${allPlayers[i].banner_url}")`
-                teamBlueSeedNumber.innerText = `#${allPlayers[i].seed}`
+        let roomTeamCount = roomName.split("(").length - 1
+        if (roomTeamCount === 2) {
+            currentTeamRedName = roomName.split("(")[1].split(")")[0]
+            currentTeamBlueName = roomName.split("(")[2].split(")")[0]
+            teamRedName.innerText = currentTeamRedName
+            teamBlueName.innerText = currentTeamBlueName
+    
+            for (let i = 0; i < allPlayers.length; i++) {
+                if (currentTeamRedName === allPlayers[i].team_name) {
+                    teamRedBanner.style.backgroundImage = `url("${allPlayers[i].banner_url}")`
+                    teamRedSeedNumber.innerText = `#${allPlayers[i].seed}`
+                } else if (currentTeamBlueName === allPlayers[i].team_name) {
+                    teamBlueBanner.style.backgroundImage = `url("${allPlayers[i].banner_url}")`
+                    teamBlueSeedNumber.innerText = `#${allPlayers[i].seed}`
+                }
             }
         }
     }

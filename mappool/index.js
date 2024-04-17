@@ -455,16 +455,19 @@ socket.onmessage = event => {
 
         // Room Name
         const roomName = message.room_name
-        currentTeamRedName = roomName.split("(")[1].split(")")[0]
-        currentTeamBlueName = roomName.split("(")[2].split(")")[0]
-        redTeamNameText.innerText = currentTeamRedName
-        blueTeamNameText.innerText = currentTeamBlueName
-
-        for (let i = 0; i < allPlayers.length; i++) {
-            if (currentTeamRedName === allPlayers[i].team_name) {
-                updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
-            } else if (currentTeamBlueName === allPlayers[i].team_name) {
-                updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
+        let roomTeamCount = roomName.split("(").length - 1
+        if (roomTeamCount === 2) {
+            currentTeamRedName = roomName.split("(")[1].split(")")[0]
+            currentTeamBlueName = roomName.split("(")[2].split(")")[0]
+            redTeamNameText.innerText = currentTeamRedName
+            blueTeamNameText.innerText = currentTeamBlueName
+    
+            for (let i = 0; i < allPlayers.length; i++) {
+                if (currentTeamRedName === allPlayers[i].team_name) {
+                    updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
+                } else if (currentTeamBlueName === allPlayers[i].team_name) {
+                    updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
+                }
             }
         }
     }
