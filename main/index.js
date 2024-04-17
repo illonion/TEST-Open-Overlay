@@ -311,6 +311,7 @@ socket.onmessage = event => {
      * }} message
      */
     if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!") {
+        console.log("hello")
         foundMappoolMap = false
         currentId = message.online_id
 
@@ -329,7 +330,6 @@ socket.onmessage = event => {
         // put find beatmap function here
         const currentMap = findMapInBeatmaps(currentId)
         if (currentMap) {
-            console.log(currentMap.songLength % 60).toString().padStart(2, '0')
             nowPlayingStatsCSNumber.innerText = `${Math.round(parseFloat(currentMap.cs) * 10) / 10}`
             nowPlayingStatsLENNumber.innerText = `${Math.floor(currentMap.songLength / 60)}:${Math.round(currentMap.songLength % 60).toString().padStart(2, '0')}`
             nowPlayingStatsARNumber.innerText = `${Math.round(parseFloat(currentMap.ar) * 10) / 10}`
@@ -721,7 +721,6 @@ function setCurrentPicker() {
 setInterval(() => {
     // Get warmup mode
     warmupMode = (getCookie("warmupMode") == "true") ? true : false
-    console.log(warmupMode, getCookie("warmupMode"))
     warmupCheck()
     
     // --- Set map picker ---

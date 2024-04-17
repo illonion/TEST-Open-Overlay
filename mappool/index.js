@@ -134,7 +134,7 @@ function resetStars() {
 // Json Bin Details
 const playerJsonBinId = "66180208acd3cb34a836d684"
 const mappoolJsonBinId = "66180211acd3cb34a836d689"
-const jsonBinApiKey = "$2a$10$2VisaCnG83oxRZcO.szDy.x7PxoJvW22tzOYD7AQFcbHaHjfGvICy" // Change api key
+const jsonBinApiKey = "" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
