@@ -610,7 +610,7 @@ socket.onmessage = event => {
 
 function updateTeamDisplay(team, backgroundElement, averageRankElement, playerPrefix) {
     backgroundElement.style.backgroundImage = `url("${team.banner_url}")`;
-    averageRankElement.innerText = Math.round(team.player_ranks.reduce((acc, val) => acc + val, 0) / team.player_ranks.length);
+    averageRankElement.innerText = Math.round(team.player_ranks.reduce((acc, val) => acc + val, 0) / team.player_ranks.length).toLocaleString();
 
     for (let j = 0; j < 5; j++) {
         const playerElement = document.getElementById(`${playerPrefix}${j + 1}`);
@@ -618,7 +618,7 @@ function updateTeamDisplay(team, backgroundElement, averageRankElement, playerPr
             playerElement.style.display = "block";
             playerElement.children[1].setAttribute("src", `https://a.ppy.sh/${team.player_ids[j]}`);
             playerElement.children[3].innerText = team.player_names[j];
-            playerElement.children[5].innerText = `#${team.player_ranks[j]}`;
+            playerElement.children[5].innerText = `#${team.player_ranks[j].toLocaleString()}`;
         } else {
             playerElement.style.display = "none";
         }
