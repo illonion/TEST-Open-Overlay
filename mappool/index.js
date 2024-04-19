@@ -134,7 +134,7 @@ function resetStars() {
 // Json Bin Details
 const playerJsonBinId = "66180208acd3cb34a836d684"
 const mappoolJsonBinId = "66180211acd3cb34a836d689"
-const jsonBinApiKey = "" // Change api key
+const jsonBinApiKey = "$2a$10$2VisaCnG83oxRZcO.szDy.x7PxoJvW22tzOYD7AQFcbHaHjfGvICy" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -635,7 +635,10 @@ function changeNextAction(colour, action) {
     function removeAllTileAnimations(tiles) {
         for (let i = 0; i < tiles.childElementCount; i++) {
             tiles.children[i].children[8].classList.remove("mapInformationPickerCurrent")
+            tiles.children[i].children[8].innerText = ""
             tiles.children[i].children[8].previousElementSibling.classList.remove("mapInformationPickerCurrent")
+            tiles.children[i].children[8].previousElementSibling.innerText = ""
+
         }
     }
     removeAllTileAnimations(redBanTiles)
@@ -655,6 +658,8 @@ function changeNextAction(colour, action) {
             if (tile.hasAttribute("id")) continue
             const targetElement = tile.children[8]
             targetElement.classList.add("mapInformationPickerCurrent")
+            if (tiles === redBanTiles || tiles === blueBanTiles) targetElement.innerText = "BANNING..."
+            else targetElement.innerText = "PICKING..."
             break
         }
     }
@@ -1344,6 +1349,7 @@ function resetTile(tile) {
     tile.style.boxShadow = "none"
     tile.children[8].style.display = "block"
     tile.children[8].classList.remove("mapInformationPickerCurrent")
+    tile.children[8].innerText = ""
 
     if (tile.childElementCount > 9) {
         tile.children[9].style.display = "none"
