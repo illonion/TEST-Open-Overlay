@@ -303,6 +303,7 @@
 .teamCurrentScore {
     position: absolute; right: 9px; 
     font-family: "Inter"; font-size: 36px;
+    font-variant-numeric: tabular-nums;
 }
 #teamRedCurrentScore {
     top: 94px;
@@ -352,6 +353,7 @@
     background-color: var(--teamBlueColour);
     color: white;
     font-family: "Inter"; font-weight: 800;
+    font-variant-numeric: tabular-nums;
     text-align: center;
     line-height: 30px;
     transition: 400ms ease-in-out;
@@ -367,6 +369,8 @@
     position: absolute; 
     width: inherit; height: 484px;
     transition: 200ms ease-in-out;
+    font-variant-numeric: tabular-nums;
+
 }
 #currentScoreBarRed {
     bottom: 50%;
@@ -488,13 +492,17 @@
 .playerInfoScore {
     position: absolute; left: 284.25px; top: 13px;
     transform: translateX(-50%);
+    font-variant-numeric: tabular-nums;
 }
 .playerInfoAccuracy {
     position: absolute; left: 386.35px; top: 13px;
     transform: translateX(-50%);
+    font-variant-numeric: tabular-nums;
+
 }
 .playerInfoCombo {
     position: absolute; right: 10px; top: 13px;
+    font-variant-numeric: tabular-nums;
 }
 .playerReadyState {
     position: absolute; right: 10px; top: 12px;
