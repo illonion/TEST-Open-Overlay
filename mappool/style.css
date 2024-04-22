@@ -555,9 +555,24 @@
     position: absolute; left: 0; top: 0;
     width: inherit; height: inherit;
     background-color: #E5E7F1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .mapInformationPickerCurrent {
-    animation: mapInformationAction 3s infinite forwards linear;
+    font-family: "Inter"; font-weight: 600; font-size: 18px;
+    animation: pickingTextAnimation 3s infinite forwards linear;
+    letter-spacing: 3px;
+}
+
+@keyframes pickingTextAnimation {
+    0% { color: #D3D7E4; }
+    15% { color: #D3D7E4; }
+    30% { color: #B3BFD4; }
+    50% { color: #8795B8; }
+    70% { color: #B3BFD4; }
+    85% { color: #D3D7E4; }
+    100% { color: #D3D7E4; }
 }
 @keyframes mapInformationAction {
     0% { background-color: #E5E7F1; }

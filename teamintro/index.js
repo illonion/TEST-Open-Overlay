@@ -1,7 +1,7 @@
 const matchJsonBinId = "661801daad19ca34f8586133"
 const playerJsonBinId = "66180208acd3cb34a836d684"
 const mappoolJsonBinId = "66180211acd3cb34a836d689"
-const jsonBinApiKey = "" // Change api key
+const jsonBinApiKey = "$2a$10$2VisaCnG83oxRZcO.szDy.x7PxoJvW22tzOYD7AQFcbHaHjfGvICy" // Change api key
 
 // Match information
 const sideBarSelect = document.getElementById("sideBarSelect")
@@ -74,8 +74,8 @@ function applyChanges() {
                     // Set top information
                     redTeamIntroBannerImage.style.backgroundImage = `url("${allPlayers[j].banner_url}")`
                     redTeamIntroTeamName.innerText = allPlayers[j].team_name
-                    redTeamIntroSeedNumber.innerText = allPlayers[j].seed
-                    redTeamIntroAvgRankNumber.innerText = Math.round(allPlayers[j].player_ranks.reduce((a, b) => a + b, 0) / allPlayers[j].player_ranks.length)
+                    redTeamIntroSeedNumber.innerText = allPlayers[j].seed.toLocaleString()
+                    redTeamIntroAvgRankNumber.innerText = Math.round(allPlayers[j].player_ranks.reduce((a, b) => a + b, 0) / allPlayers[j].player_ranks.length).toLocaleString()
 
                     // Set player information
                     for (let k = 0; k < allPlayers[j].player_names.length; k++) {
@@ -100,7 +100,7 @@ function applyChanges() {
                         teamIntroPlayerPlayerName.classList.add("teamIntroPlayerPlayerName")
 
                         const teamIntroPlayerRank = document.createElement("div")
-                        teamIntroPlayerRank.innerText = `#${allPlayers[j].player_ranks[k]}`
+                        teamIntroPlayerRank.innerText = `#${allPlayers[j].player_ranks[k].toLocaleString()}`
                         teamIntroPlayerRank.classList.add("teamIntroPlayerRank", "redTeamIntroPlayerRank")
 
                         teamIntroPlayer.append(teamIntroPlayerLine1, teamIntroPlayerLine2, teamIntroPlayerLine3, 
@@ -114,8 +114,8 @@ function applyChanges() {
                     // Set top information
                     blueTeamIntroBannerImage.style.backgroundImage = `url("${allPlayers[j].banner_url}")`
                     blueTeamIntroTeamName.innerText = allPlayers[j].team_name
-                    blueTeamIntroSeedNumber.innerText = allPlayers[j].seed
-                    blueTeamIntroAvgRankNumber.innerText = Math.round(allPlayers[j].player_ranks.reduce((a, b) => a + b, 0) / allPlayers[j].player_ranks.length)
+                    blueTeamIntroSeedNumber.innerText = allPlayers[j].seed.toLocaleString()
+                    blueTeamIntroAvgRankNumber.innerText = Math.round(allPlayers[j].player_ranks.reduce((a, b) => a + b, 0) / allPlayers[j].player_ranks.length).toLocaleString()
 
                     // Set player information
                     for (let k = 0; k < allPlayers[j].player_names.length; k++) {
@@ -140,7 +140,7 @@ function applyChanges() {
                         teamIntroPlayerPlayerName.classList.add("teamIntroPlayerPlayerName")
 
                         const teamIntroPlayerRank = document.createElement("div")
-                        teamIntroPlayerRank.innerText = `#${allPlayers[j].player_ranks[k]}`
+                        teamIntroPlayerRank.innerText = `#${allPlayers[j].player_ranks[k].toLocaleString()}`
                         teamIntroPlayerRank.classList.add("teamIntroPlayerRank", "blueTeamIntroPlayerRank")
 
                         teamIntroPlayer.append(teamIntroPlayerLine1, teamIntroPlayerLine2, teamIntroPlayerLine3, 
