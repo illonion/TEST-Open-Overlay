@@ -1,7 +1,7 @@
 const matchJsonBinId = "661801daad19ca34f8586133"
 const playerJsonBinId = "66180208acd3cb34a836d684"
 const mappoolJsonBinId = "66180211acd3cb34a836d689"
-const jsonBinApiKey = "$2a$10$2VisaCnG83oxRZcO.szDy.x7PxoJvW22tzOYD7AQFcbHaHjfGvICy" // Change api key
+const jsonBinApiKey = "" // Change api key
 
 // Match information
 const sideBarSelect = document.getElementById("sideBarSelect")
@@ -28,8 +28,8 @@ let mappoolRequest = new XMLHttpRequest()
 mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
         // Round name info
-        const currentRoundName = JSON.parse(mappoolRequest.responseText).record.roundName
-        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.toLowerCase().replace(/ /g, "-")}.png`)
+        const currentRoundName = JSON.parse(mappoolRequest.responseText).record.roundName.toLowerCase()
+        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.replace(/ /g, "-")}.png`)
     }
 }
 mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)

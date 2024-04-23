@@ -134,7 +134,7 @@ function resetStars() {
 // Json Bin Details
 const playerJsonBinId = "66180208acd3cb34a836d684"
 const mappoolJsonBinId = "66180211acd3cb34a836d689"
-const jsonBinApiKey = "$2a$10$2VisaCnG83oxRZcO.szDy.x7PxoJvW22tzOYD7AQFcbHaHjfGvICy" // Change api key
+const jsonBinApiKey = "" // Change api key
 // Player information
 let allPlayers
 let allPlayersRequest = new XMLHttpRequest()
@@ -182,12 +182,12 @@ mappoolRequest.onreadystatechange = () => {
         }
         
         // Round name info
-        const currentRoundName = mappool.roundName
-        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.toLowerCase().replace(/ /g, "-")}.png`)
+        const currentRoundName = mappool.roundName.toLowerCase()
+        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.replace(/ /g, "-")}.png`)
 
         // Get round information
         switch(currentRoundName) {
-            case "Round of 32": case "Round of 16":
+            case "round of 32": case "round of 16":
                 currentBestOf = 9
                 currentFirstTo = 5
                 numBanTiles = 2
@@ -195,7 +195,7 @@ mappoolRequest.onreadystatechange = () => {
                 pickLines.forEach(pickLine => pickLine.style.top = "238px")
                 pickTiles.style.top = "238px"
                 break
-            case "Quarterfinals":
+            case "quarterfinals":
                 currentBestOf = 11
                 currentFirstTo = 6
                 numBanTiles = 2
@@ -203,12 +203,12 @@ mappoolRequest.onreadystatechange = () => {
                 pickLines.forEach(pickLine => pickLine.style.top = "238px")
                 pickTiles.style.top = "238px"
                 break
-            case "Semifinals":
+            case "semifinals":
                 currentBestOf = 11
                 currentFirstTo = 6
                 numBanTiles = 4
                 break
-            case "Finals": case "Grand Finals":
+            case "finals": case "grand finals":
                 currentBestOf = 13
                 currentFirstTo = 7
                 numBanTiles = 4

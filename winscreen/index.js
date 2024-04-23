@@ -1,5 +1,6 @@
 // Json Bin Details
 const playerJsonBinId = "66180208acd3cb34a836d684"
+const mappoolJsonBinId = "66180211acd3cb34a836d689"
 const jsonBinApiKey = "" // Change api key
 // Player information
 let allPlayers
@@ -12,6 +13,19 @@ allPlayersRequest.onreadystatechange = () => {
 allPlayersRequest.open("GET", `https://api.jsonbin.io/v3/b/${playerJsonBinId}`, false)
 allPlayersRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
 allPlayersRequest.send()
+
+// Round information
+let mappoolRequest = new XMLHttpRequest()
+mappoolRequest.onreadystatechange = () => {
+    if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
+        // Round name info
+        const currentRoundName = JSON.parse(mappoolRequest.responseText).record.roundName.toLowerCase()
+        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.replace(/ /g, "-")}.png`)
+    }
+}
+mappoolRequest.open("GET", `https://api.jsonbin.io/v3/b/${mappoolJsonBinId}`, false)
+mappoolRequest.setRequestHeader("X-Master-Key", jsonBinApiKey)
+mappoolRequest.send()
 
 // Get Cookie
 function getCookie(cname) {

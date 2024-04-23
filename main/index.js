@@ -125,18 +125,18 @@ mappoolRequest.onreadystatechange = () => {
     if (mappoolRequest.readyState == XMLHttpRequest.DONE) {
         mappool = JSON.parse(mappoolRequest.responseText).record
         allBeatmaps = mappool.beatmaps
-        const currentRoundName = mappool.roundName
-        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.toLowerCase().replace(/ /g, "-")}.png`)
+        const currentRoundName = mappool.roundName.toLowerCase()
+        roundName.setAttribute("src",`../_shared/logo/static/${currentRoundName.replace(/ /g, "-")}.png`)
         switch(currentRoundName) {
-            case "Round of 32": case "Round of 16":
+            case "round of 32": case "round of 16":
                 currentBestOf = 9
                 currentFirstTo = 5
                 break
-            case "Quarterfinals": case "Semifinals":
+            case "quarterfinals": case "semifinals":
                 currentBestOf = 11
                 currentFirstTo = 6
                 break
-            case "Finals": case "Grand Finals":
+            case "finals": case "grand finals":
                 currentBestOf = 13
                 currentFirstTo = 7
                 break
@@ -311,7 +311,6 @@ socket.onmessage = event => {
      * }} message
      */
     if (data.type === "Beatmap" && message.online_id !== 0 && message.metadata.title !== "no beatmaps available!") {
-        console.log("hello")
         foundMappoolMap = false
         currentId = message.online_id
 
