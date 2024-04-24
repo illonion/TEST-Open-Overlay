@@ -182,15 +182,17 @@ const nowPlayingBackground = document.getElementById("nowPlayingBackground")
 const modInfoContainer = document.getElementById("modInfoContainer")
 const currentMod = document.getElementById("currentMod")
 const modInfoText = document.getElementById("modInfoText")
-const funMods = [
-    { modAbbreviation: "BR", modMessage: "The whole playing field spins slightly! It's on a barrel!"},
-    { modAbbreviation: "TC", modMessage: "Circles are gone, the players have to rely on the (bigger) approach circles!"},
-    { modAbbreviation: "WG", modMessage: "The circles are wiggling! Can the players stay focused on the moving targets?"},
-    { modAbbreviation: "GR", modMessage: "The circles are moving closer... Make sure to hit it at the right timing! Don't forget about the note underneath!"},
-    { modAbbreviation: "RP", modMessage: "The circles are moving away! Can the players catch them before time runs out?"},
-    { modAbbreviation: "DP", modMessage: "The circles are growing and expanding. Almost 3D!"},
-    { modAbbreviation: "SI", modMessage: "The circles are spinning! Can the players hit them on time?"},
-]
+const funMods = {
+    "BR": { modName: "BARREL ROLL", modMessage: "The whole playing field spins slightly! It's on a barrel!"},
+    "DP": { modName: "DEPTH", modMessage: "The circles are growing and expanding. Almost 3D!"},
+    "GR": { modName: "GROWTH", modMessage: "The circles are moving closer... Make sure to hit it at the right timing! Don't forget about the note underneath!"},
+    "NS": { modName: "NO SCOPE", modMessage: "Wheres the cursor?"},
+    "RP": { modName: "REPEL", modMessage: "The circles are moving away! Can the players catch them before time runs out?"},
+    "SI": { modName: "SPIN IN", modMessage: "The circles are spinning! Can the players hit them on time?"},
+    "TC": { modName: "TRACEABLE", modMessage: "Circles are gone, the players have to rely on the (bigger) approach circles!"},
+    "TR": { modName: "TRANSFORM", modMessage: "Everything is moving around!"},
+    "WG": { modName: "WIGGLE", modMessage: "The circles are wiggling! Can the players stay focused on the moving targets?"},
+}
 
 // Team Sections
 const teamRedSection = document.getElementById("teamRedSection")
@@ -339,18 +341,14 @@ socket.onmessage = event => {
             nowPlayingMod.style.display = "block"
             nowPlayingMod.innerText = `${currentMap.mod}${currentMap.order}`
 
+            modInfoContainer.style.left = "-330px"
             if (currentMap.hasOwnProperty("additional_mod")) {
                 let newMod = currentMap.additional_mod
-                currentMod.innerText = newMod
-                for  (let i = 0; i < funMods.length; i++) {
-                    if (funMods[i].modAbbreviation === newMod) {
-                        modInfoText.innerText = funMods[i].modMessage
-                        break
-                    }
+                if (newMod in funMods) {
+                    currentMod.innerText = funMods[newMod].modName
+                    modInfoText.innerText = funMods[newMod].modMessage
+                    modInfoContainer.style.left = "0px"
                 }
-                modInfoContainer.style.left = "0px"
-            } else {
-                modInfoContainer.style.left = "-330px"
             }
         } else {
             nowPlayingStatsCSNumber.innerText = `${message.difficulty.circle_size}`;
