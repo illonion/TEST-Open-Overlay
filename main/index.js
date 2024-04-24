@@ -186,7 +186,7 @@ const funMods = {
     "BR": { modName: "BARREL ROLL", modMessage: "The whole playing field spins slightly! It's on a barrel!"},
     "DP": { modName: "DEPTH", modMessage: "The circles are growing and expanding. Almost 3D!"},
     "GR": { modName: "GROWTH", modMessage: "The circles are moving closer... Make sure to hit it at the right timing! Don't forget about the note underneath!"},
-    "NS": { modName: "NO SCOPE", modMessage: "Wheres the cursor?"},
+    "NS": { modName: "NO SCOPE", modMessage: "The cursor is gone?!!"},
     "RP": { modName: "REPEL", modMessage: "The circles are moving away! Can the players catch them before time runs out?"},
     "SI": { modName: "SPIN IN", modMessage: "The circles are spinning! Can the players hit them on time?"},
     "TC": { modName: "TRACEABLE", modMessage: "Circles are gone, the players have to rely on the (bigger) approach circles!"},
