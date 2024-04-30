@@ -66,6 +66,11 @@ function applyChanges() {
         if (allMatches[i].match_number == sideBarSelect.value) {
             let currentRedTeam = allMatches[i].team_name_red
             let currentBlueTeam = allMatches[i].team_name_blue
+
+            // Set cookies for team names
+            document.cookie = `currentRedTeamName=${currentRedTeam}; path=/`
+            document.cookie = `currentBlueTeamName=${currentBlueTeam}; path=/`
+
             let teamCounter = 0
 
             for (let j = 0; j < allPlayers.length; j++) {
