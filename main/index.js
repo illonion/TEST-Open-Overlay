@@ -183,7 +183,10 @@ const modInfoContainer = document.getElementById("modInfoContainer")
 const currentMod = document.getElementById("currentMod")
 const modInfoText = document.getElementById("modInfoText")
 const funMods = {
+    "AD": { modName: "APPROACH DIFFERENT", modMessage: "The approach circles are... different? Can the players adjust?"},
     "BR": { modName: "BARREL ROLL", modMessage: "The whole playing field spins slightly! It's on a barrel!"},
+    "BR": { modName: "BUBBLES", modMessage: "There are marks being left on the players screens! Hopefully they don't get distracted and miss..."},
+    "DF": { modName: "DEFLATE", modMessage: "Why are the circles so big? Are they getting smaller?"},
     "DP": { modName: "DEPTH", modMessage: "The circles are growing and expanding. Almost 3D!"},
     "GR": { modName: "GROWTH", modMessage: "The circles are moving closer... Make sure to hit it at the right timing! Don't forget about the note underneath!"},
     "NS": { modName: "NO SCOPE", modMessage: "Wheres the cursor?"},
