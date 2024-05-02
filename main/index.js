@@ -150,7 +150,7 @@ mappoolRequest.send()
 
 // Find beatmap
 function findMapInBeatmaps(id) {
-    for (let i = 0; i < allBeatmaps.length; i++) {
+    for (let i = 0; i < allBeatmaps?.length; i++) {
         if (id == allBeatmaps[i].beatmapID) return allBeatmaps[i]
     }
     return
@@ -284,6 +284,16 @@ let chatLength = 0
 // Map currentply playing
 let resultsDisplayed = false
 let roomState
+
+// Combo
+const combos = {
+    player1: 0,
+    player2: 0,
+    player3: 0,
+    player4: 0,
+    player5: 0,
+    player6: 0
+}
 
 // Whenever socket sends a message
 socket.onmessage = event => {
@@ -540,6 +550,16 @@ socket.onmessage = event => {
                 scoreAnimation[`playerInfoScore${player.slot_index}`].update(player.total_score)
                 scoreAnimation[`playerInfoAccuracyNumber${player.slot_index}`].update(player.accuracy * 100)
                 scoreAnimation[`playerInfoComboNumber${player.slot_index}`].update(player.combo)
+                if (combos[`player${player.slot_index}`] >= 10 && player.combo < combos[`player${player.slot_index}`]){ 
+                    const playerInfo = document.getElementById(`playerInfo${player.slot_index}`)
+                    playerInfo.style.transition = "color 300ms cubic-bezier(0, 1, 0.4, 1)"
+                    playerInfo.style.color = "#fb6a68"
+
+                    setTimeout(() => {
+                        playerInfo.style.transition = "color 200ms cubic-bezier(0, 1, 0.4, 1)"
+                        playerInfo.style.color = "white"
+                    }, 500)
+                }
     
                 // Team Ids
                 if (player.team_id === 0) {
@@ -555,10 +575,12 @@ socket.onmessage = event => {
                 } else {
                     playerInformationConatiner.children[0].style.backgroundColor = "darkslategray"
                 }
+                combos[`player${player.slot_index}`] = player.combo
             } else {
                 scoreAnimation[`playerInfoScore${player.slot_index}`].update(0)
                 scoreAnimation[`playerInfoAccuracyNumber${player.slot_index}`].update(0)
                 scoreAnimation[`playerInfoComboNumber${player.slot_index}`].update(0)
+                combos[`player${player.slot_index}`] = 0
             }
         }
 
