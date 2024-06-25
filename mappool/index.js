@@ -480,24 +480,6 @@ socket.onmessage = event => {
             })
             resultsDisplayed = false
         }
-
-        // Room Name
-        const roomName = message.room_name
-        let roomTeamCount = roomName.split("(").length - 1
-        if (roomTeamCount === 2) {
-            currentTeamRedName = roomName.split("(")[1].split(")")[0]
-            currentTeamBlueName = roomName.split("(")[2].split(")")[0]
-            redTeamNameText.innerText = currentTeamRedName
-            blueTeamNameText.innerText = currentTeamBlueName
-    
-            for (let i = 0; i < allPlayers.length; i++) {
-                if (currentTeamRedName === allPlayers[i].team_name) {
-                    updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
-                } else if (currentTeamBlueName === allPlayers[i].team_name) {
-                    updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
-                }
-            }
-        }
     }
 
     // Chat messages
@@ -1319,6 +1301,20 @@ setInterval(() => {
         else if (tiebreakerContainer.children[10].innerText === "blue") mapWinners.push("blue")
 
         document.cookie = `mapWinners=${JSON.stringify(mapWinners)}; path=/`
+    }
+
+    // Team Name
+    currentTeamRedName = getCookie("currentRedTeamName")
+    currentTeamBlueName = getCookie("currentBlueTeamName")
+    redTeamNameText.innerText = currentTeamRedName
+    blueTeamNameText.innerText = currentTeamBlueName
+
+    for (let i = 0; i < allPlayers.length; i++) {
+        if (currentTeamRedName === allPlayers[i].team_name) {
+            updateTeamDisplay(allPlayers[i], redTeamBackgroundImage, redTeamAverageRankNumber, "redTeamPlayer");
+        } else if (currentTeamBlueName === allPlayers[i].team_name) {
+            updateTeamDisplay(allPlayers[i], blueTeamBackgroundImage, blueTeamAverageRankNumber, "blueTeamPlayer");
+        }
     }
 }, 500)
 

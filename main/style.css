@@ -418,13 +418,13 @@
 /* Gameplay greenscreen */
 .gameplayScreen {
     position: absolute; 
-    width: 507px; height: 479px;
+    width: 503px; height: 475px;
 }
-.gameplayLeftScreen { left: 375px; }
-.gameplayMiddleScreen { left: 890px; }
-.gameplayRightScreen { left: 1405px; }
-.gameplayTopScreen { top: 104px; }
-.gameplayBottomScreen { top: 593px; }
+.gameplayLeftScreen { left: 377px; }
+.gameplayMiddleScreen { left: 892px; }
+.gameplayRightScreen { left: 1407px; }
+.gameplayTopScreen { top: 108px; }
+.gameplayBottomScreen { top: 597px; }
 
 /* Sidebar */
 #sideBar {
