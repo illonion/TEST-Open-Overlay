@@ -513,3 +513,13 @@
 ::-webkit-scrollbar {
     display: none;
 }
+
+@keyframes comboBreakAnimation {
+    0% { color: inherit; }
+    50% { color: #fb6a68; }
+    100% { color: inherit; }
+}
+
+.comboBreakFlash {
+    animation: comboBreakAnimation 0.5s ease-in-out;
+}
